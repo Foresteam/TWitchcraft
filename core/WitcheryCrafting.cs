@@ -44,7 +44,7 @@ namespace Test {
 			inv[slot] = new Item();
 			return true;
 		}
-		
+
 		#nullable enable
 		public Item? Take(bool peek = false) {
 			if (catalyst != null && catalyst.type != 0) {
@@ -70,7 +70,7 @@ namespace Test {
 			return heldItem;
 		}
 
-		public Action RMBInterract(int i, int j, Player ply, Item[] inv, int slot) {
+		public Action Interract(int i, int j, Player ply, Item[] inv, int slot) {
 			// take item
 			if (SlotsUsed > 0 && inv[slot].type == 0)
 				return Action.Take;

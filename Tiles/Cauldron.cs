@@ -50,7 +50,7 @@ namespace Test.Tiles {
 			var ply = Main.LocalPlayer;
 			int slot = ply.selectedItem;
 			var inv = ply.inventory;
-			_crafting.RMBInterract(i, j, ply, inv, slot);
+			_crafting.Interract(i, j, ply, inv, slot);
 			return true;
 		}
 	}

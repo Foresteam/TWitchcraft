@@ -9,12 +9,13 @@ using System;
 
 namespace Test.Tiles {
 	public class TestCauldron : ModTile {
-		private List<Item> itemsHeld;
+		private WitcheryCrafting _crafting;
 
-		public TestCauldron() {
-			itemsHeld = new List<Item>();
+		// public TestCauldron() {
+		// }
+		public override void PlaceInWorld(int i, int j, Item tileItem) {
+			_crafting = new WitcheryCrafting(5, false);
 		}
-
 		public override void SetStaticDefaults() {
             Main.tileSolidTop[Type] = true;
             Main.tileFrameImportant[Type] = true;
@@ -49,22 +50,7 @@ namespace Test.Tiles {
 			var ply = Main.LocalPlayer;
 			int slot = ply.selectedItem;
 			var inv = ply.inventory;
-			var heldItem = itemsHeld.Count > 0 ? itemsHeld.Last() : null;
-			if (heldItem != null && inv[slot].type == 0) {
-				var names = itemsHeld.Select(i => $"{i.Name}x{i.stack}").ToArray();
-				Main.NewText($"Contained items: {String.Join(", ", names)}");
-				ply.DropItem(null, new Vector2(i * 16, j * 16), ref heldItem);
-				itemsHeld.Remove(heldItem);
-				return true;
-			}
-			if (inv[slot].type == 0) {
-				Main.NewText("The cauldron is empty.");
-				return true;
-			}
-			itemsHeld.Add(inv[slot]);
-			Main.NewText("Two dicks in my ass is not enough...");
-			Main.NewText(inv[slot].type);
-			inv[slot] = new Item();
+			_crafting.RMBInterract(i, j, ply, inv, slot);
 			return true;
 		}
 	}

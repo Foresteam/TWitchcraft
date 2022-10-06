@@ -3,6 +3,7 @@ using Terraria.ModLoader;
 using Terraria.ObjectData;
 using Terraria.ID;
 using Microsoft.Xna.Framework;
+using Terraria.DataStructures;
 using System.Collections.Generic;
 using System.Linq;
 using System;
@@ -28,8 +29,14 @@ namespace Test.Tiles {
             TileObjectData.newTile.CoordinateHeights = new int[] { 16, 16, 12 };
 			// IMPORTANT TO STATE
 			TileObjectData.newTile.CoordinatePadding = 0;
+			TileObjectData.newTile.Origin = new Point16(1, 2);
 			// For some reason, it's to be
 			TileObjectData.newTile.DrawYOffset = 8;
+
+			TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(ModContent.GetInstance<CauldronTE>().Hook_AfterPlacement, -1, 0, false);
+			TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
+
+			TileObjectData.addAlternate(0);
             TileObjectData.addTile(Type);
 
             ModTranslation name = CreateMapEntryName();
@@ -44,14 +51,23 @@ namespace Test.Tiles {
 			num = fail ? 1 : 3;
 		}
 		public override void KillMultiTile(int i, int j, int frameX, int frameY) {
+			ModContent.GetInstance<CauldronTE>()?.Kill(i, j);
 			Item.NewItem(null, i * 16, j * 16, 32, 16, ModContent.ItemType<Items.Placeables.TestCauldron>());
 		}
+		public override void MouseOver(int i, int j) {
+			Player player = Main.LocalPlayer;
+			Tile tile = Main.tile[i, j];
+			player.cursorItemIconEnabled = true;
+			player.cursorItemIconID = ModContent.ItemType<Items.Placeables.TestCauldron>();
+			player.noThrow = 2;
+		}
 		public override bool RightClick(int i, int j) {
-			var ply = Main.LocalPlayer;
-			int slot = ply.selectedItem;
-			var inv = ply.inventory;
-			_crafting.Interract(i, j, ply, inv, slot);
-			return true;
+			HelpMe.GetTileEntity<CauldronTE>(i, j)?.PrintMyNumber();
+			// var ply = Main.LocalPlayer;
+			// int slot = ply.selectedItem;
+			// var inv = ply.inventory;
+			// _crafting.Interract(i, j, ply, inv, slot);
+			return base.RightClick(i, j);
 		}
 	}
 }

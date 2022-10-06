@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Test.Items {
+namespace TWitchery.Items {
 	public class TestSword : ModItem {
 		public override void UpdateInventory(Player player) {
 			var hairColor = player.GetHairColor(false);

@@ -4,7 +4,7 @@ using Terraria.ObjectData;
 using Terraria.ID;
 using Microsoft.Xna.Framework;
 
-namespace Test.Items.Placeables {
+namespace TWitchery.Items.Placeables {
 	public class TestCauldron : ModItem {
 		public const string DisplayNameText = "Alchemy Cauldron";
 		public const string TooltipText = "Used for alchemy";

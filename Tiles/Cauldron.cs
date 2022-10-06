@@ -8,14 +8,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
-namespace Test.Tiles {
+namespace TWitchery.Tiles {
 	public class TestCauldron : ModTile {
-		private WitcheryCrafting _crafting;
 
 		// public TestCauldron() {
 		// }
 		public override void PlaceInWorld(int i, int j, Item tileItem) {
-			_crafting = new WitcheryCrafting(5, false);
 		}
 		public override void SetStaticDefaults() {
             Main.tileSolidTop[Type] = true;
@@ -33,7 +31,7 @@ namespace Test.Tiles {
 			// For some reason, it's to be
 			TileObjectData.newTile.DrawYOffset = 8;
 
-			TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(ModContent.GetInstance<CauldronTE>().Hook_AfterPlacement, -1, 0, false);
+			TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(ModContent.GetInstance<TECauldron>().Hook_AfterPlacement, -1, 0, false);
 			TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
 
 			TileObjectData.addAlternate(0);
@@ -51,7 +49,7 @@ namespace Test.Tiles {
 			num = fail ? 1 : 3;
 		}
 		public override void KillMultiTile(int i, int j, int frameX, int frameY) {
-			ModContent.GetInstance<CauldronTE>()?.Kill(i, j);
+			ModContent.GetInstance<TECauldron>()?.Kill(i, j);
 			Item.NewItem(null, i * 16, j * 16, 32, 16, ModContent.ItemType<Items.Placeables.TestCauldron>());
 		}
 		public override void MouseOver(int i, int j) {
@@ -62,7 +60,7 @@ namespace Test.Tiles {
 			player.noThrow = 2;
 		}
 		public override bool RightClick(int i, int j) {
-			HelpMe.GetTileEntity<CauldronTE>(i, j)?.PrintMyNumber();
+			HelpMe.GetTileEntity<TECauldron>(i, j)?.RightClick(i, j);
 			// var ply = Main.LocalPlayer;
 			// int slot = ply.selectedItem;
 			// var inv = ply.inventory;

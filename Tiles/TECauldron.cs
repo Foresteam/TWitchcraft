@@ -16,8 +16,9 @@ namespace TWitchery.Tiles {
 				.AddResult(new WitcheryRecipe.Result.ItemResult(new Item(ItemID.StonePlatform, 10)))
 		});
 		private WitcheryCrafting _crafting;
+		public StackedInventory Inventory => _crafting;
 		public TECauldron() {
-			_crafting = new WitcheryCrafting(5, true, _recipes);
+			_crafting = new WitcheryCrafting(5, true, true, _recipes);
 		}
 
 		public override bool IsValidTile(in Tile tile) => tile.TileType == ModContent.TileType<TestCauldron>();

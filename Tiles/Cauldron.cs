@@ -58,6 +58,9 @@ namespace TWitchery.Tiles {
 			player.cursorItemIconEnabled = true;
 			player.cursorItemIconID = ModContent.ItemType<Items.Placeables.TestCauldron>();
 			player.noThrow = 2;
+			var cauldron = HelpMe.GetTileEntity<TECauldron>(i, j);
+			if (cauldron != null)
+				UISystem.OpenCauldronHoverUI(cauldron.Inventory);
 		}
 		public override bool RightClick(int i, int j) {
 			HelpMe.GetTileEntity<TECauldron>(i, j)?.RightClick(i, j);

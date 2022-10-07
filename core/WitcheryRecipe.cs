@@ -73,11 +73,11 @@ namespace TWitchery {
 
 		private float Match(Item[] _items, Item catalyst, Liquid[] liquids, out int? xAmount) {
 			var items = new List<Item>(_items).FindAll(i => !i.IsAir);
-			int total = liquids.Length + items.Count + 1;
+			int total = liquids.Length + _itemIngredients.Count + 1;
 			int match = 0;
 			foreach (Liquid liquid in liquids)
 				match += _liquidIngredients.Find(l => l.x == liquid.x) != null ? 1 : 0;
-			// craft many times
+			// "multiply" the result
 			xAmount = null;
 			foreach (Item item in items) {
 				var found = _itemIngredients.Find(i => i.type == item.type);
@@ -85,9 +85,10 @@ namespace TWitchery {
 					continue;
 				if (xAmount == null)
 					xAmount = item.stack / found.stack;
-				match += (xAmount > 1 && item.stack / found.stack == xAmount) ? 1 : 0;
+				match += (xAmount >= 1 && item.stack % xAmount == 0) ? 1 : 0;
 			}
-			match += _catalyst.type == catalyst.type ? 1 : 0;
+			match += (_catalyst.type == catalyst.type && catalyst.stack % xAmount == 0) ? 1 : 0;
+			Main.NewText($"total: {total}, items: {items.Count}, ctype: {catalyst.type} == {_catalyst.type}, {catalyst.stack}, {xAmount}");
 			return (float)match / total;
 		}
 		private float Match(Item[] _items, Item catalyst, Liquid[] liquids) {

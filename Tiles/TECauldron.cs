@@ -1,14 +1,10 @@
 using Terraria;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 using Terraria.ID;
-using Microsoft.Xna.Framework;
 using System.Collections.Generic;
-using System.Linq;
-using System;
 
 namespace TWitchery.Tiles {
-	public class TECauldron : TEAbstractStation {
+	public class TECauldron : TEAbstractStation, IRightClickable {
 		private static List<WitcheryRecipe> _recipes = new(new WitcheryRecipe[] {
 			new WitcheryRecipe(energyCost: 0)
 				.AddIngredient(new Item(ItemID.DirtBlock, 5))
@@ -16,7 +12,7 @@ namespace TWitchery.Tiles {
 				.AddResult(new WitcheryRecipe.Result.ItemResult(new Item(ItemID.StonePlatform, 10)))
 		});
 		private WitcheryCrafting _crafting;
-		public StackedInventory Inventory => _crafting;
+		public override StackedInventory Inventory => _crafting;
 		public TECauldron() {
 			_crafting = new WitcheryCrafting(5, true, true, _recipes);
 		}
@@ -26,7 +22,7 @@ namespace TWitchery.Tiles {
 			// ass.Add(Main.rand.Next());
 			Main.NewText("I exist, therefore i am in the world.");
 		}
-		public void RightClick(int i, int j) {
+		public bool RightClick(int i, int j) {
 			var ply = Main.LocalPlayer;
 			int slot = ply.selectedItem;
 			var inv = ply.inventory;
@@ -43,9 +39,13 @@ namespace TWitchery.Tiles {
 					_crafting.PutCatalyst(ref activeItem);
 					break;
 				case WitcheryCrafting.Action.Craft:
-					_crafting.Craft(i, j, ply, this);
+					var rs = _crafting.Craft();
+					WitcheryCrafting.GiveResult(rs, new Terraria.DataStructures.Point16(i, j), ply, this);
 					break;
+				default:
+					return false;
 			}
+			return true;
 		}
 	}
 }

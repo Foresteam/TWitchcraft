@@ -1,9 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Linq;
 using Terraria;
 using Terraria.GameContent;
-using Terraria.ID;
 using Terraria.UI;
 
 namespace TWitchery.UIStates;
@@ -63,7 +61,7 @@ class CauldronHoverUI : UIState {
 			Utils.DrawBorderString(spriteBatch, item.stack.ToString(), textPos, Color.White, Main.inventoryScale);
 		}
 	}
-	private void DrawLiquidBar(Vector2 offset, float current, float max) {}
+	private void DrawLiquidBar(Vector2 offset, Liquid[] current, float max) {}
 	public override void Draw(SpriteBatch spriteBatch) {
 		base.Draw(spriteBatch);
 

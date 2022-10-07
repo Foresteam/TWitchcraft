@@ -4,17 +4,10 @@ using Terraria.ObjectData;
 using Terraria.ID;
 using Microsoft.Xna.Framework;
 using Terraria.DataStructures;
-using System.Collections.Generic;
-using System.Linq;
-using System;
 
 namespace TWitchery.Tiles {
 	public class TestCauldron : ModTile {
-
-		// public TestCauldron() {
-		// }
-		public override void PlaceInWorld(int i, int j, Item tileItem) {
-		}
+		public override void PlaceInWorld(int i, int j, Item tileItem) {}
 		public override void SetStaticDefaults() {
             Main.tileSolidTop[Type] = true;
             Main.tileFrameImportant[Type] = true;

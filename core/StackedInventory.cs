@@ -1,4 +1,5 @@
 using Terraria;
+using Terraria.ID;
 using System.Linq;
 
 namespace TWitchery {
@@ -7,6 +8,8 @@ namespace TWitchery {
 		#nullable enable
 		public Item catalyst;
 		protected bool _useCatalyst, _useLiquids;
+
+		public virtual int SlotsUsed => slots.Sum(i => i.type == ItemID.None ? 0 : 1) + (catalyst.type != ItemID.None ? 1 : 0);
 
 		public StackedInventory(int size, bool useCatalyst, bool useLiquids = false) {
 			_useCatalyst = useCatalyst;

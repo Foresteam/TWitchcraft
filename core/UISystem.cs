@@ -30,7 +30,7 @@ class UISystem : ModSystem {
 		_lastUpdateUiGameTime = gameTime;
 
 		if (!Main.tile[Main.MouseWorld.ToTileCoordinates()].HasTile)
-			OpenCauldronHoverUI();
+			CloseCauldronHoverUI();
 
 		if (_cauldronHoverUI.CurrentState != null)
 			_cauldronHoverUI.Update(gameTime);
@@ -52,16 +52,14 @@ class UISystem : ModSystem {
 		);
 	}
 
-	public static void OpenCauldronHoverUI(StackedInventory inventory)
-	{
+	public static void OpenCauldronHoverUI(StackedInventory inventory) {
 		// don't open the same ChestHoverUI again
 		if ((instance._cauldronHoverUI.CurrentState as UIStates.CauldronHoverUI)?.inventory == inventory)
 			return;
 
 		instance._cauldronHoverUI.SetState(new UIStates.CauldronHoverUI(inventory));
 	}
-	public static void OpenCauldronHoverUI()
-	{
+	public static void CloseCauldronHoverUI() {
 		// don't always close the chest
 		if (instance._cauldronHoverUI.CurrentState == null)
 			return;

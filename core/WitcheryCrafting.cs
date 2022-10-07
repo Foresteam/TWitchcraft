@@ -20,10 +20,6 @@ namespace TWitchery {
 		public WitcheryCrafting(int size, bool useCatalyst, bool useLiquids = false, List<WitcheryRecipe> recipes = null) : base(size, useCatalyst, useLiquids) {
 			_recipes = recipes == null ? new List<WitcheryRecipe>() : recipes;
 		}
-
-		public int SlotsUsed {
-			get => slots.Sum(i => i.type == 0 ? 0 : 1) + (catalyst.type != 0 ? 1 : 0);
-		}
 		
 		public override void PutCatalyst(ref Item newCatalyst) {
 			if (!_useCatalyst)
@@ -81,21 +77,26 @@ namespace TWitchery {
 			// take item
 			if (SlotsUsed > 0 && inv[slot].type == 0)
 				return Action.Take;
-			if (inv[slot].type == ItemID.Torch)
+			if (inv[slot].type == ModContent.ItemType<Items.EbonWand>())
 				return Action.Craft;
 			if (Main.tile[i, j].TileFrameY < 16)
 				return Action.PutCatalyst;
 			// put item
 			return Action.Put;
 		}
-		public void Craft(int i, int j, Player ply, TileEntity source) {
+		public WitcheryRecipe.Result? Craft() {
 			// RedefineCatalyst();
 			var recipe = WitcheryRecipe.BestMatch(_recipes, slots, catalyst, new Liquid[] {});
 			var result = recipe.Craft(slots, catalyst, new Liquid[] {});
+			Flush();
 
+			return result;
+		}
+		public void Flush() {
 			slots = Enumerable.Repeat(new Item(), slots.Length).ToArray();
 			catalyst = new Item();
-
+		}
+		public static void GiveResult(WitcheryRecipe.Result result, Point16 tile, Player ply, TileEntity source) {
 			if (result == null)
 				return;
 			foreach (var item in result.items)

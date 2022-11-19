@@ -24,4 +24,13 @@ abstract class Liquid {
 		Volume -= volume;
 		return lq;
 	}
+
+	/// <exception cref="ArgumentException">Types don't strictly match</exception>
+	public static Liquid operator +(Liquid a, Liquid b) {
+		if (a.GetType() != b.GetType())
+			throw new ArgumentException("Types don't strictly match");
+		Liquid rs = (Liquid)a.MemberwiseClone();
+		rs.Volume += b.Volume;
+		return rs;
+	}
 }

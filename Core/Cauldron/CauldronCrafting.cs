@@ -14,14 +14,17 @@ class CauldronCrafting {
 		Take,
 		Put,
 		PutCatalyst,
+		Pour,
+		Draw,
 		Craft
 	}
 	private List<WitcheryRecipe> _recipes;
 	public readonly CauldronInventory inventory;
-	public readonly LiquidContainer liquidContainer;
-	public CauldronCrafting(int size, bool useCatalyst, bool useLiquids = false, List<WitcheryRecipe> recipes = null) {
+	public readonly LiquidInventory liquidInventory;
+	public CauldronCrafting(int inventorySize, float volume, List<WitcheryRecipe> recipes = null) {
 		_recipes = recipes == null ? new List<WitcheryRecipe>() : recipes;
-		inventory = new CauldronInventory(size);
+		inventory = new CauldronInventory(inventorySize);
+		liquidInventory = new LiquidInventory(volume);
 	}
 
 	public Action Interract(int i, int j, Player ply, Item[] inv, int slot) {
@@ -30,6 +33,10 @@ class CauldronCrafting {
 			return Action.Take;
 		if (inv[slot].type == ModContent.ItemType<Items.EbonWand>())
 			return Action.Craft;
+		if (HelpMe.vesselsLiquids.Keys.Contains(inv[slot].type))
+			return Action.Pour;
+		if (HelpMe.vessels.Keys.Contains(inv[slot].type))
+			return Action.Draw;
 		if (Main.tile[i, j].TileFrameY < 16)
 			return Action.PutCatalyst;
 		// put item

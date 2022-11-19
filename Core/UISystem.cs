@@ -53,12 +53,12 @@ class UISystem : ModSystem {
 		);
 	}
 
-	public static void OpenCauldronHoverUI(StackedInventory inventory) {
+	public static void OpenCauldronHoverUI(StackedInventory inventory, LiquidInventory liquidInventory) {
 		// don't open the same ChestHoverUI again
 		if ((instance._cauldronHoverUI.CurrentState as UIStates.CauldronHoverUI)?.inventory == inventory)
 			return;
 
-		instance._cauldronHoverUI.SetState(new UIStates.CauldronHoverUI((CauldronInventory)inventory));
+		instance._cauldronHoverUI.SetState(new UIStates.CauldronHoverUI((CauldronInventory)inventory, liquidInventory));
 	}
 	public static void CloseCauldronHoverUI() {
 		// don't always close the chest

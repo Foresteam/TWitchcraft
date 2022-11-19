@@ -25,7 +25,7 @@ class CauldronInventory : StackedInventory {
 	}
 
 	#nullable enable
-	protected override Item? Take(bool peek = false) {
+	public override Item? Take(bool peek = false) {
 		if (catalyst.type != 0) {
 			var t = catalyst;
 			if (!peek)

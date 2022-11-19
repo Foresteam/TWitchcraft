@@ -53,7 +53,7 @@ namespace TWitchery.Tiles {
 			player.noThrow = 2;
 			var cauldron = HelpMe.GetTileEntity<TECauldron>(i, j);
 			if (cauldron != null)
-				UISystem.OpenCauldronHoverUI(cauldron.Inventory);
+				UISystem.OpenCauldronHoverUI(cauldron.Inventory, cauldron.LiquidInventory);
 		}
 		public override bool RightClick(int i, int j) {
 			HelpMe.GetTileEntity<TECauldron>(i, j)?.RightClick(i, j);

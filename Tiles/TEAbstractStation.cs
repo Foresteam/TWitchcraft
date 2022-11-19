@@ -10,6 +10,7 @@ using System;
 namespace TWitchery.Tiles;
 abstract class TEAbstractStation : ModTileEntity {
 	public virtual StackedInventory Inventory => null;
+	public virtual LiquidInventory LiquidInventory => null;
 	public virtual bool IsValidTile(in Tile tile) => false;
 	protected virtual void OnPlace(int i, int j) {}
 

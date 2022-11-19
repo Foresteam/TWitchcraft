@@ -28,7 +28,7 @@ class StackedInventory {
 	}
 
 	#nullable enable
-	protected virtual Item? Take(bool peek = false) {
+	public virtual Item? Take(bool peek = false) {
 		for (int i = slots.Length - 1; i >= 0; i--)
 			if (slots[i].type != 0) {
 				var t = slots[i];
@@ -42,9 +42,7 @@ class StackedInventory {
 		Item? heldItem = Take();
 		if (heldItem == null)
 			return null;
-		Item taken = ply.GetItem(Main.myPlayer, heldItem, GetItemSettings.InventoryEntityToPlayerInventorySettings);
-		if (!taken.IsAir)
-			ply.QuickSpawnItem(null, taken);
+		HelpMe.GiveItem(heldItem, ply);
 		return heldItem;
 	}
 }

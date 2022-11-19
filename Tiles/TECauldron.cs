@@ -6,7 +6,7 @@ using TWitchery.Cauldron;
 
 namespace TWitchery.Tiles {
 	class TECauldron : TEAbstractStation, IRightClickable {
-		private static List<WitcheryRecipe> _recipes = new(new WitcheryRecipe[] {
+		private static List<WitcheryRecipe> _recipes = new List<WitcheryRecipe>(new WitcheryRecipe[] {
 			new WitcheryRecipe(energyCost: 0)
 				.AddIngredient(new Item(ItemID.DirtBlock, 5))
 				.SetCatalyst(new Item(ItemID.Wood, 1))
@@ -14,8 +14,9 @@ namespace TWitchery.Tiles {
 		});
 		private CauldronCrafting _crafting;
 		public override CauldronInventory Inventory => _crafting.inventory;
+		public override LiquidInventory LiquidInventory => _crafting.liquidInventory;
 		public TECauldron() {
-			_crafting = new CauldronCrafting(5, true, true, _recipes);
+			_crafting = new CauldronCrafting(5, 5f, _recipes);
 		}
 
 		public override bool IsValidTile(in Tile tile) => tile.TileType == ModContent.TileType<TestCauldron>();
@@ -42,6 +43,9 @@ namespace TWitchery.Tiles {
 				case CauldronCrafting.Action.Craft:
 					var rs = _crafting.Craft();
 					CauldronCrafting.GiveResult(rs, new Terraria.DataStructures.Point16(i, j), ply, this);
+					break;
+				case CauldronCrafting.Action.Pour: case CauldronCrafting.Action.Draw:
+					_crafting.liquidInventory.Apply(ref inv[slot], ply);
 					break;
 				default:
 					return false;

@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -8,9 +9,11 @@ using TWitchery.Cauldron;
 namespace TWitchery.UIStates;
 class CauldronHoverUI : UIState {
 	public readonly CauldronInventory inventory;
+	public readonly LiquidInventory liquidInventory;
 
-	public CauldronHoverUI(CauldronInventory inventory) {
+	public CauldronHoverUI(CauldronInventory inventory, LiquidInventory liquidInventory) {
 		this.inventory = inventory;
+		this.liquidInventory = liquidInventory;
 	}
 
 	private void DrawItem(SpriteBatch spriteBatch, int index, Item item, Color color) {
@@ -62,7 +65,24 @@ class CauldronHoverUI : UIState {
 			Utils.DrawBorderString(spriteBatch, item.stack.ToString(), textPos, Color.White, Main.inventoryScale);
 		}
 	}
-	private void DrawLiquidBar(Vector2 offset, Liquid[] current, float max) {}
+	private void DrawLiquidBar(SpriteBatch spriteBatch, Vector2 offset, float length) {
+		float leftOffset = 0;
+		foreach (var liquid in liquidInventory) {
+			var xsize = liquid.Volume / liquidInventory.volume * length;
+			spriteBatch.Draw(
+				TextureAssets.Liquid[Terraria.ID.LiquidID.Water].Value,
+				offset + new Vector2(leftOffset, 0),
+				new Rectangle(0, 0, (int)xsize, 10),
+				liquid.Color,
+				0,
+				new Vector2(),
+				length / TextureAssets.Liquid[Terraria.ID.LiquidID.Water].Frame().Width,
+				SpriteEffects.None,
+				0
+			);
+			leftOffset += (int)xsize;
+		}
+	}
 	public override void Draw(SpriteBatch spriteBatch) {
 		base.Draw(spriteBatch);
 
@@ -76,5 +96,6 @@ class CauldronHoverUI : UIState {
 		for (; i < items.Length; i++)
 			DrawItem(spriteBatch, i, items[i], Color.White);
 		DrawItem(spriteBatch, i++, inventory.catalyst, Color.Red);
+		DrawLiquidBar(spriteBatch, Main.MouseScreen + new Vector2(0, -120), 300);
 	}
 }

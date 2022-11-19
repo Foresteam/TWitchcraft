@@ -3,12 +3,13 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.UI;
+using TWitchery.Cauldron;
 
 namespace TWitchery.UIStates;
 class CauldronHoverUI : UIState {
-	public readonly StackedInventory inventory;
+	public readonly CauldronInventory inventory;
 
-	public CauldronHoverUI(StackedInventory inventory) {
+	public CauldronHoverUI(CauldronInventory inventory) {
 		this.inventory = inventory;
 	}
 

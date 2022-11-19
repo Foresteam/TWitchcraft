@@ -4,6 +4,7 @@ using Terraria.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using TWitchery.Cauldron;
 
 namespace TWitchery;
 class UISystem : ModSystem {
@@ -57,7 +58,7 @@ class UISystem : ModSystem {
 		if ((instance._cauldronHoverUI.CurrentState as UIStates.CauldronHoverUI)?.inventory == inventory)
 			return;
 
-		instance._cauldronHoverUI.SetState(new UIStates.CauldronHoverUI(inventory));
+		instance._cauldronHoverUI.SetState(new UIStates.CauldronHoverUI((CauldronInventory)inventory));
 	}
 	public static void CloseCauldronHoverUI() {
 		// don't always close the chest

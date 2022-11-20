@@ -15,6 +15,8 @@ static partial class HelpMe {
 		{ ItemID.LavaBucket, (float volume) => new Lava(volume) },
 		{ ItemID.LesserHealingPotion, (float volume) => new WeakHealingPotion(volume) },
 		{ ItemID.HealingPotion, (float volume) => new HealingPotion(volume) },
+		{ ItemID.LesserManaPotion, (float volume) => new WeakManaPotion(volume) },
+		{ ItemID.ManaPotion, (float volume) => new ManaPotion(volume) },
 	};
 	public static readonly Dictionary<int, float> vesselsVolumes = new() {
 		{ ItemID.EmptyBucket, 1f },
@@ -33,6 +35,8 @@ static partial class HelpMe {
 		{ ItemID.BottledWater, ItemID.Bottle },
 		{ ItemID.LesserHealingPotion, ItemID.Bottle },
 		{ ItemID.HealingPotion, ItemID.Bottle },
+		{ ItemID.LesserManaPotion, ItemID.Bottle },
+		{ ItemID.ManaPotion, ItemID.Bottle },
 	};
 
 	public static class Vessel

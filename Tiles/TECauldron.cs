@@ -7,6 +7,7 @@ using TWitchery.Cauldron;
 namespace TWitchery.Tiles;
 using Liquids;
 class TECauldron : TEAbstractStation, IRightClickable {
+	private static Dictionary<int, float> VolumeOf = HelpMe.vesselsVolumes;
 	private static List<WitcheryRecipe> _recipes = new List<WitcheryRecipe>(new WitcheryRecipe[] {
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Item(ItemID.DirtBlock, 5))
@@ -19,12 +20,20 @@ class TECauldron : TEAbstractStation, IRightClickable {
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Item(ItemID.Mushroom, 1))
 			.AddIngredient(new Item(ItemID.Gel, 2))
-			.AddIngredient(new Water(.5f))
-			.AddResult(new WeakHealingPotion(.5f)),
+			.AddIngredient(new Water(VolumeOf[ItemID.Bottle] * 2))
+			.AddResult(new WeakHealingPotion(VolumeOf[ItemID.Bottle] * 2)),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Item(ItemID.GlowingMushroom, 1))
-			.AddIngredient(new WeakHealingPotion(.5f))
-			.AddResult(new HealingPotion(.25f)),
+			.AddIngredient(new WeakHealingPotion(VolumeOf[ItemID.Bottle] * 2))
+			.AddResult(new HealingPotion(VolumeOf[ItemID.Bottle])),
+		new WitcheryRecipe(energyCost: 0)
+			.AddIngredient(new Item(ItemID.FallenStar, 1))
+			.AddIngredient(new Water(VolumeOf[ItemID.EmptyBucket] * 1.5f))
+			.AddResult(new WeakManaPotion(VolumeOf[ItemID.EmptyBucket] * 1.5f)),
+		new WitcheryRecipe(energyCost: 0)
+			.AddIngredient(new Item(ItemID.GlowingMushroom, 1))
+			.AddIngredient(new WeakManaPotion(VolumeOf[ItemID.Bottle] * 2))
+			.AddResult(new ManaPotion(VolumeOf[ItemID.Bottle])),
 	});
 	private Crafting _crafting;
 	public override Inventory Inventory => _crafting.inventory;

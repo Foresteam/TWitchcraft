@@ -12,6 +12,7 @@ static class HelpMe {
 	public static readonly Dictionary<int, Func<float, Liquid>> vesselsLiquids = new() {
 		{ ItemID.WaterBucket, (float volume) => new Water(volume) },
 		{ ItemID.BottledWater, (float volume) => new Water(volume) },
+		{ ItemID.LavaBucket, (float volume) => new Lava(volume) }
 	};
 	public static readonly Dictionary<int, float> vesselsVolumes = new() {
 		{ ItemID.EmptyBucket, 1f },

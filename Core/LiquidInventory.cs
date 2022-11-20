@@ -104,8 +104,11 @@ class LiquidInventory : IEnumerable<Liquid> {
 			return;
 		}
 		// fill
+		if (!HelpMe.vesselsLiquids.ContainsKey(item.type))
+			return;
 		var vol = HelpMe.Vessel.GetVolume(item);
-		Add(HelpMe.vesselsLiquids[item.type](HelpMe.Vessel.GetVolume(item)));
+		if (!Add(HelpMe.vesselsLiquids[item.type](HelpMe.Vessel.GetVolume(item))))
+			return;
 		if (HelpMe.vessels[item.type] == ItemID.EmptyBucket)
 			HelpMe.GiveItem(new Item(ItemID.EmptyBucket), ply);
 		HelpMe.Consume(ref item);

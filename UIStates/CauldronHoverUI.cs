@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.ModLoader;
 using Terraria.GameContent;
 using Terraria.UI;
 using TWitchery.Cauldron;
@@ -10,22 +13,25 @@ namespace TWitchery.UIStates;
 class CauldronHoverUI : UIState {
 	public readonly CauldronInventory inventory;
 	public readonly LiquidInventory liquidInventory;
+	public readonly Texture2D liquidTexture, liquidBarTexture;
 
 	public CauldronHoverUI(CauldronInventory inventory, LiquidInventory liquidInventory) {
 		this.inventory = inventory;
 		this.liquidInventory = liquidInventory;
+		liquidTexture = ModContent.Request<Texture2D>("TWitchery/Assets/Liquid").Value;
+		liquidBarTexture = ModContent.Request<Texture2D>("TWitchery/Assets/LiquidBar").Value;
 	}
 
-	private void DrawItem(SpriteBatch spriteBatch, int index, Item item, Color color) {
+	private Rectangle DrawItem(SpriteBatch spriteBatch, int index, Item item, Color color) {
 		const float baseScale = 1f;
+		const float itemsPadding = 20 * baseScale;
 		const int yOffset = -40;
-		const float padding = 20 * baseScale;
 		const float spacing = 0;
 		const float maxSize = 20 * baseScale;
 		const float itemSlotRatio = 1.5f;
 
 		float drawScale = baseScale * 1f;
-		float column = (maxSize + padding + spacing) * index;
+		float column = (maxSize + itemsPadding + spacing) * index;
 
 		Main.instance.LoadItem(item.type); // load item before trying to get its texture (Item only gets loaded once)
 		Texture2D itemTexture = TextureAssets.Item[item.type].Value; // get item texture
@@ -64,24 +70,42 @@ class CauldronHoverUI : UIState {
 			Vector2 textPos = drawPos + corner;
 			Utils.DrawBorderString(spriteBatch, item.stack.ToString(), textPos, Color.White, Main.inventoryScale);
 		}
+
+		var rsRect = TextureAssets.InventoryBack.Frame();
+		rsRect = new Rectangle(
+			(int)backgroundPos.X,
+			(int)backgroundPos.Y,
+			(int)(rsRect.Width * drawScale * .7f),
+			(int)(rsRect.Height * drawScale * .7f)
+		);
+		return rsRect;
 	}
-	private void DrawLiquidBar(SpriteBatch spriteBatch, Vector2 offset, float length) {
-		float leftOffset = 0;
+	private void DrawLiquidBar(SpriteBatch spriteBatch, Vector2 offset, int length) {
+		const int height = 14;
+		int leftOffset = 0;
+		spriteBatch.Draw(
+			liquidBarTexture,
+			offset - new Vector2(1, 1),
+			new Rectangle(0, 0, length + 2, height + 2),
+			Color.Black
+		);
 		foreach (var liquid in liquidInventory) {
-			var xsize = liquid.Volume / liquidInventory.volume * length;
+			var xsize = (int)(liquid.Volume / liquidInventory.volume * length);
 			spriteBatch.Draw(
-				TextureAssets.Liquid[Terraria.ID.LiquidID.Water].Value,
+				liquidTexture,
 				offset + new Vector2(leftOffset, 0),
-				new Rectangle(0, 0, (int)xsize, 10),
-				liquid.Color,
-				0,
-				new Vector2(),
-				length / TextureAssets.Liquid[Terraria.ID.LiquidID.Water].Frame().Width,
-				SpriteEffects.None,
-				0
+				new Rectangle(0, 0, (int)xsize, height),
+				liquid.Color
 			);
 			leftOffset += (int)xsize;
 		}
+	}
+	private void DrawItems(SpriteBatch spriteBatch) {
+		Item[] items = inventory.slots;
+		int i = 0;
+		for (; i < items.Length; i++)
+			DrawItem(spriteBatch, i, items[i], Color.White);
+		DrawItem(spriteBatch, i++, inventory.catalyst, Color.Red);
 	}
 	public override void Draw(SpriteBatch spriteBatch) {
 		base.Draw(spriteBatch);
@@ -89,13 +113,7 @@ class CauldronHoverUI : UIState {
 		if (inventory == null)
 			return;
 
-		// all items in the chest
-		Item[] items = inventory.slots;
-
-		int i = 0;
-		for (; i < items.Length; i++)
-			DrawItem(spriteBatch, i, items[i], Color.White);
-		DrawItem(spriteBatch, i++, inventory.catalyst, Color.Red);
-		DrawLiquidBar(spriteBatch, Main.MouseScreen + new Vector2(0, -120), 300);
+		DrawItems(spriteBatch);
+		DrawLiquidBar(spriteBatch, Main.MouseScreen + new Vector2(-15, -75), 230);
 	}
 }

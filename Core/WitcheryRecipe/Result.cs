@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 
 namespace TWitchery;
+using Liquids;
 partial class WitcheryRecipe {
 	#nullable enable
 	public class Result

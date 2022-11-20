@@ -88,18 +88,20 @@ class LiquidInventory : IEnumerable<Liquid> {
 	public Liquid? Get() => _contained.Count > 0 ? _contained.Last() : null;
 
 	public List<Liquid> GetAll() => new List<Liquid>(_contained);
-	public void Clear() => _contained.Clear();
+	public void Flush() => _contained.Clear();
 
 	public void Apply(ref Item item, Player ply) {
 		if (!HelpMe.Vessel.IsVessel(item))
 			return;
 		// draw
 		if (HelpMe.Vessel.IsEmpty(item)) {
-			Liquid? taken = Take(HelpMe.Vessel.GetVolume(item));
-			if (taken == null)
+			Liquid? liquidToTake = Get();
+			int itemID = HelpMe.Vessel.GetFilledWith(item, liquidToTake);
+			if (liquidToTake == null || itemID == 0)
 				return;
+			Liquid? taken = Take(HelpMe.Vessel.GetVolume(item));
 			// the order should be preserved!
-			HelpMe.GiveItem(new Item(HelpMe.Vessel.GetFilledWith(item, taken)), ply);
+			HelpMe.GiveItem(new Item(itemID), ply);
 			HelpMe.Consume(ref item);
 			return;
 		}

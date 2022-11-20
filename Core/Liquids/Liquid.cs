@@ -33,4 +33,9 @@ abstract class Liquid {
 		rs.Volume += b.Volume;
 		return rs;
 	}
+	public static Liquid operator *(Liquid a, float b) {
+		Liquid result = (Liquid)a.MemberwiseClone();
+		result.Volume *= b;
+		return result;
+	}
 }

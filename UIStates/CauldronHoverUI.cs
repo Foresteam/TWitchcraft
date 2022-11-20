@@ -7,15 +7,14 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.GameContent;
 using Terraria.UI;
-using TWitchery.Cauldron;
 
 namespace TWitchery.UIStates;
 class CauldronHoverUI : UIState {
-	public readonly CauldronInventory inventory;
+	public readonly Cauldron.Inventory inventory;
 	public readonly LiquidInventory liquidInventory;
 	public readonly Texture2D liquidTexture, liquidBarTexture;
 
-	public CauldronHoverUI(CauldronInventory inventory, LiquidInventory liquidInventory) {
+	public CauldronHoverUI(Cauldron.Inventory inventory, LiquidInventory liquidInventory) {
 		this.inventory = inventory;
 		this.liquidInventory = liquidInventory;
 		liquidTexture = ModContent.Request<Texture2D>("TWitchery/Assets/Liquid").Value;

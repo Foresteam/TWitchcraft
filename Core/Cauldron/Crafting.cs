@@ -8,22 +8,14 @@ using Microsoft.Xna.Framework;
 using System;
 
 namespace TWitchery.Cauldron;
-class CauldronCrafting {
-	public enum Action {
-		Nothing = 0,
-		Take,
-		Put,
-		PutCatalyst,
-		Pour,
-		Draw,
-		Craft
-	}
+using Liquids;
+partial class Crafting {
 	private List<WitcheryRecipe> _recipes;
-	public readonly CauldronInventory inventory;
+	public readonly Inventory inventory;
 	public readonly LiquidInventory liquidInventory;
-	public CauldronCrafting(int inventorySize, float volume, List<WitcheryRecipe> recipes = null) {
+	public Crafting(int inventorySize, float volume, List<WitcheryRecipe> recipes = null) {
 		_recipes = recipes == null ? new List<WitcheryRecipe>() : recipes;
-		inventory = new CauldronInventory(inventorySize);
+		inventory = new Inventory(inventorySize);
 		liquidInventory = new LiquidInventory(volume);
 	}
 
@@ -45,8 +37,8 @@ class CauldronCrafting {
 	#nullable enable
 	public WitcheryRecipe.Result? Craft() {
 		// RedefineCatalyst();
-		var recipe = WitcheryRecipe.BestMatch(_recipes, inventory.slots, inventory.catalyst, new Liquid[] {});
-		var result = recipe.Craft(inventory.slots, inventory.catalyst, new Liquid[] {});
+		var recipe = WitcheryRecipe.BestMatch(_recipes, inventory.slots, inventory.catalyst, liquidInventory.GetAll());
+		var result = recipe.Craft(inventory.slots, inventory.catalyst, liquidInventory.GetAll());
 		Flush();
 
 		return result;
@@ -54,11 +46,14 @@ class CauldronCrafting {
 	public void Flush() {
 		inventory.slots = Enumerable.Repeat(new Item(), inventory.slots.Length).ToArray();
 		inventory.catalyst = new Item();
+		liquidInventory.Flush();
 	}
-	public static void GiveResult(WitcheryRecipe.Result result, Point16 tile, Player ply, TileEntity source) {
+	public void GiveResult(WitcheryRecipe.Result result, Point16 tile, Player ply, TileEntity source) {
 		if (result == null)
 			return;
 		foreach (var item in result.items)
 			ply.QuickSpawnClonedItem(new EntitySource_TileEntity(source), item.self, item.self.stack);
+		foreach (var liquid in result.liquids)
+			liquidInventory.Add(liquid.self);
 	}
 }

@@ -5,7 +5,7 @@ using Terraria.ID;
 using Microsoft.Xna.Framework;
 
 namespace TWitchery.Items.Placeables {
-	public class TestCauldron : ModItem {
+	public class Cauldron : ModItem {
 		public const string DisplayNameText = "Alchemy Cauldron";
 		public const string TooltipText = "Used for alchemy";
 
@@ -25,7 +25,7 @@ namespace TWitchery.Items.Placeables {
 			Item.useStyle = ItemUseStyleID.Swing;
 			Item.consumable = true;
 			Item.value = 150;
-			Item.createTile = ModContent.TileType<Tiles.TestCauldron>();
+			Item.createTile = ModContent.TileType<Tiles.Cauldron>();
 		}
 		public override void AddRecipes() {
 			CreateRecipe()

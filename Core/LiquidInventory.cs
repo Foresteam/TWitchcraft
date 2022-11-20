@@ -96,8 +96,10 @@ class LiquidInventory : IEnumerable<Liquid> {
 		// draw
 		if (HelpMe.Vessel.IsEmpty(item)) {
 			Liquid? liquidToTake = Get();
+			if (liquidToTake == null)
+				return;
 			int itemID = HelpMe.Vessel.GetFilledWith(item, liquidToTake);
-			if (liquidToTake == null || itemID == 0)
+			if (itemID == 0)
 				return;
 			Liquid? taken = Take(HelpMe.Vessel.GetVolume(item));
 			// the order should be preserved!

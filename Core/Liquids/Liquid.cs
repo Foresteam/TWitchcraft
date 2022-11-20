@@ -5,7 +5,8 @@ namespace TWitchery.Liquids;
 abstract class Liquid {
 	private float _volume;
 	public virtual string Name => "Generic Liquid";
-	public virtual Color Color => new Color(255, 255, 255, 255);
+	public virtual Color Color => Color.White;
+	public virtual Color? ColorSecondary => null;
 	public float Volume {
 		get => _volume;
 		set => _volume = Math.Max(0, value);

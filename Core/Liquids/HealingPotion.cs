@@ -1,8 +1,8 @@
 using Microsoft.Xna.Framework;
 
 namespace TWitchery.Liquids;
-class HealingPotion : Liquid {
-	public override string Name => "Healing poton";
-	public override Color Color => new Color(200, 15, 0);
+class HealingPotion : WeakHealingPotion {
+	public override string Name => "Healing potion";
+	public override Color Color => new Color(230, 10, 57);
 	public HealingPotion(float volume) : base(volume) {}
 }

@@ -12,12 +12,13 @@ namespace TWitchery.UIStates;
 class CauldronHoverUI : UIState {
 	public readonly Cauldron.Inventory inventory;
 	public readonly LiquidInventory liquidInventory;
-	public readonly Texture2D liquidTexture, liquidBarTexture;
+	public readonly Texture2D liquidTexture, liquidSecondaryTexture, liquidBarTexture;
 
 	public CauldronHoverUI(Cauldron.Inventory inventory, LiquidInventory liquidInventory) {
 		this.inventory = inventory;
 		this.liquidInventory = liquidInventory;
 		liquidTexture = ModContent.Request<Texture2D>("TWitchery/Assets/Liquid").Value;
+		liquidSecondaryTexture = ModContent.Request<Texture2D>("TWitchery/Assets/LiquidSecondary").Value;
 		liquidBarTexture = ModContent.Request<Texture2D>("TWitchery/Assets/LiquidBar").Value;
 	}
 
@@ -96,6 +97,13 @@ class CauldronHoverUI : UIState {
 				new Rectangle(0, 0, (int)xsize, height),
 				liquid.Color
 			);
+			if (liquid.ColorSecondary != null)
+				spriteBatch.Draw(
+					liquidSecondaryTexture,
+					offset + new Vector2(leftOffset, 0),
+					new Rectangle(0, 0, (int)xsize, height),
+					(Color)liquid.ColorSecondary
+				);
 			leftOffset += (int)xsize;
 		}
 	}

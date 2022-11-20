@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace TWitchery.Tiles;
 public class Cauldron : ModTile {
 	const int magicDrawOffsetY = 8;
-	private Asset<Texture2D> _liquidTexture;
+	private Asset<Texture2D> _liquidTexture, _liquidSecondaryTexture;
 	public override void PlaceInWorld(int i, int j, Item tileItem) {}
 	public override void SetStaticDefaults() {
 		Main.tileSolidTop[Type] = true;
@@ -44,6 +44,7 @@ public class Cauldron : ModTile {
 		Main.tileCut[Type] = false;
 
 		_liquidTexture = ModContent.Request<Texture2D>("TWitchery/Assets/CauldronLiquid");
+		_liquidSecondaryTexture = ModContent.Request<Texture2D>("TWitchery/Assets/CauldronLiquidSecondary");
 }
 	public override void NumDust(int i, int j, bool fail, ref int num) {
 		num = fail ? 1 : 3;
@@ -92,8 +93,8 @@ public class Cauldron : ModTile {
 				accumulated += lq.Volume;
 			}
 
-		spriteBatch.Draw(
-			_liquidTexture.Value,
+		var draw = (Texture2D texture, Color color) => spriteBatch.Draw(
+			texture,
 			origin.ToVector2() * 16 - Main.screenPosition + zero,
 			new Rectangle(dorigin.X * 16, dorigin.Y * 16, 16, 16),
 			color,
@@ -103,5 +104,8 @@ public class Cauldron : ModTile {
 			SpriteEffects.None,
 			0f
 		);
+		draw(_liquidTexture.Value, color);
+		if (liquids.First().ColorSecondary != null)
+			draw(_liquidSecondaryTexture.Value, (Color)liquids.First().ColorSecondary);
 	}
 }

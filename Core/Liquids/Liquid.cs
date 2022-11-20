@@ -39,4 +39,5 @@ abstract class Liquid {
 		result.Volume *= b;
 		return result;
 	}
+	public Liquid Clone() => (Liquid)MemberwiseClone();
 }

@@ -18,22 +18,60 @@ class TECauldron : TEAbstractStation, IRightClickable {
 			.AddIngredient(new Lava(1f))
 			.AddResult(new Item(ItemID.Obsidian, 5)),
 		new WitcheryRecipe(energyCost: 0)
-			.AddIngredient(new Item(ItemID.Mushroom, 1))
 			.AddIngredient(new Item(ItemID.Gel, 2))
+			.SetCatalyst(new Item(ItemID.Mushroom, 1))
 			.AddIngredient(new Water(VolumeOf[ItemID.Bottle] * 2))
-			.AddResult(new WeakHealingPotion(VolumeOf[ItemID.Bottle] * 2)),
+			.AddResult(new LesserHealingPotion(VolumeOf[ItemID.Bottle] * 2)),
 		new WitcheryRecipe(energyCost: 0)
-			.AddIngredient(new Item(ItemID.GlowingMushroom, 1))
-			.AddIngredient(new WeakHealingPotion(VolumeOf[ItemID.Bottle] * 2))
+			.AddIngredient(new LesserHealingPotion(VolumeOf[ItemID.Bottle] * 2))
+			.SetCatalyst(new Item(ItemID.GlowingMushroom, 1))
 			.AddResult(new HealingPotion(VolumeOf[ItemID.Bottle])),
 		new WitcheryRecipe(energyCost: 0)
-			.AddIngredient(new Item(ItemID.FallenStar, 1))
-			.AddIngredient(new Water(VolumeOf[ItemID.EmptyBucket] * 1.5f))
-			.AddResult(new WeakManaPotion(VolumeOf[ItemID.EmptyBucket] * 1.5f)),
+			.AddIngredient(new Water(VolumeOf[ItemID.Bottle]))
+			.AddIngredient(new Item(ItemID.CrystalShard))
+			.AddResult(new LiquidCrystal(VolumeOf[ItemID.EmptyBucket] / 10f)),
 		new WitcheryRecipe(energyCost: 0)
-			.AddIngredient(new Item(ItemID.GlowingMushroom, 1))
-			.AddIngredient(new WeakManaPotion(VolumeOf[ItemID.Bottle] * 2))
+			.AddIngredient(new LiquidCrystal(VolumeOf[ItemID.EmptyBucket] / 10f))
+			.AddIngredient(new Water(VolumeOf[ItemID.Bottle] * 4f))
+			.AddIngredient(new Item(ItemID.PixieDust, 3))
+			.AddResult(new GreaterHealingPotion(VolumeOf[ItemID.Bottle] * 4f)),
+		new WitcheryRecipe(energyCost: 0)
+			.AddIngredient(new Water(VolumeOf[ItemID.Bottle] * 3f))
+			.AddIngredient(new Item(ItemID.PixieDust, 3))
+			.SetCatalyst(new Item(ItemID.CrystalShard))
+			.AddResult(new GreaterHealingPotion(VolumeOf[ItemID.Bottle] * 3f)),
+
+		new WitcheryRecipe(energyCost: 0)
+			.AddIngredient(new Water(VolumeOf[ItemID.EmptyBucket] * 1.5f))
+			.SetCatalyst(new Item(ItemID.FallenStar, 1))
+			.AddResult(new LesserManaPotion(VolumeOf[ItemID.EmptyBucket] * 1.5f)),
+		new WitcheryRecipe(energyCost: 0)
+			.AddIngredient(new LesserManaPotion(VolumeOf[ItemID.Bottle] * 2))
+			.SetCatalyst(new Item(ItemID.GlowingMushroom, 1))
 			.AddResult(new ManaPotion(VolumeOf[ItemID.Bottle])),
+		
+		// The "secret" potion. Should this be used for something else?
+		new WitcheryRecipe(energyCost: 0)
+			.AddIngredient(new HealingPotion(VolumeOf[ItemID.EmptyBucket]))
+			.AddIngredient(new LesserHealingPotion(VolumeOf[ItemID.Bottle]))
+			.AddIngredient(new ManaPotion(VolumeOf[ItemID.EmptyBucket]))
+			.AddResult(new LifeforcePotion(VolumeOf[ItemID.Bottle])),
+
+		new WitcheryRecipe(energyCost: 0)
+			.AddIngredient(new Item(ItemID.SandBlock, 2))
+			.AddResult(new Glass(VolumeOf[ItemID.EmptyBucket] / 10f * 1.5f)),
+		new WitcheryRecipe(energyCost: 0)
+			.AddIngredient(new Item(ItemID.Glass))
+			.AddResult(new Glass(VolumeOf[ItemID.EmptyBucket] / 10f)),
+		new WitcheryRecipe(energyCost: 0)
+			.AddIngredient(new Glass(VolumeOf[ItemID.EmptyBucket] / 10f))
+			.AddResult(new Item(ItemID.Glass)),
+		new WitcheryRecipe(energyCost: 0)
+			.AddIngredient(new LiquidCrystal(VolumeOf[ItemID.EmptyBucket]))
+			.AddIngredient(new Item(ItemID.Glass, 5))
+			.SetCatalyst(new Item(ItemID.ManaCrystal))
+			// .AddIngredient(new Glass(VolumeOf[ItemID.EmptyBucket] / 2f))
+			.AddResult(new Item(ItemID.CrystalBall))
 	});
 	private Crafting _crafting;
 	public override Inventory Inventory => _crafting.inventory;

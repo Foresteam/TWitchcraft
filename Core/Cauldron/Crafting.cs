@@ -36,7 +36,6 @@ partial class Crafting {
 	}
 	#nullable enable
 	public WitcheryRecipe.Result? Craft() {
-		// RedefineCatalyst();
 		var recipe = WitcheryRecipe.BestMatch(_recipes, inventory.slots, inventory.catalyst, liquidInventory.GetAll());
 		var result = recipe.Craft(inventory.slots, inventory.catalyst, liquidInventory.GetAll());
 		Flush();

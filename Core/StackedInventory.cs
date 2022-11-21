@@ -13,11 +13,16 @@ class StackedInventory {
 	}
 
 	protected virtual bool TryPut(Item item) {
-		for (int i = 0; i < slots.Length; i++)
+		for (int i = 0; i < slots.Length; i++) {
+			if (slots[i].type == item.type) {
+				slots[i].stack += item.stack;
+				return true;
+			}
 			if (slots[i].type == 0) {
 				slots[i] = item;
 				return true;
 			}
+		}
 		return false;
 	}
 	public bool Put(ref Item activeItem) {

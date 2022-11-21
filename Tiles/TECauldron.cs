@@ -66,7 +66,7 @@ class TECauldron : TEAbstractStation, IRightClickable {
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Item(ItemID.Glass))
 			.AddResult(new Glass(VolumeOf[ItemID.EmptyBucket] / 10f)),
-		new WitcheryRecipe(energyCost: 0)
+		new WitcheryRecipe(energyCost: 0, failedWorkedChance: 1f)
 			.AddIngredient(new Glass(VolumeOf[ItemID.EmptyBucket] / 10f))
 			.AddResult(new Item(ItemID.Glass)),
 		new WitcheryRecipe(energyCost: 0)

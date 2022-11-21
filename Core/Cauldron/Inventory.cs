@@ -10,6 +10,11 @@ class Inventory : StackedInventory {
 	}
 
 	public void PutCatalyst(ref Item newCatalyst) {
+		if (newCatalyst.type == catalyst.type) {
+			catalyst.stack += newCatalyst.stack;
+			newCatalyst = new Item();
+			return;
+		}
 		HelpMe.Swap(ref catalyst, ref newCatalyst);
 	}
 

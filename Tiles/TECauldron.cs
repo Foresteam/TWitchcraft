@@ -69,7 +69,7 @@ class TECauldron : TEAbstractStation, IRightClickable {
 		new WitcheryRecipe(energyCost: 0, failedWorkedChance: 1f)
 			.AddIngredient(new Glass(VolumeOf[ItemID.EmptyBucket] / 10f))
 			.AddResult(new Item(ItemID.Glass)),
-		new WitcheryRecipe(energyCost: 0)
+		new WitcheryRecipe(energyCost: 100)
 			.AddIngredient(new LiquidCrystal(VolumeOf[ItemID.EmptyBucket]))
 			.AddIngredient(new Item(ItemID.Glass, 5))
 			.SetCatalyst(new Item(ItemID.ManaCrystal))
@@ -146,6 +146,11 @@ class TECauldron : TEAbstractStation, IRightClickable {
 				break;
 			case Crafting.Action.Craft:
 				var rs = _crafting.Craft();
+				if (rs != null && !_crafting.DrainEnergy(rs.energyCost, _crafting.liquidInventory.GetAll(), ply)) {
+					Main.NewText("Not enough energy!", Color.Red);
+					rs = null;
+				}
+				_crafting.Flush();
 				CraftEffects(i, j, rs != null);
 				_crafting.GiveResult(rs, new Terraria.DataStructures.Point16(i, j), ply, this);
 				break;

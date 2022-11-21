@@ -1,8 +1,15 @@
+using System.Collections.Generic;
 using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
 
 namespace TWitchery;
+using Liquids;
 static partial class HelpMe {
+	public static readonly Dictionary<System.Type, float> energyLiquids = new() {
+		{ new LesserManaPotion(1).GetType(), 1f / 5f },
+		{ new ManaPotion(1).GetType(), 1f / 5f * 2f },
+	};
+
 	public static void GetTileOrigin(ref int i, ref int j) {
 		i -= Terraria.Main.tile[i, j].TileFrameX / 16;
 		j -= -1 + Terraria.Main.tile[i, j].TileFrameY / 16;

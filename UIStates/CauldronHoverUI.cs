@@ -118,8 +118,8 @@ class CauldronHoverUI : UIState {
 	private void DrawLiquidStatus(SpriteBatch spriteBatch, Vector2 position) {
 		if (liquidInventory.GetAll().Count == 0)
 			return;
-		var text = (from liquid in liquidInventory.GetAll() orderby liquid.Volume descending select liquid.Name).First();
-		spriteBatch.DrawString(FontAssets.MouseText.Value, text, position, Color.White);
+		var liquid = (from _liquid in liquidInventory.GetAll() orderby _liquid.Volume descending select _liquid).First();
+		spriteBatch.DrawString(FontAssets.MouseText.Value, $"{liquid.Name} {liquid.Volume}L", position, Color.White);
 	}
 	public override void Draw(SpriteBatch spriteBatch) {
 		base.Draw(spriteBatch);

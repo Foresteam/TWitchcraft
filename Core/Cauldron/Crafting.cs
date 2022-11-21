@@ -38,7 +38,6 @@ partial class Crafting {
 	public WitcheryRecipe.Result? Craft() {
 		var recipe = WitcheryRecipe.BestMatch(_recipes, inventory.slots, inventory.catalyst, liquidInventory.GetAll());
 		var result = recipe.Craft(inventory.slots, inventory.catalyst, liquidInventory.GetAll());
-		Flush();
 
 		return result;
 	}
@@ -46,6 +45,30 @@ partial class Crafting {
 		inventory.slots = Enumerable.Repeat(new Item(), inventory.slots.Length).ToArray();
 		inventory.catalyst = new Item();
 		liquidInventory.Flush();
+	}
+	public bool DrainEnergy(float amount, List<Liquid> liquids, Player ply) {
+		if (amount == 0)
+			return true;
+		List<Liquid> remove = new();
+		foreach (Liquid liquid in liquids)
+			if (HelpMe.energyLiquids.ContainsKey(liquid.GetType())) {
+				var mpu = HelpMe.energyLiquids[liquid.GetType()];
+				if (liquid.Volume < amount / mpu) {
+					amount -= liquid.Volume * mpu;
+					remove.Add(liquid);
+					continue;
+				}
+				liquid.Volume -= amount / mpu;
+				return true;
+			}
+		Main.NewText($"Mana: {ply.statMana}/{amount}");
+		if (ply.statMana >= amount) {
+			// not working
+			ply.GetModPlayer<TWitcheryPlayer>().TakeMana((int)amount);
+			Main.NewText($"Mana: {ply.statMana}/{amount}");
+			return true;
+		}
+		return false;
 	}
 	public void GiveResult(WitcheryRecipe.Result result, Point16 tile, Player ply, TileEntity source) {
 		if (result == null)

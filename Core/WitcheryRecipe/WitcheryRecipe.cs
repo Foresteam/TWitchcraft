@@ -60,10 +60,16 @@ partial class WitcheryRecipe {
 		return this;
 	}
 
-	private float Match(Item[] _items, Item catalyst, List<Liquid> liquids, out int? xAmount) {
+	private List<Liquid> FilterEnergyOut(List<Liquid> input) {
+		return input.Select(liquid => !HelpMe.energyLiquids.ContainsKey(liquid.GetType()) ? liquid : null).ToList();
+	}
+	private float Match(Item[] _items, Item catalyst, List<Liquid> inputLiquids, out int? xAmount) {
 		var items = new List<Item>(_items).FindAll(i => !i.IsAir);
+		var liquids = inputLiquids;
+		if (_result.energyCost > 0)
+			liquids = FilterEnergyOut(liquids);
 		int 
-			totalLiquids = Math.Max(liquids.Count, _liquidIngredients.Count),
+			totalLiquids = Math.Max(liquids.Select(l => l == null ? 0 : 1).Sum(), _liquidIngredients.Count),
 			totalItems = Math.Max(_itemIngredients.Count, _items.Select(i => i.type == 0 ? 0 : 1).Sum()),
 			totalCatalyst = Math.Max(catalyst.type != 0 ? 1 : 0, _catalyst.type != 0 ? 1 : 0);
 		int total = totalLiquids + totalItems + totalCatalyst;
@@ -78,6 +84,8 @@ partial class WitcheryRecipe {
 					match++;
 				}
 		foreach (Liquid liquid in liquids) {
+			if (liquid == null)
+				continue;
 			var _xAmount = xAmount;
 			Liquid rliquid = null;
 			foreach (var tliquid in _liquidIngredients)

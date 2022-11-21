@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 
 namespace TWitchery.Liquids;
@@ -24,6 +26,26 @@ abstract class Liquid {
 		lq.Volume = Volume - volume;
 		Volume -= volume;
 		return lq;
+	}
+
+#nullable enable
+	public static Color? Blend(IEnumerable<Liquid> liquids, Func<Liquid, Color?> colorGetter) {
+		if (liquids.Count() == 0)
+			return null;
+		Color? color = colorGetter(liquids.First());
+		if (color == null)
+			return null;
+		float accumulated = liquids.First().Volume;
+		foreach (var liquid in liquids) {
+			Color? other = colorGetter(liquid);
+			if (other == null || other == color)
+				continue;
+			else {
+				color = HelpMe.Blend((Color)other, (Color)color, accumulated / liquid.Volume / (accumulated == liquids.First().Volume ? 2 : 1));
+				accumulated += liquid.Volume;
+			}
+		}
+		return color;
 	}
 
 	/// <exception cref="ArgumentException">Types don't strictly match</exception>

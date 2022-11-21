@@ -1,7 +1,10 @@
+using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
-using System.Collections.Generic;
+using Terraria.Audio;
 using TWitchery.Cauldron;
 
 namespace TWitchery.Tiles;
@@ -85,6 +88,44 @@ class TECauldron : TEAbstractStation, IRightClickable {
 		// ass.Add(Main.rand.Next());
 		Main.NewText("I exist, therefore i am in the world.");
 	}
+	private void CraftEffects(int i, int j, bool success) {
+		HelpMe.GetTileOrigin(ref i, ref j);
+		i++;
+		var pos = new Vector2(i, j) * 16 + new Vector2(2, -8);
+		var type = success ? DustID.MagicMirror : DustID.Smoke;
+		var startVelocity = success ? -1f : -3f;
+		for (int k = 0; k < 50; k++) {
+			int dust = Dust.NewDust(new Vector2(i, j) * 16 + Cauldron.particleOrigin, 4, 4, type, 0, startVelocity, 100, default(Color), 1.5f);
+			// Main.dust[dust].velocity.X *= .9f;
+			if (success) {
+				Main.dust[dust].velocity.X *= 1.7f;
+				Main.dust[dust].velocity.Y *= 1.7f;
+			}
+			else
+				Main.dust[dust].velocity.Y *= .7f;
+			Main.dust[dust].noGravity = true;
+		}
+		if (success)
+			SoundEngine.PlaySound(SoundID.Item29, pos);
+		else
+			SoundEngine.PlaySound(SoundID.LiquidsWaterLava, pos);
+	}
+	private void AddItemEffects(int i, int j, int amount) {
+		var color = Liquid.Blend(_crafting.liquidInventory.GetAll(), lq => lq.Color);
+		if (color == null)
+			return;
+		HelpMe.GetTileOrigin(ref i, ref j);
+		i++;
+		var pos = new Vector2(i, j) * 16 + Cauldron.particleOrigin;
+		var type = ModContent.DustType<Dusts.Bubble>();
+		for (int k = 0; k < Math.Min(100, amount * 2.5); k++) {
+			int dust = Dust.NewDust(pos, 4, 4, type, 0, -2f, 100, (Color)color, .25f);
+			Main.dust[dust].velocity.Y *= .3f;
+			Main.dust[dust].velocity.X *= .6f;
+			Main.dust[dust].noGravity = true;
+		}
+		SoundEngine.PlaySound(SoundID.Splash, pos);
+	}
 	public bool RightClick(int i, int j) {
 		var ply = Main.LocalPlayer;
 		int slot = ply.selectedItem;
@@ -96,13 +137,16 @@ class TECauldron : TEAbstractStation, IRightClickable {
 				_crafting.inventory.Take(i, j, ply);
 				break;
 			case Crafting.Action.Put:
+				AddItemEffects(i, j, activeItem.stack);
 				_crafting.inventory.Put(ref activeItem);
 				break;
 			case Crafting.Action.PutCatalyst:
+				AddItemEffects(i, j, activeItem.stack);
 				_crafting.inventory.PutCatalyst(ref activeItem);
 				break;
 			case Crafting.Action.Craft:
 				var rs = _crafting.Craft();
+				CraftEffects(i, j, rs != null);
 				_crafting.GiveResult(rs, new Terraria.DataStructures.Point16(i, j), ply, this);
 				break;
 			case Crafting.Action.Pour: case Crafting.Action.Draw:

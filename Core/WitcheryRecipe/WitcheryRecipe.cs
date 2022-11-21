@@ -93,7 +93,7 @@ partial class WitcheryRecipe {
 		}
 		if (totalCatalyst > 0)
 			match += (_catalyst.type == catalyst.type && catalyst.stack % xAmount == 0) ? 1 : 0;
-		Main.NewText($"totalItems: {totalItems}, totalLiquids: {totalLiquids}, totalCatalyst: {totalCatalyst}, total: {total}, match: {match}, items: {items.Count}, ctype: {catalyst.type} == {_catalyst.type}, {catalyst.stack}, {xAmount}");
+		// Main.NewText($"totalItems: {totalItems}, totalLiquids: {totalLiquids}, totalCatalyst: {totalCatalyst}, total: {total}, match: {match}, items: {items.Count}, ctype: {catalyst.type} == {_catalyst.type}, {catalyst.stack}, {xAmount}");
 		return (float)match / total;
 	}
 	private float Match(Item[] _items, Item catalyst, List<Liquid> liquids) {
@@ -131,7 +131,7 @@ partial class WitcheryRecipe {
 			liquids = new List<Liquid>();
 		int? xAmount;
 		float match = Match(items, catalyst, liquids, out xAmount);
-		Main.NewText(match, Color.Cyan);
+		// Main.NewText(match, Color.Cyan);
 		if (match < _matchThreshold || match < 1 && Main.rand.NextFloat() < match * _failedWorkedChance)
 			return null;
 		

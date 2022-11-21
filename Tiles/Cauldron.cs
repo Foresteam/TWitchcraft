@@ -13,8 +13,10 @@ using Microsoft.Xna.Framework.Graphics;
 namespace TWitchery.Tiles;
 using Liquids;
 public class Cauldron : ModTile {
-	const int magicDrawOffsetY = 8;
-	private Asset<Texture2D> _liquidTexture, _liquidSecondaryTexture;
+	public const int magicDrawOffsetY = 8;
+	public static readonly Vector2 particleOrigin = new Vector2(2, -magicDrawOffsetY);
+	private static int _bubbleParticle;
+	private static Asset<Texture2D> _liquidTexture, _liquidSecondaryTexture;
 	public override void PlaceInWorld(int i, int j, Item tileItem) {}
 	public override void SetStaticDefaults() {
 		Main.tileSolidTop[Type] = true;
@@ -46,6 +48,7 @@ public class Cauldron : ModTile {
 		MinPick = 0;
 		Main.tileCut[Type] = false;
 
+		_bubbleParticle = ModContent.DustType<Dusts.Bubble>();
 		_liquidTexture = ModContent.Request<Texture2D>("TWitchery/Assets/CauldronLiquid");
 		_liquidSecondaryTexture = ModContent.Request<Texture2D>("TWitchery/Assets/CauldronLiquidSecondary");
 }
@@ -70,25 +73,6 @@ public class Cauldron : ModTile {
 		HelpMe.GetTileEntity<TECauldron>(i, j)?.RightClick(i, j);
 		return base.RightClick(i, j);
 	}
-	#nullable enable
-	private Color? Blend(IEnumerable<Liquid> liquids, Func<Liquid, Color?> colorGetter) {
-		if (liquids.Count() == 0)
-			return null;
-		Color? color = colorGetter(liquids.First());
-		if (color == null)
-			return null;
-		float accumulated = liquids.First().Volume;
-		foreach (var liquid in liquids) {
-			Color? other = colorGetter(liquid);
-			if (other == null || other == color)
-				continue;
-			else {
-				color = HelpMe.Blend((Color)color, (Color)other, accumulated / liquid.Volume / (accumulated == liquids.First().Volume ? 2 : 1));
-				accumulated += liquid.Volume;
-			}
-		}
-		return color;
-	}
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
 		Point16 point = new Point16(i, j);
 		Point16 origin = HelpMe.GetTileOrigin(point);
@@ -99,8 +83,8 @@ public class Cauldron : ModTile {
 			zero = Vector2.Zero;
 		
 		var liquids = HelpMe.GetTileEntity<TECauldron>(i, j).LiquidInventory.GetAll();
-		Color? primaryColor = Blend(liquids, liquid => liquid.Color);
-		Color? secondaryColor = Blend(liquids, liquid => liquid.ColorSecondary);
+		Color? primaryColor = Liquid.Blend(liquids, liquid => liquid.Color);
+		Color? secondaryColor = Liquid.Blend(liquids, liquid => liquid.ColorSecondary);
 
 		var draw = (Texture2D texture, Color color) => spriteBatch.Draw(
 			texture,
@@ -117,5 +101,19 @@ public class Cauldron : ModTile {
 			draw(_liquidTexture.Value, (Color)primaryColor);
 		if (secondaryColor != null)
 			draw(_liquidSecondaryTexture.Value, (Color)secondaryColor);
+	}
+	public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData) {
+		var te = HelpMe.GetTileEntity<TECauldron>(i, j);
+		if (HelpMe.GetTileOrigin(new Point16(i, j)).Y != j || te == null || te.LiquidInventory.GetAll().Count == 0)
+			return;
+		// begin with this.
+		if (Main.rand.Next(7) < 1) {
+			// DustID.BubbleBlock
+			int dust = Dust.NewDust(new Vector2(i, j) * 16 + particleOrigin - new Vector2(0, 3), 4, 4, _bubbleParticle, 0, -3, 100, (Color)Liquid.Blend(te.LiquidInventory.GetAll(), lq => lq.Color), .25f);
+			Main.dust[dust].velocity.X *= .1f;
+			Main.dust[dust].velocity.Y *= .05f;
+			Main.dust[dust].noGravity = true;
+		}
+		base.DrawEffects(i, j, spriteBatch, ref drawData);
 	}
 }

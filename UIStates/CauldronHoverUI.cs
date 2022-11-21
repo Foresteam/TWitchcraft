@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -7,6 +7,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.GameContent;
 using Terraria.UI;
+using ReLogic.Graphics;
 
 namespace TWitchery.UIStates;
 class CauldronHoverUI : UIState {
@@ -80,12 +81,19 @@ class CauldronHoverUI : UIState {
 		);
 		return rsRect;
 	}
-	private void DrawLiquidBar(SpriteBatch spriteBatch, Vector2 offset, int length) {
+	private void DrawItems(SpriteBatch spriteBatch) {
+		Item[] items = inventory.slots;
+		int i = 0;
+		for (; i < items.Length; i++)
+			DrawItem(spriteBatch, i, items[i], Color.White);
+		DrawItem(spriteBatch, i++, inventory.catalyst, Color.Red);
+	}
+	private void DrawLiquidBar(SpriteBatch spriteBatch, Vector2 position, int length) {
 		const int height = 14;
 		int leftOffset = 0;
 		spriteBatch.Draw(
 			liquidBarTexture,
-			offset - new Vector2(1, 1),
+			position - new Vector2(1, 1),
 			new Rectangle(0, 0, length + 2, height + 2),
 			Color.Black
 		);
@@ -93,26 +101,25 @@ class CauldronHoverUI : UIState {
 			var xsize = (int)(liquid.Volume / liquidInventory.volume * length);
 			spriteBatch.Draw(
 				liquidTexture,
-				offset + new Vector2(leftOffset, 0),
+				position + new Vector2(leftOffset, 0),
 				new Rectangle(0, 0, (int)xsize, height),
 				liquid.Color
 			);
 			if (liquid.ColorSecondary != null)
 				spriteBatch.Draw(
 					liquidSecondaryTexture,
-					offset + new Vector2(leftOffset, 0),
+					position + new Vector2(leftOffset, 0),
 					new Rectangle(0, 0, (int)xsize, height),
 					(Color)liquid.ColorSecondary
 				);
 			leftOffset += (int)xsize;
 		}
 	}
-	private void DrawItems(SpriteBatch spriteBatch) {
-		Item[] items = inventory.slots;
-		int i = 0;
-		for (; i < items.Length; i++)
-			DrawItem(spriteBatch, i, items[i], Color.White);
-		DrawItem(spriteBatch, i++, inventory.catalyst, Color.Red);
+	private void DrawLiquidStatus(SpriteBatch spriteBatch, Vector2 position) {
+		if (liquidInventory.GetAll().Count == 0)
+			return;
+		var text = (from liquid in liquidInventory.GetAll() orderby liquid.Volume descending select liquid.Name).First();
+		spriteBatch.DrawString(FontAssets.MouseText.Value, text, position, Color.White);
 	}
 	public override void Draw(SpriteBatch spriteBatch) {
 		base.Draw(spriteBatch);
@@ -121,6 +128,8 @@ class CauldronHoverUI : UIState {
 			return;
 
 		DrawItems(spriteBatch);
-		DrawLiquidBar(spriteBatch, Main.MouseScreen + new Vector2(-15, -75), 230);
+		var barPos = Main.MouseScreen + new Vector2(-15, -75);
+		DrawLiquidBar(spriteBatch, barPos, 230);
+		DrawLiquidStatus(spriteBatch, barPos - new Vector2(0, 24));
 	}
 }

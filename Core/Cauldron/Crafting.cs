@@ -25,9 +25,9 @@ partial class Crafting {
 			return Action.Take;
 		if (inv[slot].type == ModContent.ItemType<Items.EbonWand>())
 			return Action.Craft;
-		if (HelpMe.vesselsLiquids.Keys.Contains(inv[slot].type))
+		if (Tables.Vessels.vesselsLiquids.Keys.Contains(inv[slot].type))
 			return Action.Pour;
-		if (HelpMe.vessels.Keys.Contains(inv[slot].type))
+		if (Tables.Vessels.vessels.Keys.Contains(inv[slot].type))
 			return Action.Draw;
 		if (Main.tile[i, j].TileFrameY < 16)
 			return Action.PutCatalyst;
@@ -51,8 +51,8 @@ partial class Crafting {
 			return true;
 		List<Liquid> remove = new();
 		foreach (Liquid liquid in liquids)
-			if (HelpMe.energyLiquids.ContainsKey(liquid.GetType())) {
-				var mpu = HelpMe.energyLiquids[liquid.GetType()];
+			if (Tables.Common.energyLiquids.ContainsKey(liquid.GetType())) {
+				var mpu = Tables.Common.energyLiquids[liquid.GetType()];
 				if (liquid.Volume < amount / mpu) {
 					amount -= liquid.Volume * mpu;
 					remove.Add(liquid);
@@ -65,9 +65,9 @@ partial class Crafting {
 			liquidInventory.Take(toRemove);
 		Main.NewText($"Mana: {ply.statMana + ply.GetModPlayer<TWitcheryPlayer>().CalcDepletionLimits()}/{amount}");
 
-		var yetToTake = ply.GetModPlayer<TWitcheryPlayer>().TakeMana((int)amount, useDeplition: false);
+		var couldntTake = ply.GetModPlayer<TWitcheryPlayer>().TakeMana((int)amount, useDeplition: false);
 		Main.NewText($"Mana: {ply.statMana + ply.GetModPlayer<TWitcheryPlayer>().CalcDepletionLimits()}/{amount}");
-		return yetToTake <= 0;
+		return couldntTake <= 0;
 	}
 	public void GiveResult(WitcheryRecipe.Result result, Point16 tile, Player ply, TileEntity source) {
 		if (result == null)

@@ -90,29 +90,29 @@ class LiquidInventory : IEnumerable<Liquid> {
 	public void Flush() => _contained.Clear();
 
 	public void Apply(ref Item item, Player ply) {
-		if (!HelpMe.Vessel.IsVessel(item))
+		if (!Tables.Vessels.IsVessel(item))
 			return;
 		// draw
-		if (HelpMe.Vessel.IsEmpty(item)) {
+		if (Tables.Vessels.IsEmpty(item)) {
 			Liquid? liquidToTake = Get();
 			if (liquidToTake == null)
 				return;
-			int itemID = HelpMe.Vessel.GetFilledWith(item, liquidToTake);
+			int itemID = Tables.Vessels.GetFilledWith(item, liquidToTake);
 			if (itemID == 0)
 				return;
-			Liquid? taken = Take(HelpMe.Vessel.GetVolume(item));
+			Liquid? taken = Take(Tables.Vessels.GetVolume(item));
 			// the order should be preserved!
 			HelpMe.GiveItem(new Item(itemID), ply);
 			HelpMe.Consume(ref item);
 			return;
 		}
 		// fill
-		if (!HelpMe.vesselsLiquids.ContainsKey(item.type))
+		if (!Tables.Vessels.vesselsLiquids.ContainsKey(item.type))
 			return;
-		var vol = HelpMe.Vessel.GetVolume(item);
-		if (!Add(HelpMe.vesselsLiquids[item.type](HelpMe.Vessel.GetVolume(item))))
+		var vol = Tables.Vessels.GetVolume(item);
+		if (!Add(Tables.Vessels.vesselsLiquids[item.type](Tables.Vessels.GetVolume(item))))
 			return;
-		if (HelpMe.vessels[item.type] == ItemID.EmptyBucket)
+		if (Tables.Vessels.vessels[item.type] == ItemID.EmptyBucket)
 			HelpMe.GiveItem(new Item(ItemID.EmptyBucket), ply);
 		HelpMe.Consume(ref item);
 	}

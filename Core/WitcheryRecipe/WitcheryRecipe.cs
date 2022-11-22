@@ -61,7 +61,7 @@ partial class WitcheryRecipe {
 	}
 
 	private List<Liquid> FilterEnergyOut(List<Liquid> input) {
-		return input.Select(liquid => !HelpMe.energyLiquids.ContainsKey(liquid.GetType()) ? liquid : null).ToList();
+		return input.Select(liquid => !Tables.Common.energyLiquids.ContainsKey(liquid.GetType()) ? liquid : null).ToList();
 	}
 	private float Match(Item[] _items, Item catalyst, List<Liquid> inputLiquids, out int? xAmount) {
 		var items = new List<Item>(_items).FindAll(i => !i.IsAir);

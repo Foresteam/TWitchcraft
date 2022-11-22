@@ -125,12 +125,13 @@ partial class WitcheryRecipe {
 		return recipes.Last();
 	}
 	public static void GetDefaultResult(RecipeItem[] ritems, int? xAmount, Item[] items, Item catalyst, List<Liquid> liquids, ref Result result) {
-		if (xAmount != null) {
-			foreach (var item in result.items)
-				item.self.stack *= (int)xAmount;
-			foreach (var liquid in result.liquids)
-				liquid.self.Volume *= (int)xAmount;
-		}
+		if (xAmount == null)
+			return;
+		foreach (var item in result.items)
+			item.self.stack *= (int)xAmount;
+		foreach (var liquid in result.liquids)
+			liquid.self.Volume *= (int)xAmount;
+		result.energyCost *= (int)xAmount;
 	}
 	/// Attempt to combine ingredients into the recipe
 #nullable enable

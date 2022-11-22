@@ -36,25 +36,24 @@ class LiquidInventory : IEnumerable<Liquid> {
 	}
 	
 	/// <returns>Volume taken</returns>
-	public float Take<T>(float amount = 0) {
-		if (amount < 0)
-			amount = 0;
+	public float Take(Liquid toTake) {
 		Liquid lq = null;
 		foreach (var liquid in _contained)
-			if (liquid is T) {
+			if (liquid.GetType() == toTake.GetType()) {
 				lq = liquid;
 				break;
 			}
 		if (lq == null)
 			return 0;
-		if (amount == 0) {
+		if (toTake.Volume == 0) {
 			var vol = lq.Volume;
 			lq.Volume = 0;
+			_contained.Remove(lq);
 			return vol;
 		}
-		if (lq.Volume < amount)
+		if (lq.Volume < toTake.Volume)
 			return 0;
-		lq.Volume -= amount;
+		lq.Volume -= toTake.Volume;
 		return lq.Volume;
 	}
 	#nullable enable

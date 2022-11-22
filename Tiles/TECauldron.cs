@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
@@ -60,10 +61,10 @@ class TECauldron : TEAbstractStation, IRightClickable {
 			.AddIngredient(new ManaPotion(VolumeOf[ItemID.EmptyBucket]))
 			.AddResult(new LifeforcePotion(VolumeOf[ItemID.Bottle])),
 
-		new WitcheryRecipe(energyCost: 0)
+		new WitcheryRecipe(energyCost: 1.5f)
 			.AddIngredient(new Item(ItemID.SandBlock, 2))
 			.AddResult(new Glass(VolumeOf[ItemID.EmptyBucket] / 10f * 1.5f)),
-		new WitcheryRecipe(energyCost: 0)
+		new WitcheryRecipe(energyCost: 1)
 			.AddIngredient(new Item(ItemID.Glass))
 			.AddResult(new Glass(VolumeOf[ItemID.EmptyBucket] / 10f)),
 		new WitcheryRecipe(energyCost: 0, failedWorkedChance: 1f)
@@ -80,7 +81,7 @@ class TECauldron : TEAbstractStation, IRightClickable {
 	public override Inventory Inventory => _crafting.inventory;
 	public override LiquidInventory LiquidInventory => _crafting.liquidInventory;
 	public TECauldron() {
-		_crafting = new Crafting(5, 5f, _recipes);
+		_crafting = new Crafting(5, 25f, _recipes);
 	}
 
 	public override bool IsValidTile(in Tile tile) => tile.TileType == ModContent.TileType<Cauldron>();
@@ -148,7 +149,12 @@ class TECauldron : TEAbstractStation, IRightClickable {
 				var rs = _crafting.Craft();
 				if (rs != null && !_crafting.DrainEnergy(rs.energyCost, _crafting.liquidInventory.GetAll(), ply)) {
 					Main.NewText("Not enough energy!", Color.Red);
-					rs = null;
+					// rs = null;
+					break;
+				}
+				if (rs != null && rs.liquids.Select(lq => lq.self.Volume).Sum() > _crafting.liquidInventory.volume) {
+					Main.NewText("Not enough space!", Color.Red);
+					break;
 				}
 				_crafting.Flush();
 				CraftEffects(i, j, rs != null);

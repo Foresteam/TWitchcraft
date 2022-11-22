@@ -61,14 +61,13 @@ partial class Crafting {
 				liquid.Volume -= amount / mpu;
 				return true;
 			}
-		Main.NewText($"Mana: {ply.statMana}/{amount}");
-		if (ply.statMana >= amount) {
-			// not working
-			ply.GetModPlayer<TWitcheryPlayer>().TakeMana((int)amount);
-			Main.NewText($"Mana: {ply.statMana}/{amount}");
-			return true;
-		}
-		return false;
+		foreach (var toRemove in remove)
+			liquidInventory.Take(toRemove);
+		Main.NewText($"Mana: {ply.statMana + ply.GetModPlayer<TWitcheryPlayer>().CalcDepletionLimits()}/{amount}");
+
+		var yetToTake = ply.GetModPlayer<TWitcheryPlayer>().TakeMana((int)amount, useDeplition: false);
+		Main.NewText($"Mana: {ply.statMana + ply.GetModPlayer<TWitcheryPlayer>().CalcDepletionLimits()}/{amount}");
+		return yetToTake <= 0;
 	}
 	public void GiveResult(WitcheryRecipe.Result result, Point16 tile, Player ply, TileEntity source) {
 		if (result == null)

@@ -6,8 +6,8 @@ namespace TWitchery;
 using Liquids;
 static partial class HelpMe {
 	public static readonly Dictionary<System.Type, float> energyLiquids = new() {
-		{ new LesserManaPotion(1).GetType(), 1f / 5f },
-		{ new ManaPotion(1).GetType(), 1f / 5f * 2f },
+		{ new LesserManaPotion(1).GetType(), 50f * 4 },
+		{ new ManaPotion(1).GetType(), 100f * 4 },
 	};
 
 	public static void GetTileOrigin(ref int i, ref int j) {

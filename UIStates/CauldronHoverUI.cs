@@ -102,14 +102,14 @@ class CauldronHoverUI : UIState {
 			spriteBatch.Draw(
 				liquidTexture,
 				position + new Vector2(leftOffset, 0),
-				new Rectangle(0, 0, (int)xsize, height),
+				new Rectangle(leftOffset, 0, (int)xsize, height),
 				liquid.Color
 			);
 			if (liquid.ColorSecondary != null)
 				spriteBatch.Draw(
 					liquidSecondaryTexture,
 					position + new Vector2(leftOffset, 0),
-					new Rectangle(0, 0, (int)xsize, height),
+					new Rectangle(leftOffset, 0, (int)xsize, height),
 					(Color)liquid.ColorSecondary
 				);
 			leftOffset += (int)xsize;
@@ -118,8 +118,11 @@ class CauldronHoverUI : UIState {
 	private void DrawLiquidStatus(SpriteBatch spriteBatch, Vector2 position) {
 		if (liquidInventory.GetAll().Count == 0)
 			return;
-		var liquid = (from _liquid in liquidInventory.GetAll() orderby _liquid.Volume descending select _liquid).First();
-		spriteBatch.DrawString(FontAssets.MouseText.Value, $"{liquid.Name} {liquid.Volume}L", position, Color.White);
+		int offset = 0;
+		foreach (var liquid in liquidInventory.GetAll().AsEnumerable().Reverse()) {
+			spriteBatch.DrawString(FontAssets.MouseText.Value, $"{liquid.Name}, {liquid.Volume}B", position + new Vector2(0, offset), Color.White);
+			offset -= 15;
+		}
 	}
 	public override void Draw(SpriteBatch spriteBatch) {
 		base.Draw(spriteBatch);

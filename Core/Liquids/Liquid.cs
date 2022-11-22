@@ -11,7 +11,7 @@ abstract class Liquid {
 	public virtual Color? ColorSecondary => null;
 	public float Volume {
 		get => _volume;
-		set => _volume = Math.Max(0, value);
+		set => _volume = (int)(Math.Max(0, value) * .1e+3) / .1e+3f;
 	}
 
 	public Liquid(float volume = 0) {

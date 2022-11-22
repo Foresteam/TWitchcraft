@@ -14,13 +14,14 @@ using Tables;
 class TECauldron : TEAbstractStation, IRightClickable {
 	private static List<WitcheryRecipe> _recipes = new List<WitcheryRecipe>(new WitcheryRecipe[] {
 		new WitcheryRecipe(energyCost: 0)
-			.AddIngredient(new Item(ItemID.DirtBlock, 5))
-			.SetCatalyst(new Item(ItemID.Wood, 1))
-			.AddResult(new Item(ItemID.StonePlatform, 10)),
-		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Water(1f))
 			.AddIngredient(new Lava(1f))
 			.AddResult(new Item(ItemID.Obsidian, 5)),
+		new WitcheryRecipe(energyCost: 0)
+			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle)))
+			.AddIngredient(new Item(ItemID.CrystalShard))
+			.AddResult(new LiquidCrystal(Vessels.VolumeOf(ItemID.EmptyBucket) / 10f)),
+			
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Item(ItemID.Gel, 2))
 			.SetCatalyst(new Item(ItemID.Mushroom, 1))
@@ -30,10 +31,6 @@ class TECauldron : TEAbstractStation, IRightClickable {
 			.AddIngredient(new LesserHealingPotion(Vessels.VolumeOf(ItemID.Bottle) * 2))
 			.SetCatalyst(new Item(ItemID.GlowingMushroom, 1))
 			.AddResult(new HealingPotion(Vessels.VolumeOf(ItemID.Bottle))),
-		new WitcheryRecipe(energyCost: 0)
-			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle)))
-			.AddIngredient(new Item(ItemID.CrystalShard))
-			.AddResult(new LiquidCrystal(Vessels.VolumeOf(ItemID.EmptyBucket) / 10f)),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new LiquidCrystal(Vessels.VolumeOf(ItemID.EmptyBucket) / 10f))
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle) * 4f))
@@ -53,6 +50,12 @@ class TECauldron : TEAbstractStation, IRightClickable {
 			.AddIngredient(new LesserManaPotion(Vessels.VolumeOf(ItemID.Bottle) * 2))
 			.SetCatalyst(new Item(ItemID.GlowingMushroom, 1))
 			.AddResult(new ManaPotion(Vessels.VolumeOf(ItemID.Bottle))),
+
+		new WitcheryRecipe(energyCost: 0)
+			.AddIngredient(new LesserHealingPotion(Vessels.VolumeOf(ItemID.Bottle)))
+			.AddIngredient(new Item(ItemID.PinkGel))
+			.SetCatalyst(new Item(ItemID.GlowingMushroom))
+			.AddResult(new RestorationPotion(Vessels.VolumeOf(ItemID.Bottle))),
 		
 		// The "secret" potion. Should this be used for something else?
 		new WitcheryRecipe(energyCost: 0)

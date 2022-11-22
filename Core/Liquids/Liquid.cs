@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Linq;
 using Microsoft.Xna.Framework;
 
 namespace TWitchery.Liquids;
 abstract class Liquid {
 	private float _volume;
-	public virtual string Name => "Generic Liquid";
+	public virtual string Name => Regex.Replace(GetType().Name, "(\\B[A-Z])", " $1");
 	public virtual Color Color => Color.White;
 	public virtual Color? ColorSecondary => null;
 	public float Volume {

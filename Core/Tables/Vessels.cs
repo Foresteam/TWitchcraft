@@ -6,21 +6,23 @@ using Terraria.ID;
 namespace TWitchery.Tables;
 using Liquids;
 class Vessels {
-	/// <summary>FilledVessel to Liquid pairs (volume included)</summary>
+	/// <summary>FilledVessel to Liquid pairs (volume included). A factory?</summary>
 	public static readonly Dictionary<int, Func<float, Liquid>> vesselsLiquids = new() {
-		{ 0, (float volume) => null },
-		{ ItemID.WaterBucket, (float volume) => new Water(volume) },
-		{ ItemID.BottledWater, (float volume) => new Water(volume) },
-		{ ItemID.LavaBucket, (float volume) => new Lava(volume) },
+		{ 0, volume => null },
+		{ ItemID.WaterBucket, volume => new Water(volume) },
+		{ ItemID.BottledWater, volume => new Water(volume) },
+		{ ItemID.LavaBucket, volume => new Lava(volume) },
 
-		{ ItemID.LesserHealingPotion, (float volume) => new LesserHealingPotion(volume) },
-		{ ItemID.HealingPotion, (float volume) => new HealingPotion(volume) },
-		{ ItemID.GreaterHealingPotion, (float volume) => new GreaterHealingPotion(volume) },
+		{ ItemID.LesserHealingPotion, volume => new LesserHealingPotion(volume) },
+		{ ItemID.HealingPotion, volume => new HealingPotion(volume) },
+		{ ItemID.GreaterHealingPotion, volume => new GreaterHealingPotion(volume) },
 
-		{ ItemID.LesserManaPotion, (float volume) => new LesserManaPotion(volume) },
-		{ ItemID.ManaPotion, (float volume) => new ManaPotion(volume) },
+		{ ItemID.LesserManaPotion, volume => new LesserManaPotion(volume) },
+		{ ItemID.ManaPotion, volume => new ManaPotion(volume) },
 
-		{ ItemID.LifeforcePotion, (float volume) => new LifeforcePotion(volume) },
+		{ ItemID.RestorationPotion, volume => new RestorationPotion(volume) },
+
+		{ ItemID.LifeforcePotion, volume => new LifeforcePotion(volume) },
 	};
 	public static readonly Dictionary<int, float> vesselsVolumes = new() {
 		{ ItemID.EmptyBucket, 1f },
@@ -42,6 +44,7 @@ class Vessels {
 		{ ItemID.GreaterHealingPotion, ItemID.Bottle },
 		{ ItemID.LesserManaPotion, ItemID.Bottle },
 		{ ItemID.ManaPotion, ItemID.Bottle },
+		{ ItemID.RestorationPotion, ItemID.Bottle },
 		{ ItemID.LifeforcePotion, ItemID.Bottle }
 	};
 

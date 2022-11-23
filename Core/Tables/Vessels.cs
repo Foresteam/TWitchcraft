@@ -23,6 +23,8 @@ class Vessels {
 		{ ItemID.RestorationPotion, volume => new RestorationPotion(volume) },
 
 		{ ItemID.LifeforcePotion, volume => new LifeforcePotion(volume) },
+		//
+		{ ItemID.AmmoReservationPotion, volume => new AmmoReservationPotion(volume) },
 		{ ItemID.ArcheryPotion, volume => new ArcheryPotion(volume) },
 		{ ItemID.BattlePotion, volume => new BattlePotion(volume) },
 		{ ItemID.BuilderPotion, volume => new BuilderPotion(volume) },
@@ -91,6 +93,7 @@ class Vessels {
 		{ ItemID.RestorationPotion, ItemID.Bottle },
 
 		{ ItemID.LifeforcePotion, ItemID.Bottle },
+		{ ItemID.AmmoReservationPotion, ItemID.Bottle },
 		{ ItemID.ArcheryPotion, ItemID.Bottle },
 		{ ItemID.BattlePotion, ItemID.Bottle },
 		{ ItemID.BuilderPotion, ItemID.Bottle },

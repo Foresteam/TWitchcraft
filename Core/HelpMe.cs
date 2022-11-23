@@ -48,11 +48,12 @@ static partial class HelpMe {
 	/// <param name="amount">How much of <paramref name="color"/> to keep,
 	/// “on top of” <paramref name="backColor"/>.</param>
 	/// <returns>The blended colors.</returns>
-	public static Color Blend(this Color color, Color backColor, double amount)
-	{
-		byte r = (byte)(color.R * amount + backColor.R * (1 - amount));
-		byte g = (byte)(color.G * amount + backColor.G * (1 - amount));
-		byte b = (byte)(color.B * amount + backColor.B * (1 - amount));
+	public static Color Blend(this Color color, Color backColor, float amount1, float amount2 = 0) {
+		if (amount2 == 0)
+			amount2 = 1 - amount1;
+		byte r = (byte)(color.R * amount1 + backColor.R * amount2);
+		byte g = (byte)(color.G * amount1 + backColor.G * amount2);
+		byte b = (byte)(color.B * amount1 + backColor.B * amount2);
 		return new Color(r, g, b);
 	}
 }

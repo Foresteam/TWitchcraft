@@ -36,13 +36,14 @@ abstract class Liquid {
 		Color? color = colorGetter(liquids.First());
 		if (color == null)
 			return null;
+		float totalVolume = liquids.Select(l => l.Volume).Sum();
 		float accumulated = liquids.First().Volume;
 		foreach (var liquid in liquids) {
 			Color? other = colorGetter(liquid);
 			if (other == null || other == color)
 				continue;
 			else {
-				color = HelpMe.Blend((Color)other, (Color)color, accumulated / liquid.Volume / (accumulated == liquids.First().Volume ? 2 : 1));
+				color = HelpMe.Blend((Color)color, (Color)other, accumulated / totalVolume, liquid.Volume / totalVolume);
 				accumulated += liquid.Volume;
 			}
 		}

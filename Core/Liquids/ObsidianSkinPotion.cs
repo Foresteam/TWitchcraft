@@ -5,5 +5,5 @@ namespace TWitchery.Liquids;
 class ObsidianSkin : Liquid {
 	public override Color Color => new Color(54, 44, 104);
 	public override Color? ColorSecondary => new Color(125, 110, 199);
-	public ObsidianSkin(float volume) : base(volume) {}
+	public ObsidianSkin(float volume = 0) : base(volume) {}
 }

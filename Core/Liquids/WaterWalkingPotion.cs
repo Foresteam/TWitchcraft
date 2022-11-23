@@ -5,5 +5,5 @@ namespace TWitchery.Liquids;
 class WaterWalkingPotion : Liquid {
 	public override Color Color => new Color(0, 65, 145);
 	public override Color? ColorSecondary => new Color(105, 163, 253);
-	public WaterWalkingPotion(float volume) : base(volume) {}
+	public WaterWalkingPotion(float volume = 0) : base(volume) {}
 }

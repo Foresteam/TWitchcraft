@@ -43,17 +43,17 @@ static partial class HelpMe {
 	}
 
 	/// <summary>Blends the specified colors together.</summary>
-	/// <param name="color">Color to blend onto the background color.</param>
-	/// <param name="backColor">Color to blend the other color onto.</param>
-	/// <param name="amount">How much of <paramref name="color"/> to keep,
-	/// “on top of” <paramref name="backColor"/>.</param>
+	/// <param name="color">First color</param>
+	/// <param name="color2">Second color</param>
+	/// <param name="k1">Amount of <paramref name="color"/>, supposed to be less or equal than 1</param>
+	/// <param name="k2">Amount of <paramref name="color2"/>, supposed to be less or equal than 1</param>
 	/// <returns>The blended colors.</returns>
-	public static Color Blend(this Color color, Color backColor, float amount1, float amount2 = 0) {
-		if (amount2 == 0)
-			amount2 = 1 - amount1;
-		byte r = (byte)(color.R * amount1 + backColor.R * amount2);
-		byte g = (byte)(color.G * amount1 + backColor.G * amount2);
-		byte b = (byte)(color.B * amount1 + backColor.B * amount2);
+	public static Color Blend(Color color, Color color2, float k1, float k2 = 0) {
+		if (k2 == 0)
+			k2 = 1 - k1;
+		byte r = (byte)(color.R * k1 + color2.R * k2);
+		byte g = (byte)(color.G * k1 + color2.G * k2);
+		byte b = (byte)(color.B * k1 + color2.B * k2);
 		return new Color(r, g, b);
 	}
 }

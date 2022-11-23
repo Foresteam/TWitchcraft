@@ -14,6 +14,8 @@ namespace TWitchery.Tiles;
 using Liquids;
 public class Cauldron : ModTile {
 	public const int magicDrawOffsetY = 8;
+	public const int ticksPerFrame = 9;
+	public const int frames = 5;
 	public static readonly Vector2 particleOrigin = new Vector2(2, -magicDrawOffsetY);
 	private static int _bubbleParticle;
 	private static Asset<Texture2D> _liquidTexture, _liquidSecondaryTexture;
@@ -51,7 +53,18 @@ public class Cauldron : ModTile {
 		_bubbleParticle = ModContent.DustType<Dusts.Bubble>();
 		_liquidTexture = ModContent.Request<Texture2D>("TWitchery/Assets/CauldronLiquid");
 		_liquidSecondaryTexture = ModContent.Request<Texture2D>("TWitchery/Assets/CauldronLiquidSecondary");
-}
+	}
+	public override void AnimateIndividualTile(int type, int i, int j, ref int frameXOffset, ref int frameYOffset) {
+		int uniqueAnimationFrame = Main.tileFrame[Type] + i;
+		uniqueAnimationFrame++;
+		uniqueAnimationFrame = uniqueAnimationFrame % frames;
+		frameXOffset = uniqueAnimationFrame * 16 * 3;
+	}
+	public override void AnimateTile(ref int frame, ref int frameCounter) {
+		if (++frameCounter >= frames * ticksPerFrame)
+			frameCounter = 0;
+		frame = frameCounter / ticksPerFrame;
+	}
 	public override void NumDust(int i, int j, bool fail, ref int num) {
 		num = fail ? 1 : 3;
 	}

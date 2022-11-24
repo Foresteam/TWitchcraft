@@ -1,6 +1,8 @@
 using System;
 using Terraria;
 using Terraria.ModLoader;
+using Microsoft.Xna.Framework;
+using System.IO;
 
 namespace TWitchery {
 	public class TWitchery : Mod {
@@ -23,6 +25,25 @@ namespace TWitchery {
 			yetToTake -= Player.statMana;
 			Player.statMana = Math.Max(useDeplition ? -CalcDepletionLimits() : 0, Player.statMana - amount);
 			return yetToTake;
+		}
+	}
+	public class DumpRecipesCommand : ModCommand {
+		public override string Command => "twitchery";
+		public override CommandType Type => CommandType.Chat;
+		public override string Usage =>
+			"/twitchery <recipes> [stack]" +
+			"\n recipes — Dump all recipes to CSV tables" +
+			"\n TWitchery mod commands";
+		public override void Action(CommandCaller caller, string input, string[] args) {
+			switch (args.Length > 0 ? args[0] : "") {
+				case "recipes":
+					File.WriteAllText("CauldronRecipes.csv", Tiles.TECauldron.DumpRecipes());
+					Main.NewText("Dumped successfully.");
+					return;
+				default:
+					Main.NewText(Usage, Color.Red);
+					return;
+			}
 		}
 	}
 }

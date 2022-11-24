@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using System.Text;
 using Terraria;
-using Microsoft.Xna.Framework;
+using Terraria.ID;
 
 namespace TWitchery;
 using Liquids;
@@ -150,5 +151,20 @@ partial class WitcheryRecipe {
 		if (match < 1)
 			result.energyCost /= _failedWorkedChance / match;
 		return result;
+	}
+
+	public static string DumpHeader => "Solid ingredients\tLiquid ingredients\tCatalyst\tEnergy cost\tOut liquids\tOut items";
+	public string Dump() {
+		List<string> rs = new();
+		var ingredients = _itemIngredients.Select(ri => $"{new Item(ri.Type).Name} x{ri.Stack}").ToList();
+		// while (ingredients.Count < ningredients)
+		// 	ingredients.Add("");
+		rs.Add(String.Join(",", ingredients));
+		rs.Add(String.Join(", ", _liquidIngredients.Select(lq => $"{lq.Name} x{lq.Volume}")));
+		rs.Add(_catalyst.type != 0 ? $"{new Item(_catalyst.type).Name} x{_catalyst.stack}" : "");
+		rs.Add(_result.energyCost.ToString());
+		rs.Add(String.Join(", ", _result.liquids.Select(lq => $"{lq.self.Name} x{lq.self.Volume}")));
+		rs.Add(String.Join(", ", _result.items.Select(item => $"{item.self.Name} x{item.self.stack}")));
+		return String.Join('\t', rs);
 	}
 }

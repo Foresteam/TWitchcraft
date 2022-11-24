@@ -329,11 +329,12 @@ class TECauldron : TEAbstractStation, IRightClickable {
 			.SetCatalyst(new Item(ItemID.Ebonkoi))
 			.AddResult(new WrathPotion(Vessels.VolumeOf(ItemID.Bottle))),
 	});
+	public const int inventorySize = 5;
 	private Crafting _crafting;
 	public override Inventory Inventory => _crafting.inventory;
 	public override LiquidInventory LiquidInventory => _crafting.liquidInventory;
 	public TECauldron() {
-		_crafting = new Crafting(5, 25f, _recipes);
+		_crafting = new Crafting(inventorySize, 25f, _recipes);
 	}
 
 	public override bool IsValidTile(in Tile tile) => tile.TileType == ModContent.TileType<Cauldron>();
@@ -419,5 +420,11 @@ class TECauldron : TEAbstractStation, IRightClickable {
 				return false;
 		}
 		return true;
+	}
+
+	public static string DumpRecipes() {
+		var dump = _recipes.Select(recipe => recipe.Dump()).ToList();
+		dump.Insert(0, WitcheryRecipe.DumpHeader);
+		return String.Join("\n", dump);
 	}
 }

@@ -422,8 +422,8 @@ class TECauldron : TEAbstractStation, IRightClickable {
 		return true;
 	}
 
-	public static string DumpRecipes() {
-		var dump = _recipes.Select(recipe => recipe.Dump()).ToList();
+	public static string DumpRecipes(bool dev) {
+		var dump = _recipes.Select(recipe => recipe.Dump(dev)).ToList();
 		dump.Insert(0, WitcheryRecipe.DumpHeader);
 		return String.Join("\n", dump);
 	}

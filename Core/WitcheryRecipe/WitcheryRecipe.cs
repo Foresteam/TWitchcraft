@@ -153,18 +153,22 @@ partial class WitcheryRecipe {
 		return result;
 	}
 
-	public static string DumpHeader => "Solid ingredients\tLiquid ingredients\tCatalyst\tEnergy cost\tOut liquids\tOut items";
-	public string Dump() {
+	public static string DumpHeader => "Solid ingredients;Liquid ingredients;Catalyst;Energy cost;Out liquids;Out items";
+	public string Dump(bool dev = false, int ningredients = 0) {
 		List<string> rs = new();
-		var ingredients = _itemIngredients.Select(ri => $"{new Item(ri.Type).Name} x{ri.Stack}").ToList();
-		// while (ingredients.Count < ningredients)
-		// 	ingredients.Add("");
-		rs.Add(String.Join(",", ingredients));
-		rs.Add(String.Join(", ", _liquidIngredients.Select(lq => $"{lq.Name} x{lq.Volume}")));
-		rs.Add(_catalyst.type != 0 ? $"{new Item(_catalyst.type).Name} x{_catalyst.stack}" : "");
+		var ingredients = _itemIngredients.Select(ri => HelpMe.DumpItem(new Item(ri.Type, ri.Stack), dev)).ToList();
+		// if (dev)
+		// 	while (ingredients.Count < ningredients)
+		// 		ingredients.Add("");
+		var singredients = String.Join(",", ingredients);
+		if (dev)
+			singredients = $"[{singredients}]";
+		rs.Add(singredients);
+		rs.Add(String.Join(", ", _liquidIngredients.Select(lq => lq.Dump(dev))));
+		rs.Add(_catalyst.type != 0 ? HelpMe.DumpItem(_catalyst) : "");
 		rs.Add(_result.energyCost.ToString());
-		rs.Add(String.Join(", ", _result.liquids.Select(lq => $"{lq.self.Name} x{lq.self.Volume}")));
-		rs.Add(String.Join(", ", _result.items.Select(item => $"{item.self.Name} x{item.self.stack}")));
-		return String.Join('\t', rs);
+		rs.Add(String.Join(", ", _result.liquids.Select(lq => lq.self.Dump(dev))));
+		rs.Add(String.Join(", ", _result.items.Select(item => HelpMe.DumpItem(item.self, dev))));
+		return String.Join(';', rs);
 	}
 }

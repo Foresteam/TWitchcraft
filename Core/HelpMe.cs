@@ -1,4 +1,5 @@
 using Terraria.DataStructures;
+using Terraria;
 using Microsoft.Xna.Framework;
 
 namespace TWitchery;
@@ -55,5 +56,12 @@ static partial class HelpMe {
 		byte g = (byte)(color.G * k1 + color2.G * k2);
 		byte b = (byte)(color.B * k1 + color2.B * k2);
 		return new Color(r, g, b);
+	}
+
+	public static string DumpItem(Item item, bool dev = false) {
+		if (!dev)
+			return $"{item.Name} x{item.stack}";
+		else
+			return '{' + $"\"id\": {item.type}, \"stack\": {item.stack}" + '}';
 	}
 }

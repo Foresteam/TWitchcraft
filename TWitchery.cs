@@ -31,13 +31,14 @@ namespace TWitchery {
 		public override string Command => "twitchery";
 		public override CommandType Type => CommandType.Chat;
 		public override string Usage =>
-			"/twitchery <recipes> [stack]" +
+			"/twitchery <dev|export> <recipes|items|liquids|vessels>" +
 			"\n recipes — Dump all recipes to CSV tables" +
 			"\n TWitchery mod commands";
 		public override void Action(CommandCaller caller, string input, string[] args) {
-			switch (args.Length > 0 ? args[0] : "") {
+			bool dev = args.Length > 0 ? args[0] == "dev" : false;
+			switch (args.Length > 1 ? args[1] : "") {
 				case "recipes":
-					File.WriteAllText("CauldronRecipes.csv", Tiles.TECauldron.DumpRecipes());
+					File.WriteAllText("CauldronRecipes.csv", Tiles.TECauldron.DumpRecipes(dev));
 					Main.NewText("Dumped successfully.");
 					return;
 				default:

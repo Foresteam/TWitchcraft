@@ -64,4 +64,7 @@ abstract class Liquid {
 		return result;
 	}
 	public Liquid Clone() => (Liquid)MemberwiseClone();
+	public string Dump(bool dev = false) => !dev
+		? $"{Name} x{Volume}"
+		: '{' + $"\"id\": {GetType().ToString().GetHashCode()}, \"volume\": {Volume}" + '}';
 }

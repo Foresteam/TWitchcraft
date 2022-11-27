@@ -1,6 +1,5 @@
-using System.Collections.Generic;
-using System.Collections;
 using System.Linq;
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -44,18 +43,16 @@ class CauldronHoverUI : UIState {
 		// handle animation frames
 		int frameCount = 1;
 		Rectangle itemFrameRect = itemTexture.Frame();
-		if (Main.itemAnimations[item.type] != null)
-		{
+		if (Main.itemAnimations[item.type] != null) {
 			itemFrameRect = Main.itemAnimations[item.type].GetFrame(itemTexture);
 			frameCount = Main.itemAnimations[item.type].FrameCount;
 		}
 
 		// handle draw scale
-		if (itemTexture.Width > maxSize || itemTexture.Height / frameCount > maxSize) {
-			drawScale = maxSize * itemSlotRatio / (float)(itemFrameRect.Width <= itemFrameRect.Height ?
-				itemFrameRect.Height :
-				itemFrameRect.Width);
-		}
+		if (itemTexture.Width > maxSize || itemTexture.Height / frameCount > maxSize)
+			drawScale = maxSize / Math.Max(itemFrameRect.Height, itemFrameRect.Width);
+		else
+			drawScale = baseScale * 1f;
 
 		// draw item texture
 		Vector2 itemSize = itemFrameRect.Size() * drawScale;

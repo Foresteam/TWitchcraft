@@ -400,7 +400,7 @@ class TECauldron : TEAbstractStation, IRightClickable {
 				break;
 			case Crafting.Action.Craft:
 				var rs = _crafting.Craft();
-				if (rs != null && !_crafting.DrainEnergy(rs.energyCost, _crafting.liquidInventory.GetAll(), ply)) {
+				if (rs != null && !_crafting.DrainEnergy(rs.energyCost, _crafting.liquidInventory, ply)) {
 					Main.NewText("Not enough energy!", Color.Red);
 					// rs = null;
 					break;

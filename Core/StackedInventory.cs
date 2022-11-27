@@ -4,6 +4,12 @@ using System.Linq;
 
 namespace TWitchery;
 class StackedInventory {
+	public enum Action {
+		Nothing = 0,
+		Take,
+		Put
+	}
+
 	public Item[] slots;
 
 	public virtual int SlotsUsed => slots.Sum(i => i.type == ItemID.None ? 0 : 1);
@@ -49,5 +55,11 @@ class StackedInventory {
 			return null;
 		HelpMe.GiveItem(heldItem, ply);
 		return heldItem;
+	}
+
+	public Action BasicInterract(int i, int j, Player ply, Item[] inv, int slot) {
+		if (SlotsUsed > 0 && inv[slot].type == 0)
+			return Action.Take;
+		return Action.Put;
 	}
 }

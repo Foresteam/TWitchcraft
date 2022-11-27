@@ -46,7 +46,7 @@ partial class Crafting {
 		inventory.catalyst = new Item();
 		liquidInventory.Flush();
 	}
-	public bool DrainEnergy(float amount, List<Liquid> liquids, Player ply) {
+	public bool DrainEnergy(float amount, LiquidInventory liquids, Player ply) {
 		if (amount == 0)
 			return true;
 		List<Liquid> remove = new();
@@ -62,7 +62,7 @@ partial class Crafting {
 				return true;
 			}
 		foreach (var toRemove in remove)
-			liquidInventory.Take(toRemove);
+			liquids.Take(toRemove);
 		Main.NewText($"Mana: {ply.statMana + ply.GetModPlayer<TWitcheryPlayer>().CalcDepletionLimits()}/{amount}");
 
 		var couldntTake = ply.GetModPlayer<TWitcheryPlayer>().TakeMana((int)amount, useDeplition: false);

@@ -1,9 +1,9 @@
 namespace TWitchery.Cauldron;
 partial class Crafting {
 	public enum Action {
-		Nothing = 0,
-		Take,
-		Put,
+		Nothing = StackedInventory.Action.Nothing,
+		Take = StackedInventory.Action.Take,
+		Put = StackedInventory.Action.Put,
 		PutCatalyst,
 		Pour,
 		Draw,

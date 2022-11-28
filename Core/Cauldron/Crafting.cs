@@ -46,29 +46,6 @@ partial class Crafting {
 		inventory.catalyst = new Item();
 		liquidInventory.Flush();
 	}
-	public bool DrainEnergy(float amount, LiquidInventory liquids, Player ply) {
-		if (amount == 0)
-			return true;
-		List<Liquid> remove = new();
-		foreach (Liquid liquid in liquids)
-			if (Tables.Common.energyLiquids.ContainsKey(liquid.GetType())) {
-				var mpu = Tables.Common.energyLiquids[liquid.GetType()];
-				if (liquid.Volume < amount / mpu) {
-					amount -= liquid.Volume * mpu;
-					remove.Add(liquid);
-					continue;
-				}
-				liquid.Volume -= amount / mpu;
-				return true;
-			}
-		foreach (var toRemove in remove)
-			liquids.Take(toRemove);
-		Main.NewText($"Mana: {ply.statMana + ply.GetModPlayer<TWitcheryPlayer>().CalcDepletionLimits()}/{amount}");
-
-		var couldntTake = ply.GetModPlayer<TWitcheryPlayer>().TakeMana((int)amount, useDeplition: false);
-		Main.NewText($"Mana: {ply.statMana + ply.GetModPlayer<TWitcheryPlayer>().CalcDepletionLimits()}/{amount}");
-		return couldntTake <= 0;
-	}
 	public void GiveResult(WitcheryRecipe.Result result, Point16 tile, Player ply, TileEntity source) {
 		if (result == null)
 			return;

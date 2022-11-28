@@ -49,8 +49,8 @@ class CauldronHoverUI : UIState {
 		}
 
 		// handle draw scale
-		if (itemTexture.Width > maxSize || itemTexture.Height / frameCount > maxSize)
-			drawScale = maxSize / Math.Max(itemFrameRect.Height, itemFrameRect.Width);
+		if (itemTexture.Width > maxSize / itemSlotRatio || itemTexture.Height / frameCount > maxSize / itemSlotRatio)
+			drawScale = maxSize / itemSlotRatio / Math.Max(itemFrameRect.Height, itemFrameRect.Width);
 		else
 			drawScale = baseScale * 1f;
 

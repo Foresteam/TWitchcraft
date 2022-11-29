@@ -23,12 +23,22 @@ class EnergyDrainer {
 	}
 
 	/// <returns>Amount of energy left to drain. Can go negative (took more than needed)</returns>
-	public float DrainAltar(float amount, Player ply, int i, int j) {
+	public float DrainAltar(float amount, Player ply, int i, int j,ref List<Item> slots) {
+		
 		HelpMe.GetTileOrigin(ref i, ref j);
 		_x = i;
 		_y = j;
 
 		_yetToDrain = amount;
+
+		for (int k = 0; k < slots.Count; k++)
+		{
+			if (slots[k].healMana > 0 && slots[k].potion)
+			{
+				_yetToDrain -= slots[k].healMana;
+				slots[k] = new Item();
+			}
+		}
 
 		foreach (
 				var step in new Action[]

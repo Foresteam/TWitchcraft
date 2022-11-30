@@ -66,5 +66,5 @@ abstract class Liquid {
 	public Liquid Clone() => (Liquid)MemberwiseClone();
 	public string Dump(bool dev = false) => !dev
 		? $"{Name} x{Volume}"
-		: '{' + $"\"id\": {GetType().ToString().GetHashCode()}, \"volume\": {Volume}" + '}';
+		: '{' + $"\"id\": {HelpMe.GetLiquidsTable().First(p => p.Value == GetType()).Key}, \"volume\": {Volume}" + '}';
 }

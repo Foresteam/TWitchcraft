@@ -4,6 +4,8 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using System.IO;
 
+using System.Linq;
+
 namespace TWitchery {
 	public class TWitchery : Mod {
 		
@@ -33,23 +35,50 @@ namespace TWitchery {
 		}
 	}
 	public class DumpRecipesCommand : ModCommand {
-		public override string Command => "twitchery";
+		public override string Command => "tw";
 		public override CommandType Type => CommandType.Chat;
 		public override string Usage =>
-			"/twitchery <dev|export> <recipes|items|liquids|vessels>" +
+			"/tw <dev|export> <recipes|items|liquids|vessels>" +
 			"\n recipes — Dump all recipes to CSV tables" +
 			"\n TWitchery mod commands";
+		private int damn(System.Collections.Generic.KeyValuePair<int, Func<float, Liquids.Liquid>> p, System.Collections.Generic.Dictionary<int, Type> liquids) {
+			if (p.Value(1) == null)
+				return -1;
+			return liquids.First(lt => lt.Value == p.Value(1).GetType()).Key;
+		}
 		public override void Action(CommandCaller caller, string input, string[] args) {
 			bool dev = args.Length > 0 ? args[0] == "dev" : false;
+			Directory.CreateDirectory("dump");
+			var liquidsTable = HelpMe.GetLiquidsTable();
 			switch (args.Length > 1 ? args[1] : "") {
 				case "recipes":
-					File.WriteAllText("CauldronRecipes.csv", Tiles.TECauldron.DumpRecipes(dev));
-					Main.NewText("Dumped successfully.");
-					return;
+					var recipes = Tiles.TECauldron.DumpRecipes(dev);
+					if (dev)
+						recipes = recipes.Replace("\"", "\"\"\"");
+					File.WriteAllText($"dump/{(dev ? "cauldron_recipes" : "CauldronRecipes")}.csv", recipes);
+					break;
+				case "liquids":
+					File.WriteAllText("dump/ids_liquids.csv", "ID;Name\n" + String.Join('\n', liquidsTable.Select(pair => pair.Key + ";" + pair.Value.Name)) + "\n-1;");
+					break;
+				case "items":
+					File.WriteAllText("dump/ids_items.csv", "ID;Name\n" + String.Join('\n', HelpMe.GetItemsTable().Select(p => p.Key + ";" + p.Value)));
+					break;
+				case "vessels":
+					File.WriteAllText("dump/vessels_vessels.csv", "Filled;Empty\n" + String.Join('\n', Tables.Vessels.vessels.Select(p => p.Key + ";" + p.Value)));
+					File.WriteAllText("dump/vessels_liquids.csv", "Filled;Liquid\n" + String.Join('\n', 
+						Tables.Vessels.vesselsLiquids
+						.Select(p => p.Key + ";" + damn(p, liquidsTable))
+					));
+					File.WriteAllText("dump/vessels_volumes.csv", "ID;Volume\n" + String.Join('\n', 
+						Tables.Vessels.vesselsVolumes
+						.Select(p => p.Key + ";" + p.Value)
+					));
+					break;
 				default:
 					Main.NewText(Usage, Color.Red);
 					return;
 			}
+			Main.NewText("Dumped successfully.");
 		}
 	}
 }

@@ -164,11 +164,11 @@ partial class WitcheryRecipe {
 		if (dev)
 			singredients = $"[{singredients}]";
 		rs.Add(singredients);
-		rs.Add(String.Join(", ", _liquidIngredients.Select(lq => lq.Dump(dev))));
-		rs.Add(_catalyst.type != 0 ? HelpMe.DumpItem(_catalyst) : "");
+		rs.Add('[' + String.Join(", ", _liquidIngredients.Select(lq => lq.Dump(dev))) + ']');
+		rs.Add(_catalyst.type != 0 ? HelpMe.DumpItem(_catalyst, dev) : "");
 		rs.Add(_result.energyCost.ToString());
-		rs.Add(String.Join(", ", _result.liquids.Select(lq => lq.self.Dump(dev))));
-		rs.Add(String.Join(", ", _result.items.Select(item => HelpMe.DumpItem(item.self, dev))));
+		rs.Add('[' + String.Join(", ", _result.liquids.Select(lq => lq.self.Dump(dev))) + ']');
+		rs.Add('[' + String.Join(", ", _result.items.Select(item => HelpMe.DumpItem(item.self, dev))) + ']');
 		return String.Join(';', rs);
 	}
 }

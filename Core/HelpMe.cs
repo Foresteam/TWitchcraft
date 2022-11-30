@@ -1,6 +1,10 @@
 using Terraria.DataStructures;
 using Terraria;
 using Microsoft.Xna.Framework;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Linq;
 
 namespace TWitchery;
 static partial class HelpMe {
@@ -64,5 +68,29 @@ static partial class HelpMe {
 			return $"{item.Name} x{item.stack}";
 		else
 			return '{' + $"\"id\": {item.type}, \"stack\": {item.stack}" + '}';
+	}
+	public static Type[] GetTypesInNamespace(Assembly assembly, string nameSpace) =>
+			assembly.GetTypes()
+			.Where(t => String.Equals(t.Namespace, nameSpace, StringComparison.Ordinal))
+			.ToArray();
+	public static Dictionary<int, Type> GetLiquidsTable() {
+		Dictionary<int, Type> result = new();
+		int i = 0;
+		foreach (var liquidType in HelpMe.GetTypesInNamespace(System.Reflection.Assembly.GetExecutingAssembly(), "TWitchery.Liquids")) {
+			result[i] = liquidType;
+			i++;
+		}
+		return result;
+	}
+	public static Dictionary<int, string> GetItemsTable() {
+		Dictionary<int, string> result = new();
+		int i = 0;
+		foreach (var itemType in typeof(Terraria.ID.ItemID).GetFields()) {
+			if (itemType.FieldType != typeof(System.Int16))
+				continue;
+			result[(short)itemType.GetValue(null)] = itemType.Name;
+			i++;
+		}
+		return result;
 	}
 }

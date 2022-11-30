@@ -345,7 +345,7 @@ class TECauldron : TEAbstractStation, IRightClickable {
 		Main.NewText("I exist, therefore i am in the world.");
 	}
 	private void CraftEffects(int i, int j, bool success) {
-		HelpMe.GetTileOrigin(ref i, ref j);
+		HelpMe.GetTileTextureOrigin(ref i, ref j);
 		i++;
 		var pos = new Vector2(i, j) * 16 + new Vector2(2, -8);
 		var type = success ? DustID.MagicMirror : DustID.Smoke;
@@ -370,7 +370,7 @@ class TECauldron : TEAbstractStation, IRightClickable {
 		var color = Liquid.Blend(_crafting.liquidInventory.GetAll(), lq => lq.Color);
 		if (color == null)
 			return;
-		HelpMe.GetTileOrigin(ref i, ref j);
+		HelpMe.GetTileTextureOrigin(ref i, ref j);
 		i++;
 		var pos = new Vector2(i, j) * 16 + Cauldron.particleOrigin;
 		var type = ModContent.DustType<Dusts.Bubble>();

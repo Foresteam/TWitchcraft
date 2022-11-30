@@ -27,18 +27,18 @@ class CauldronHoverUI : UIState {
 		const float itemsPadding = 20 * baseScale;
 		const int yOffset = -40;
 		const float spacing = 0;
-		const float maxSize = 20 * baseScale;
-		const float itemSlotRatio = 1.5f;
+		const float halfMaxSize = 20 * baseScale;
+		const float itemSlotRatio = .65f;
 
 		float drawScale = baseScale * 1f;
-		float column = (maxSize + itemsPadding + spacing) * index;
+		float column = (halfMaxSize + itemsPadding + spacing) * index;
 
 		Main.instance.LoadItem(item.type); // load item before trying to get its texture (Item only gets loaded once)
 		Texture2D itemTexture = TextureAssets.Item[item.type].Value; // get item texture
 		Vector2 drawPos = new(Main.MouseScreen.X + column, Main.MouseScreen.Y + yOffset);
 
 		// draw slot background
-		Vector2 backgroundPos = new(drawPos.X - maxSize + 2, drawPos.Y - maxSize + 2);
+		Vector2 backgroundPos = new(drawPos.X - halfMaxSize + 2, drawPos.Y - halfMaxSize + 2);
 		spriteBatch.Draw(TextureAssets.InventoryBack.Value, backgroundPos, null, color, 0, new Vector2(), drawScale * .7f, SpriteEffects.None, 0);
 		// handle animation frames
 		int frameCount = 1;
@@ -49,8 +49,8 @@ class CauldronHoverUI : UIState {
 		}
 
 		// handle draw scale
-		if (itemTexture.Width > maxSize / itemSlotRatio || itemTexture.Height / frameCount > maxSize / itemSlotRatio)
-			drawScale = maxSize / itemSlotRatio / Math.Max(itemFrameRect.Height, itemFrameRect.Width);
+		if (Math.Max(itemTexture.Width, itemTexture.Height / frameCount) > halfMaxSize * 2 * itemSlotRatio)
+			drawScale = halfMaxSize * 2 * itemSlotRatio / Math.Max(itemFrameRect.Height / frameCount, itemFrameRect.Width);
 		else
 			drawScale = baseScale * 1f;
 

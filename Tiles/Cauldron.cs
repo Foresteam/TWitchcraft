@@ -16,7 +16,7 @@ public class Cauldron : ModTile {
 	public const int magicDrawOffsetY = 8;
 	public const int ticksPerFrame = 9;
 	public const int frames = 5;
-	public static readonly Vector2 particleOrigin = new Vector2(2, -magicDrawOffsetY);
+	public static readonly Vector2 particleOrigin = new Vector2(2, 0);
 	private static int _bubbleParticle;
 	private static Asset<Texture2D> _liquidTexture, _liquidSecondaryTexture;
 	public override void PlaceInWorld(int i, int j, Item tileItem) {}
@@ -88,7 +88,7 @@ public class Cauldron : ModTile {
 	}
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
 		Point16 point = new Point16(i, j);
-		Point16 origin = HelpMe.GetTileOrigin(point);
+		Point16 origin = HelpMe.GetTileTextureOrigin(point) + new Point16(0, 1);
 		Point16 dorigin = point - origin;
 
 		Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
@@ -117,7 +117,7 @@ public class Cauldron : ModTile {
 	}
 	public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData) {
 		var te = HelpMe.GetTileEntity<TECauldron>(i, j);
-		if (HelpMe.GetTileOrigin(new Point16(i, j)).Y != j || te == null || te.LiquidInventory.GetAll().Count == 0)
+		if (HelpMe.GetTileTextureOrigin(new Point16(i, j)).Y != j || te == null || te.LiquidInventory.GetAll().Count == 0)
 			return;
 		// begin with this.
 		if (Main.rand.Next(7) < 1) {

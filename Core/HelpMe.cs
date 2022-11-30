@@ -4,20 +4,21 @@ using Microsoft.Xna.Framework;
 
 namespace TWitchery;
 static partial class HelpMe {
-	public static void GetTileOrigin(ref int i, ref int j) {
+	// f'd up. Fix this
+	public static void GetTileTextureOrigin(ref int i, ref int j) {
 		i -= Terraria.Main.tile[i, j].TileFrameX / 16;
-		j -= -1 + Terraria.Main.tile[i, j].TileFrameY / 16;
+		j -= Terraria.Main.tile[i, j].TileFrameY / 16;
 	}
-	public static Point16 GetTileOrigin(Point16 point) {
+	public static Point16 GetTileTextureOrigin(Point16 point) {
 		int i = point.X, j = point.Y;
-		GetTileOrigin(ref i, ref j);
+		GetTileTextureOrigin(ref i, ref j);
 		return new Point16(i, j);
 	}
 	public static T GetTileEntity<T>(int i, int j) where T: TileEntity {
-		GetTileOrigin(ref i, ref j);
+		GetTileTextureOrigin(ref i, ref j);
 
 		TileEntity te;
-		if (!TileEntity.ByPosition.TryGetValue(new Point16(i, j), out te) || te is not T)
+		if (!TileEntity.ByPosition.TryGetValue(GetTileTextureOrigin(new Point16(i, j)), out te) || te is not T)
 			return null;
 		return (T)te;
 	}

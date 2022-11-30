@@ -24,7 +24,7 @@ abstract class TEAbstractStation : ModTileEntity {
 			return -1;
 		}
 
-		HelpMe.GetTileOrigin(ref i, ref j);
+		HelpMe.GetTileTextureOrigin(ref i, ref j);
 		int id = Place(i, j);
 		((TEAbstractStation)ByID[id]).OnPlace(i, j);
 		return id;

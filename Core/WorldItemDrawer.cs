@@ -42,8 +42,6 @@ class WorldItemDrawer {
 		else
 			drawScale = scale;
 		
-		Main.NewText($"{Math.Max(frameRect.Height, frameRect.Width)}");
-		
 		var finalSize = frameRect.Size() * drawScale;
 		var finalPos = screenPos - new Vector2(norigin.X * finalSize.X, norigin.Y * finalSize.Y);
 		spriteBatch.Draw(texture, finalPos, frameRect, Color.White, 0, new Vector2(), drawScale, SpriteEffects.None, 0);

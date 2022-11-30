@@ -51,7 +51,7 @@ public class Pedestal : ModTile {
 		var self = HelpMe.GetTileEntity<TEPedestal>(i, j);
 		if (self == null)
 			return;
-		if (new Point16(i, j + 1) != HelpMe.GetTileOrigin(new Point16(i, j)))
+		if (new Point16(i, j) != HelpMe.GetTileTextureOrigin(new Point16(i, j)))
 			return;
 		self.ItemDrawer.Draw(spriteBatch, new Vector2(i, j) * 16 + new Vector2(8, 10 + magicDrawOffsetY / 2), new Vector2(.5f, 1f));
 		base.PostDraw(i, j, spriteBatch);

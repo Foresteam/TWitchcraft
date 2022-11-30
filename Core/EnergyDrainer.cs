@@ -24,8 +24,7 @@ class EnergyDrainer {
 
 	/// <returns>Amount of energy left to drain. Can go negative (took more than needed)</returns>
 	public float DrainAltar(float amount, Player ply, int i, int j,ref List<Item> slots) {
-		
-		HelpMe.GetTileOrigin(ref i, ref j);
+		HelpMe.GetTileTextureOrigin(ref i, ref j);
 		_x = i;
 		_y = j;
 

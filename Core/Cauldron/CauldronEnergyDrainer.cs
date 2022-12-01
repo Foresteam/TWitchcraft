@@ -1,7 +1,7 @@
 ﻿using System;
 using Terraria;
 
-namespace TWitchery.Cauldron;
+namespace TWitchery.CauldronCore;
 class CauldronEnegyDrainer : EnergyDrainer {
 	public float Drain(float amount, Player ply, LiquidInventory liquids) {
 		_yetToDrain = amount;

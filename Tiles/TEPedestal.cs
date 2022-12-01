@@ -1,9 +1,12 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ModLoader;
+using Microsoft.Xna.Framework;
 
-using TWitchery.Pedestal;
+using TWitchery.PedestalCore;
 
 namespace TWitchery.Tiles;
 using Tables;
@@ -29,16 +32,36 @@ class TEPedestal : TEAbstractStation, IRightClickable {
 		var inv = ply.inventory;
 		// no mouse yet
 		ref var activeItem = ref inv[slot];
-		switch (_inventory.BasicInterract(i, j, ply, inv, slot)) {
-			case StackedInventory.Action.Take:
+		switch (_inventory.Interract(i, j, ply, inv, slot)) {
+			case PedestalCore.Action.Take:
 				_inventory.Take(i, j, ply);
 				break;
-			case StackedInventory.Action.Put:
+			case PedestalCore.Action.Put:
 				_inventory.Put(ref activeItem);
+				break;
+			case PedestalCore.Action.ShowLink:
+				var positions = LocateAltar(i, j);
+				if (positions.Count > 0)
+					Main.NewText($"Linked to: {String.Join(", ", positions)}");
+				else
+					Main.NewText("Not linked");
 				break;
 			default:
 				return false;
 		}
 		return true;
+	}
+	/// <returns>Coordinates, if an altar is present. Null otherwise</returns>
+	public List<Point16> LocateAltar(int i0, int j0) {
+		HelpMe.GetTileTextureOrigin(ref i0, ref j0);
+		var altars = new List<Point16>();
+		for (int i = i0 - TEAltar.radiusMax - 4; i < i0 + TEAltar.radiusMax + 2; i++)
+			for (int j = j0 - TEAltar.radiusMax - 4; j < j0 + TEAltar.radiusMax + 2; j++)
+				if (HelpMe.GetTileEntity<TEAltar>(i, j) != null) {
+					var origin = HelpMe.GetTileTextureOrigin(new Point16(i, j));
+					if (!altars.Contains(origin))
+						altars.Add(origin);
+				}
+		return altars.Where(origin => (bool)HelpMe.GetTileEntity<TEAltar>(origin.X, origin.Y).GetOverallInventory(origin.X, origin.Y).Contains(Inventory)).ToList();
 	}
 }

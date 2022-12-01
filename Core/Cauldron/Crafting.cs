@@ -7,7 +7,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using System;
 
-namespace TWitchery.Cauldron;
+namespace TWitchery.CauldronCore;
 using Liquids;
 partial class Crafting {
 	private List<WitcheryRecipe> _recipes;

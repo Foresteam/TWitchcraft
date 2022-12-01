@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
-namespace TWitchery.Altar;
-using Pedestal;
+namespace TWitchery.AltarCore;
+using PedestalCore;
 using Liquids;
 partial class Crafting {
 	private List<WitcheryRecipe> _recipes;
@@ -17,21 +17,15 @@ partial class Crafting {
 		inventory = new Inventory();
 	}
 
-	// public Action Interract(int i, int j, Player ply, Item[] inv, int slot) {
-	// 	// take item
-	// 	if (inventory.SlotsUsed > 0 && inv[slot].type == 0)
-	// 		return Action.Take;
-	// 	if (inv[slot].type == ModContent.ItemType<Items.EbonWand>())
-	// 		return Action.Craft;
-	// 	if (Tables.Vessels.vesselsLiquids.Keys.Contains(inv[slot].type))
-	// 		return Action.Pour;
-	// 	if (Tables.Vessels.vessels.Keys.Contains(inv[slot].type))
-	// 		return Action.Draw;
-	// 	if (Main.tile[i, j].TileFrameY < 16)
-	// 		return Action.PutCatalyst;
-	// 	// put item
-	// 	return Action.Put;
-	// }
+	public Action Interract(int i, int j, Player ply, Item[] inv, int slot) {
+		// take item
+		if (inventory.SlotsUsed > 0 && inv[slot].type == 0)
+			return Action.Take;
+		if (inv[slot].type == ModContent.ItemType<Items.EbonWand>())
+			return Action.Craft;
+		// put item
+		return Action.Put;
+	}
 	// #nullable enable
 	// public WitcheryRecipe.Result? Craft() {
 	// 	var recipe = WitcheryRecipe.BestMatch(_recipes, inventory.slots, inventory.catalyst, liquidInventory.GetAll());

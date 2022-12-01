@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Terraria;
-using TWitchery.Pedestal;
+using TWitchery.PedestalCore;
 
 
 namespace TWitchery.Altar;
@@ -15,7 +15,7 @@ class AltarEnergyDrainer : EnergyDrainer {
 		_yetToDrain = amount;
 
 		foreach (
-				var step in new Action[]
+				var step in new System.Action[]
 				{
 								() => DrainPlayer(ply),
 								() => DrainManaPotions(entrySlots),

@@ -1,7 +1,7 @@
 using Terraria;
 using Terraria.ID;
 
-namespace TWitchery.Cauldron;
+namespace TWitchery.CauldronCore;
 class Inventory : StackedInventory {
 	public Item catalyst;
 	public override int SlotsUsed => base.SlotsUsed + (catalyst.type != ItemID.None ? 1 : 0);

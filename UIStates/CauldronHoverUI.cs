@@ -10,11 +10,11 @@ using ReLogic.Graphics;
 
 namespace TWitchery.UIStates;
 class CauldronHoverUI : UIState {
-	public readonly Cauldron.Inventory inventory;
+	public readonly CauldronCore.Inventory inventory;
 	public readonly LiquidInventory liquidInventory;
 	public readonly Texture2D liquidTexture, liquidSecondaryTexture, liquidBarTexture;
 
-	public CauldronHoverUI(Cauldron.Inventory inventory, LiquidInventory liquidInventory) {
+	public CauldronHoverUI(CauldronCore.Inventory inventory, LiquidInventory liquidInventory) {
 		this.inventory = inventory;
 		this.liquidInventory = liquidInventory;
 		liquidTexture = ModContent.Request<Texture2D>("TWitchery/Assets/Liquid").Value;

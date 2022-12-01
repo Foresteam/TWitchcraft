@@ -57,7 +57,7 @@ class UISystem : ModSystem {
 		if ((instance._cauldronHoverUI.CurrentState as UIStates.CauldronHoverUI)?.inventory == inventory)
 			return;
 
-		instance._cauldronHoverUI.SetState(new UIStates.CauldronHoverUI((Cauldron.Inventory)inventory, liquidInventory));
+		instance._cauldronHoverUI.SetState(new UIStates.CauldronHoverUI((CauldronCore.Inventory)inventory, liquidInventory));
 	}
 	public static void CloseCauldronHoverUI() {
 		// don't always close the chest

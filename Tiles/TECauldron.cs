@@ -6,7 +6,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
 using Terraria.Audio;
-using TWitchery.Cauldron;
+using TWitchery.CauldronCore;
 
 namespace TWitchery.Tiles;
 using Liquids;

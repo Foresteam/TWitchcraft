@@ -30,12 +30,24 @@ abstract class EnergyDrainer {
 
 		_yetToDrain = amount;
 
+		int stack;
+
 		for (int k = 0; k < slots.Count; k++)
 		{
+			stack = slots[k].stack;
 			//int y = slots[k].stack;
 			if (slots[k].healMana > 0 && slots[k].potion)
 			{
-				_yetToDrain -= slots[k].healMana;
+                for (int t = 1; t < stack; t++)
+                {
+					_yetToDrain -= slots[k].healMana;
+                    if (_yetToDrain <= 0)
+                    {
+						ply.QuickSpawnItem(null, slots[k], stack - t);
+						slots[k] = new Item();
+						break;
+					}
+				}								
 				slots[k] = new Item();
 			}
 			if(_yetToDrain <= 0)

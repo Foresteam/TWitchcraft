@@ -1,25 +1,16 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
 using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.ObjectData;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System;
 
-namespace TWitchery;
-using Liquids;
-class CauldronEnegyDrain : EnergyDrainer
-{
-    public CauldronEnegyDrain(float amountDrainFlora) : base(amountDrainFlora)
-    {
+namespace TWitchery.Cauldron;
+class CauldronEnegyDrainer : EnergyDrainer {
+	public float Drain(float amount, Player ply, LiquidInventory liquids) {
+		_yetToDrain = amount;
 
-    }
-
-    public float Drain(float amount, Player ply, LiquidInventory liquids)
-    {
-        return DrainCauldron(amount, ply, liquids);
-    }
-
+		foreach (var step in new Action[] { () => DrainPlayer(ply), () => DrainLiquid(liquids) })
+			if (_yetToDrain > 0)
+				step();
+			else
+				break;
+		return _yetToDrain;
+	}
 }

@@ -13,82 +13,19 @@ using Liquids;
 
 abstract class EnergyDrainer {
 	// private Tile _tile;
-	private float _yetToDrain;
+	protected float _yetToDrain;
+	protected int _x, _y;
 	private float _amountDrainFlora;
-	private int _x,
-			_y;
 
 	public EnergyDrainer(float amountDrainFlora = 15) {
 		_amountDrainFlora = amountDrainFlora;
 	}
 
-	/// <returns>Amount of energy left to drain. Can go negative (took more than needed)</returns>
-	public float DrainAltar(float amount, Player ply, int i, int j,ref List<Item> slots) {
-		HelpMe.GetTileTextureOrigin(ref i, ref j);
-		_x = i;
-		_y = j;
-
-		_yetToDrain = amount;
-
-		int stack;
-
-		for (int k = 0; k < slots.Count; k++)
-		{
-			stack = slots[k].stack;
-			//int y = slots[k].stack;
-			if (slots[k].healMana > 0 && slots[k].potion)
-			{
-                for (int t = 1; t < stack; t++)
-                {
-					_yetToDrain -= slots[k].healMana;
-                    if (_yetToDrain <= 0)
-                    {
-						ply.QuickSpawnItem(null, slots[k], stack - t);
-						slots[k] = new Item();
-						break;
-					}
-				}								
-				slots[k] = new Item();
-			}
-			if(_yetToDrain <= 0)
-            {
-				break;
-            } 
-		}
-
-		foreach (
-				var step in new Action[]
-				{
-								() => DrainPlayer(ply),
-								DrainBiome,
-								DrainFlora,
-								DrainBlocks,
-								DrainLivingForms
-				}
-		)
-			;
-
-		Main.NewText(_yetToDrain);
-		return _yetToDrain;
-	}
-
-	/// <returns>Amount of energy left to drain. Can go negative (took more than needed)</returns>
-	public float DrainCauldron(float amount, Player ply, LiquidInventory liquids) {
-		_yetToDrain = amount;
-
-		foreach (var step in new Action[] { () => DrainPlayer(ply), () => DrainLiquid(liquids) })
-			if (_yetToDrain > 0)
-				step();
-			else
-				break;
-		return _yetToDrain;
-	}
-
-	private void DrainPlayer(Player ply) =>
+	protected void DrainPlayer(Player ply) =>
 			ply.GetModPlayer<TWitcheryPlayer>()
 					.TakeMana((int)_yetToDrain, out _yetToDrain, useDeplition: false);
 
-	private void DrainLiquid(LiquidInventory liquids) {
+	protected void DrainLiquid(LiquidInventory liquids) {
 		if (_yetToDrain == 0)
 			return;
 		List<Liquid> remove = new();
@@ -107,7 +44,7 @@ abstract class EnergyDrainer {
 			liquids.Take(toRemove);
 	}
 
-	private void DrainFlora() {
+	protected void DrainFlora() {
 		int radius = 10;
 		for (int t = _x - radius + 1; t < _x + radius; t++)
 			for (int o = _y - radius + 2; o < _y + radius; o++) {
@@ -122,7 +59,7 @@ abstract class EnergyDrainer {
 			}
 	}
 
-	private void DrainBlocks() {
+	protected void DrainBlocks() {
 		//tile.HasTile();
 		int radius = 6;
 		for (int o = _y - radius + 2; o < _y + radius; o++)
@@ -136,7 +73,7 @@ abstract class EnergyDrainer {
 			}
 	}
 
-	private void DrainBiome() {
+	protected void DrainBiome() {
 		int radius = 10;
 		for (int t = _x - radius + 1; t < _x + radius; t++) {
 			for (int o = _y - radius + 2; o < _y + radius; o++) {
@@ -153,7 +90,7 @@ abstract class EnergyDrainer {
 		}
 	}
 
-	private void DrainLivingForms() {
+	protected void DrainLivingForms() {
 		Vector2 pos;
 		pos = new Vector2(_x, _y);
 
@@ -174,7 +111,7 @@ abstract class EnergyDrainer {
 			// 4. can take damage (e.g. moonlord core after all it's parts are downed)
 			// 5. hostile (!friendly)
 			// 6. not immortal (e.g. not a target dummy)
-			
+
 			float sqrDistanceToTarget = Vector2.DistanceSquared(
 					new Vector2(
 							target.Center.ToTileCoordinates().X,
@@ -191,20 +128,18 @@ abstract class EnergyDrainer {
 				sqrMaxDetectDistance = sqrDistanceToTarget;
 				closestNPC = target;
 				//target.life = 0;				
-				if (target.CountsAsACritter)
-				{
+				if (target.CountsAsACritter) {
 					//Monster in radius
 					_yetToDrain -= 20;
 					//debuff?
 				}
-				else
-				{
+				else {
 					//Animal in radius
 					_yetToDrain -= 40;
 				}
 				target.StrikeNPC(999, 0, 0);
 			}
-			
+
 			//if (target.CanBeChasedBy()) {
 			//	float sqrDistanceToTarget = Vector2.DistanceSquared(
 			//			new Vector2(

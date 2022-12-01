@@ -331,12 +331,12 @@ class TECauldron : TEAbstractStation, IRightClickable {
 	});
 	public const int inventorySize = 5;
 	private Crafting _crafting;
-	private EnergyDrainer _energyDrainer;
+	private CauldronEnegyDrainer _energyDrainer;
 	public override Inventory Inventory => _crafting.inventory;
 	public override LiquidInventory LiquidInventory => _crafting.liquidInventory;
 	public TECauldron() {
 		_crafting = new Crafting(inventorySize, 25f, _recipes);
-		_energyDrainer = new EnergyDrainer();
+		_energyDrainer = new CauldronEnegyDrainer();
 	}
 
 	public override bool IsValidTile(in Tile tile) => tile.TileType == ModContent.TileType<Cauldron>();
@@ -402,7 +402,7 @@ class TECauldron : TEAbstractStation, IRightClickable {
 				break;
 			case Crafting.Action.Craft:
 				var rs = _crafting.Craft();
-				if (rs != null && _energyDrainer.DrainCauldron(rs.energyCost, ply, _crafting.liquidInventory) > 0) {
+				if (rs != null && _energyDrainer.Drain(rs.energyCost, ply, _crafting.liquidInventory) > 0) {
 					Main.NewText("Not enough energy!", Color.Red);
 					// rs = null;
 					break;

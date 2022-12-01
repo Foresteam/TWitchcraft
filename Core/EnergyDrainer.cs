@@ -11,7 +11,7 @@ using System;
 namespace TWitchery;
 using Liquids;
 
-class EnergyDrainer {
+abstract class EnergyDrainer {
 	// private Tile _tile;
 	private float _yetToDrain;
 	private float _amountDrainFlora;
@@ -32,11 +32,16 @@ class EnergyDrainer {
 
 		for (int k = 0; k < slots.Count; k++)
 		{
+			//int y = slots[k].stack;
 			if (slots[k].healMana > 0 && slots[k].potion)
 			{
 				_yetToDrain -= slots[k].healMana;
 				slots[k] = new Item();
 			}
+			if(_yetToDrain <= 0)
+            {
+				break;
+            } 
 		}
 
 		foreach (
@@ -157,46 +162,56 @@ class EnergyDrainer {
 			// 4. can take damage (e.g. moonlord core after all it's parts are downed)
 			// 5. hostile (!friendly)
 			// 6. not immortal (e.g. not a target dummy)
-			if (target.CountsAsACritter) {
-				float sqrDistanceToTarget = Vector2.DistanceSquared(
-						new Vector2(
-								target.Center.ToTileCoordinates().X,
-								target.Center.ToTileCoordinates().Y
-						),
-						pos
-				);
-				//Main.NewText("Центр мир: " + target.Center);
-				//Main.NewText("Центр экран?: " + target.Center.ToTileCoordinates());
+			
+			float sqrDistanceToTarget = Vector2.DistanceSquared(
+					new Vector2(
+							target.Center.ToTileCoordinates().X,
+							target.Center.ToTileCoordinates().Y
+					),
+					pos
+			);
+			//Main.NewText("Центр мир: " + target.Center);
+			//Main.NewText("Центр экран?: " + target.Center.ToTileCoordinates());
 
-				// Check if it is within the radius
-				if (sqrDistanceToTarget < sqrMaxDetectDistance) {
-					Main.NewText("Есть монстр: ");
-					sqrMaxDetectDistance = sqrDistanceToTarget;
-					closestNPC = target;
-					//target.life = 0;
-					target.StrikeNPC(999, 0, 0);
-					//target.CountsAsACritter
+			// Check if it is within the radius
+			if (sqrDistanceToTarget < sqrMaxDetectDistance) {
+				//Main.NewText("Есть монстр: ");
+				sqrMaxDetectDistance = sqrDistanceToTarget;
+				closestNPC = target;
+				//target.life = 0;				
+				if (target.CountsAsACritter)
+				{
+					//Monster in radius
+					_yetToDrain -= 20;
+					//debuff?
 				}
-			}
-			if (target.CanBeChasedBy()) {
-				float sqrDistanceToTarget = Vector2.DistanceSquared(
-						new Vector2(
-								target.Center.ToTileCoordinates().X,
-								target.Center.ToTileCoordinates().Y
-						),
-						pos
-				);
-
-				// Check if it is within the radius
-				if (sqrDistanceToTarget < sqrMaxDetectDistance) {
-					sqrMaxDetectDistance = sqrDistanceToTarget;
-					closestNPC = target;
-					//target.life = 0;
-					target.StrikeNPC(999, 0, 0);
+				else
+				{
+					//Animal in radius
 					_yetToDrain -= 40;
-					//target.CountsAsACritter
 				}
+				target.StrikeNPC(999, 0, 0);
 			}
+			
+			//if (target.CanBeChasedBy()) {
+			//	float sqrDistanceToTarget = Vector2.DistanceSquared(
+			//			new Vector2(
+			//					target.Center.ToTileCoordinates().X,
+			//					target.Center.ToTileCoordinates().Y
+			//			),
+			//			pos
+			//	);
+
+			//	// Check if it is within the radius
+			//	if (sqrDistanceToTarget < sqrMaxDetectDistance) {
+			//		sqrMaxDetectDistance = sqrDistanceToTarget;
+			//		closestNPC = target;
+			//		//target.life = 0;
+			//		target.StrikeNPC(999, 0, 0);
+			//		_yetToDrain -= 40;
+			//		//target.CountsAsACritter
+			//	}
+			//}
 		}
 	}
 }

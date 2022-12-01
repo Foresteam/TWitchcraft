@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using TWitchery.Pedestal;
 
 namespace TWitchery;
 using Liquids;
@@ -15,10 +16,36 @@ abstract class EnergyDrainer {
 	// private Tile _tile;
 	protected float _yetToDrain;
 	protected int _x, _y;
-	private float _amountDrainFlora;
+	private float _amountDrainFlora, _amountDrainBlocks, _amountDrainBiome;
+	private float[] _amountDrainLivingForms = new float[2];
 
-	public EnergyDrainer(float amountDrainFlora = 15) {
+	public EnergyDrainer(float amountDrainFlora = 15,float amountDrainBlocks=5,float amountDrainBiome=25, float amountDrainMonster = 20, float amountDrainAnimal = 40) {
 		_amountDrainFlora = amountDrainFlora;
+		_amountDrainBlocks = amountDrainBlocks;
+		_amountDrainBiome = amountDrainBiome;
+		_amountDrainLivingForms[0] = amountDrainMonster;
+		_amountDrainLivingForms[1] = amountDrainAnimal;
+	}
+
+	protected void DrainManaPotions(List<Inventory> entrySlots)
+    {
+		for (int k = 0; k < entrySlots.Count; k++)
+		{
+			if (entrySlots[k].slots[0].healMana > 0 && entrySlots[k].slots[0].potion && entrySlots[k].slots[0].healLife == 0)
+			{
+				if ((_yetToDrain / entrySlots[k].slots[0].healMana) > entrySlots[k].slots[0].stack)
+				{
+					_yetToDrain -= entrySlots[k].slots[0].healMana * entrySlots[k].slots[0].stack;
+					entrySlots[k].slots[0] = new Item();
+				}
+				else
+				{
+					entrySlots[k].slots[0].stack -= (int)(_yetToDrain / entrySlots[k].slots[0].healMana);
+					_yetToDrain -= entrySlots[k].slots[0].healMana * (int)(_yetToDrain / entrySlots[k].slots[0].healMana);
+					break;
+				}
+			}
+		}
 	}
 
 	protected void DrainPlayer(Player ply) =>
@@ -65,7 +92,7 @@ abstract class EnergyDrainer {
 		for (int o = _y - radius + 2; o < _y + radius; o++)
 			for (int t = _x - radius + 1; t < _x + radius; t++) {
 				if (Main.tile[t, o].TileType == TileID.Dirt && Main.tile[t, o].HasTile) {
-					_yetToDrain -= 5;
+					_yetToDrain -= _amountDrainBlocks;
 					WorldGen.ReplaceTile(t, o, TileID.Stone, 0);
 				}
 				if (_yetToDrain < 0)
@@ -80,7 +107,7 @@ abstract class EnergyDrainer {
 				//Main.NewText(Main.tile[t, o].TileType);
 				if (Main.tile[t, o].TileType == 3) {
 					//Main.NewText("Есть: "+ Main.tile[t, o].TileType);
-					_yetToDrain -= 25;
+					_yetToDrain -= _amountDrainBiome;
 					WorldGen.KillTile(t, o);
 				}
 				if (_yetToDrain < 0) {
@@ -101,8 +128,7 @@ abstract class EnergyDrainer {
 		float sqrMaxDetectDistance = maxDetectDistance * maxDetectDistance;
 
 		// Loop through all NPCs(max always 200)
-		for (int k = 0; k < Main.maxNPCs; k++) {
-			float maxDetectRadius = 1000f;
+		for (int k = 0; k < Main.maxNPCs; k++) {	
 			NPC target = Main.npc[k];
 			// Check if NPC able to be targeted. It means that NPC is
 			// 1. active (alive)
@@ -130,12 +156,12 @@ abstract class EnergyDrainer {
 				//target.life = 0;				
 				if (target.CountsAsACritter) {
 					//Monster in radius
-					_yetToDrain -= 20;
+					_yetToDrain -= _amountDrainLivingForms[0];
 					//debuff?
 				}
 				else {
 					//Animal in radius
-					_yetToDrain -= 40;
+					_yetToDrain -= _amountDrainLivingForms[1];
 				}
 				target.StrikeNPC(999, 0, 0);
 			}

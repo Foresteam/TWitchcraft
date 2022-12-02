@@ -7,16 +7,15 @@ using Terraria.ID;
 
 namespace TWitchery;
 using Liquids;
+///<summary>Inherit this and redefine GetResult to customize results based on input ingredients</summary>
 partial class WitcheryRecipe {
-	private float _failedWorkedChance, _matchThreshold;
-	private List<RecipeItem> _itemIngredients;
-	private List<Liquid> _liquidIngredients;
-	private Item _catalyst;
-	private Result _result;
-	public delegate void ResultGetter(RecipeItem[] ritems, int? xAmount, Item[] items, Item catalyst, List<Liquid> liquids, ref Result result);
-	public readonly ResultGetter GetResult;
+	protected float _failedWorkedChance, _matchThreshold;
+	protected List<RecipeItem> _itemIngredients;
+	protected List<Liquid> _liquidIngredients;
+	protected Item _catalyst;
+	protected Result _result;
 	/// <param name="resultGetter">An alternative (and advanced) way to define recipe results.</param>
-	public WitcheryRecipe(float energyCost, float failedWorkedChance = 0, float matchThreshold = .75f, ResultGetter resultGetter = null) {
+	public WitcheryRecipe(float energyCost, float failedWorkedChance = 0, float matchThreshold = .75f) {
 		_failedWorkedChance = failedWorkedChance;
 		_matchThreshold = matchThreshold;
 		_catalyst = new Item();
@@ -24,8 +23,6 @@ partial class WitcheryRecipe {
 		_itemIngredients = new List<RecipeItem>();
 		_liquidIngredients = new List<Liquid>();
 		_result = new Result(energyCost);
-
-		GetResult = resultGetter != null ? resultGetter : GetDefaultResult;
 	}
 
 	public WitcheryRecipe AddIngredient(Item ingredient) {
@@ -44,20 +41,12 @@ partial class WitcheryRecipe {
 		_catalyst = catalyst;
 		return this;
 	}
-	public WitcheryRecipe AddResult(Result.ItemResult result) {
+	public WitcheryRecipe AddResult(Item result) {
 		_result.items.Add(result);
 		return this;
 	}
-	public WitcheryRecipe AddResult(Item result) {
-		_result.items.Add(new Result.ItemResult(result));
-		return this;
-	}
-	public WitcheryRecipe AddResult(Result.LiquidResult result) {
-		_result.liquids.Add(result);
-		return this;
-	}
 	public WitcheryRecipe AddResult(Liquid result) {
-		_result.liquids.Add(new Result.LiquidResult(result));
+		_result.liquids.Add(result);
 		return this;
 	}
 
@@ -129,11 +118,12 @@ partial class WitcheryRecipe {
 		if (xAmount == null)
 			return;
 		foreach (var item in result.items)
-			item.self.stack *= (int)xAmount;
+			item.stack *= (int)xAmount;
 		foreach (var liquid in result.liquids)
-			liquid.self.Volume *= (int)xAmount;
+			liquid.Volume *= (int)xAmount;
 		result.energyCost *= (int)xAmount;
 	}
+	public virtual void GetResult(RecipeItem[] ritems, int? xAmount, Item[] items, Item catalyst, List<Liquid> liquids, ref Result result) => GetDefaultResult(ritems, xAmount, items, catalyst, liquids, ref result);
 	/// Attempt to combine ingredients into the recipe
 #nullable enable
 	public Result? Craft(Item[] items, Item catalyst, List<Liquid>? liquids = null) {
@@ -167,8 +157,8 @@ partial class WitcheryRecipe {
 		rs.Add('[' + String.Join(", ", _liquidIngredients.Select(lq => lq.Dump(dev))) + ']');
 		rs.Add(_catalyst.type != 0 ? HelpMe.DumpItem(_catalyst, dev) : "");
 		rs.Add(_result.energyCost.ToString());
-		rs.Add('[' + String.Join(", ", _result.liquids.Select(lq => lq.self.Dump(dev))) + ']');
-		rs.Add('[' + String.Join(", ", _result.items.Select(item => HelpMe.DumpItem(item.self, dev))) + ']');
+		rs.Add('[' + String.Join(", ", _result.liquids.Select(lq => lq.Dump(dev))) + ']');
+		rs.Add('[' + String.Join(", ", _result.items.Select(item => HelpMe.DumpItem(item, dev))) + ']');
 		return String.Join(';', rs);
 	}
 }

@@ -407,7 +407,7 @@ class TECauldron : TEAbstractStation, IRightClickable {
 					// rs = null;
 					break;
 				}
-				if (rs != null && rs.liquids.Select(lq => lq.self.Volume).Sum() > _crafting.liquidInventory.volume) {
+				if (rs != null && rs.liquids.Select(lq => lq.Volume).Sum() > _crafting.liquidInventory.volume) {
 					Main.NewText("Not enough space!", Color.Red);
 					break;
 				}

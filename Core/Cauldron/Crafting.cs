@@ -50,8 +50,8 @@ partial class Crafting {
 		if (result == null)
 			return;
 		foreach (var item in result.items)
-			ply.QuickSpawnClonedItem(new EntitySource_TileEntity(source), item.self, item.self.stack);
+			ply.QuickSpawnClonedItem(new EntitySource_TileEntity(source), item, item.stack);
 		foreach (var liquid in result.liquids)
-			liquidInventory.Add(liquid.self);
+			liquidInventory.Add(liquid);
 	}
 }

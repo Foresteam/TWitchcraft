@@ -1,8 +1,12 @@
 using Terraria;
 using Terraria.ID;
+using System.ComponentModel;
 
 namespace TWitchery.CauldronCore;
 class Inventory : StackedInventory {
+#nullable enable
+	public delegate void CatalystSlotHandler(Item item);
+	public CatalystSlotHandler? CatalystPut, CatalystTaken;
 	public Item catalyst;
 	public override int SlotsUsed => base.SlotsUsed + (catalyst.type != ItemID.None ? 1 : 0);
 	public Inventory(int size) : base(size) {
@@ -21,6 +25,7 @@ class Inventory : StackedInventory {
 	private bool TryPutCatalyst(Item item) {
 		if (catalyst.type == 0) {
 			catalyst = item;
+			CatalystPut?.Invoke(item);
 			return true;
 		}
 		return false;
@@ -35,6 +40,7 @@ class Inventory : StackedInventory {
 			var t = catalyst;
 			if (!peek)
 				catalyst = new Item();
+			CatalystTaken?.Invoke(catalyst);
 			return t;
 		}
 		return base.Take(peek);

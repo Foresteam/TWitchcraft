@@ -10,6 +10,10 @@ class StackedInventory {
 		Put
 	}
 
+	public delegate void SlotEventHandler(Item item, int slot);
+#nullable enable
+	public event SlotEventHandler? ItemTaken, ItemPut;
+
 	public Item[] slots;
 
 	public virtual int SlotsUsed => slots.Sum(i => i.type == ItemID.None ? 0 : 1);
@@ -18,14 +22,17 @@ class StackedInventory {
 		slots = Enumerable.Repeat(new Item(), size).ToArray();
 	}
 
+
 	protected virtual bool TryPut(Item item) {
 		for (int i = 0; i < slots.Length; i++) {
 			if (slots[i].type == item.type) {
 				slots[i].stack += item.stack;
+				ItemPut?.Invoke(item, i);
 				return true;
 			}
 			if (slots[i].type == 0) {
 				slots[i] = item;
+				ItemPut?.Invoke(item, i);
 				return true;
 			}
 		}
@@ -45,6 +52,7 @@ class StackedInventory {
 				var t = slots[i];
 				if (!peek)
 					slots[i] = new Item();
+				ItemTaken?.Invoke(t, i);
 				return t;
 			}
 		return null;

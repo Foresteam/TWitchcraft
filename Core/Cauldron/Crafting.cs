@@ -9,19 +9,20 @@ using System;
 
 namespace TWitchery.CauldronCore;
 using Liquids;
-partial class Crafting {
+partial class Crafting : ICrafting<Crafting.Action, Inventory> {
 	private List<WitcheryRecipe> _recipes;
-	public readonly Inventory inventory;
+	private Inventory _inventory;
+	public Inventory Inventory => _inventory;
 	public readonly LiquidInventory liquidInventory;
 	public Crafting(int inventorySize, float volume, List<WitcheryRecipe> recipes = null) {
 		_recipes = recipes == null ? new List<WitcheryRecipe>() : recipes;
-		inventory = new Inventory(inventorySize);
+		_inventory = new Inventory(inventorySize);
 		liquidInventory = new LiquidInventory(volume);
 	}
 
 	public Action Interract(int i, int j, Player ply, Item[] inv, int slot) {
 		// take item
-		if (inventory.SlotsUsed > 0 && inv[slot].type == 0)
+		if (_inventory.SlotsUsed > 0 && inv[slot].type == 0)
 			return Action.Take;
 		if (inv[slot].type == ModContent.ItemType<Items.EbonWand>())
 			return Action.Craft;
@@ -35,18 +36,18 @@ partial class Crafting {
 		return Action.Put;
 	}
 	#nullable enable
-	public WitcheryRecipe.Result? Craft() {
-		var recipe = WitcheryRecipe.BestMatch(_recipes, inventory.slots, inventory.catalyst, liquidInventory.GetAll());
-		var result = recipe.Craft(inventory.slots, inventory.catalyst, liquidInventory.GetAll());
+	public WitcheryRecipe.Result? Craft(int i, int j) {
+		var recipe = WitcheryRecipe.BestMatch(_recipes, _inventory.slots, _inventory.catalyst, liquidInventory.GetAll());
+		var result = recipe.Craft(_inventory.slots, _inventory.catalyst, liquidInventory.GetAll());
 
 		return result;
 	}
-	public void Flush() {
-		inventory.slots = Enumerable.Repeat(new Item(), inventory.slots.Length).ToArray();
-		inventory.catalyst = new Item();
+	public void Flush(int i, int j) {
+		_inventory.slots = Enumerable.Repeat(new Item(), _inventory.slots.Length).ToArray();
+		_inventory.catalyst = new Item();
 		liquidInventory.Flush();
 	}
-	public void GiveResult(WitcheryRecipe.Result result, Point16 tile, Player ply, TileEntity source) {
+	public void GiveResult(WitcheryRecipe.Result? result, Point16 tile, Player ply, TileEntity source) {
 		if (result == null)
 			return;
 		foreach (var item in result.items)

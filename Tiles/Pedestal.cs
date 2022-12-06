@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace TWitchery.Tiles;
 public class Pedestal : ModTile {
 	public const int magicDrawOffsetY = 2;
+	public static readonly Vector2 particleOrigin = new Vector2(8, magicDrawOffsetY - 8);
 	public override void PlaceInWorld(int i, int j, Item tileItem) {}
 	public override void SetStaticDefaults() {
 		Main.tileSolidTop[Type] = true;

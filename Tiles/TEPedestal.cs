@@ -10,6 +10,7 @@ using TWitchery.PedestalCore;
 
 namespace TWitchery.Tiles;
 using Tables;
+#nullable enable
 class TEPedestal : TEAbstractStation, IRightClickable {
 	private static List<WitcheryRecipe> _recipes = new();
 	public const int inventorySize = 5;
@@ -54,14 +55,16 @@ class TEPedestal : TEAbstractStation, IRightClickable {
 	/// <returns>Coordinates, if an altar is present. Null otherwise</returns>
 	public List<Point16> LocateAltar(int i0, int j0) {
 		HelpMe.GetTileTextureOrigin(ref i0, ref j0);
-		var altars = new List<Point16>();
+		var altars = new Dictionary<Point16, TEAltar>();
 		for (int i = i0 - TEAltar.radiusMax - 4; i < i0 + TEAltar.radiusMax + 2; i++)
-			for (int j = j0 - TEAltar.radiusMax - 4; j < j0 + TEAltar.radiusMax + 2; j++)
-				if (HelpMe.GetTileEntity<TEAltar>(i, j) != null) {
+			for (int j = j0 - TEAltar.radiusMax - 4; j < j0 + TEAltar.radiusMax + 2; j++) {
+				var altar = HelpMe.GetTileEntity<TEAltar>(i, j);
+				if (altar != null) {
 					var origin = HelpMe.GetTileTextureOrigin(new Point16(i, j));
-					if (!altars.Contains(origin))
-						altars.Add(origin);
+					if (!altars.ContainsKey(origin))
+						altars[origin] = altar;
 				}
-		return altars.Where(origin => (bool)HelpMe.GetTileEntity<TEAltar>(origin.X, origin.Y).GetSatelliteInventories(origin.X, origin.Y).Contains(Inventory)).ToList();
+			}
+		return altars.Keys.Where(origin => (bool)(TEAltar.GetSatelliteInventories(origin.X, origin.Y)?.Contains(Inventory) ?? false)).ToList();
 	}
 }

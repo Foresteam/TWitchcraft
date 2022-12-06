@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
 
+#nullable enable
 namespace TWitchery;
 static partial class HelpMe {
 	// f'd up. Fix this
@@ -18,14 +19,15 @@ static partial class HelpMe {
 		GetTileTextureOrigin(ref i, ref j);
 		return new Point16(i, j);
 	}
-	public static T GetTileEntity<T>(int i, int j) where T: TileEntity {
+	public static T? GetTileEntity<T>(int i, int j) where T: TileEntity {
 		GetTileTextureOrigin(ref i, ref j);
 
-		TileEntity te;
+		TileEntity? te;
 		if (!TileEntity.ByPosition.TryGetValue(GetTileTextureOrigin(new Point16(i, j)), out te) || te is not T)
 			return null;
 		return (T)te;
 	}
+	public static T? GetTileEntity<T>(Point16 p) where T: TileEntity => GetTileEntity<T>(p.X, p.Y);
 	public static bool Consume(ref Terraria.Item item, int amount = 1) {
 		if (item.stack < amount)
 			return false;
@@ -54,7 +56,7 @@ static partial class HelpMe {
 	/// <param name="k1">Amount of <paramref name="color"/>, supposed to be less or equal than 1</param>
 	/// <param name="k2">Amount of <paramref name="color2"/>, supposed to be less or equal than 1</param>
 	/// <returns>The blended colors.</returns>
-	public static Color Blend(Color color, Color color2, float k1, float k2 = 0) {
+	public static Color Blend(Color color, Color color2, float k1 = .5f, float k2 = 0) {
 		if (k2 == 0)
 			k2 = 1 - k1;
 		byte r = (byte)(color.R * k1 + color2.R * k2);
@@ -88,7 +90,8 @@ static partial class HelpMe {
 		foreach (var itemType in typeof(Terraria.ID.ItemID).GetFields()) {
 			if (itemType.FieldType != typeof(System.Int16))
 				continue;
-			result[(short)itemType.GetValue(null)] = itemType.Name;
+			var itemID = (short)(itemType.GetValue(null) ?? -i - 1);
+			result[itemID] = itemType.Name;
 			i++;
 		}
 		return result;

@@ -332,7 +332,7 @@ class TECauldron : TEAbstractStation, IRightClickable {
 	public const int inventorySize = 5;
 	private Crafting _crafting;
 	private CauldronEnegyDrainer _energyDrainer;
-	public override Inventory Inventory => _crafting.inventory;
+	public override Inventory Inventory => _crafting.Inventory;
 	public override LiquidInventory LiquidInventory => _crafting.liquidInventory;
 	public TECauldron() {
 		_crafting = new Crafting(inventorySize, 25f, _recipes);
@@ -390,18 +390,18 @@ class TECauldron : TEAbstractStation, IRightClickable {
 		ref var activeItem = ref inv[slot];
 		switch (_crafting.Interract(i, j, ply, inv, slot)) {
 			case Crafting.Action.Take:
-				_crafting.inventory.Take(i, j, ply);
+				_crafting.Inventory.Take(i, j, ply);
 				break;
 			case Crafting.Action.Put:
 				AddItemEffects(i, j, activeItem.stack);
-				_crafting.inventory.Put(ref activeItem);
+				_crafting.Inventory.Put(ref activeItem);
 				break;
 			case Crafting.Action.PutCatalyst:
 				AddItemEffects(i, j, activeItem.stack);
-				_crafting.inventory.PutCatalyst(ref activeItem);
+				_crafting.Inventory.PutCatalyst(ref activeItem);
 				break;
 			case Crafting.Action.Craft:
-				var rs = _crafting.Craft();
+				var rs = _crafting.Craft(i, j);
 				if (rs != null && _energyDrainer.Drain(rs.energyCost, ply, _crafting.liquidInventory) > 0) {
 					Main.NewText("Not enough energy!", Color.Red);
 					// rs = null;
@@ -411,7 +411,7 @@ class TECauldron : TEAbstractStation, IRightClickable {
 					Main.NewText("Not enough space!", Color.Red);
 					break;
 				}
-				_crafting.Flush();
+				_crafting.Flush(i, j);
 				CraftEffects(i, j, rs != null);
 				_crafting.GiveResult(rs, new Terraria.DataStructures.Point16(i, j), ply, this);
 				break;

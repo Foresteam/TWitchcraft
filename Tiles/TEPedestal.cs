@@ -62,6 +62,6 @@ class TEPedestal : TEAbstractStation, IRightClickable {
 					if (!altars.Contains(origin))
 						altars.Add(origin);
 				}
-		return altars.Where(origin => (bool)HelpMe.GetTileEntity<TEAltar>(origin.X, origin.Y).GetOverallInventory(origin.X, origin.Y).Contains(Inventory)).ToList();
+		return altars.Where(origin => (bool)HelpMe.GetTileEntity<TEAltar>(origin.X, origin.Y).GetSatelliteInventories(origin.X, origin.Y).Contains(Inventory)).ToList();
 	}
 }

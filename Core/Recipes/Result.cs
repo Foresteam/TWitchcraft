@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
 
-namespace TWitchery;
+namespace TWitchery.Recipes;
 using Liquids;
 partial class WitcheryRecipe {
 	#nullable enable

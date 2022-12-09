@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 using System;
 
 namespace TWitchery.CauldronCore;
-using Liquids;
+using Recipes;
 partial class Crafting : ICrafting<Crafting.Action, Inventory> {
 	private List<WitcheryRecipe> _recipes;
 	private Inventory _inventory;

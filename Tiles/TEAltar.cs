@@ -13,6 +13,7 @@ using TWitchery.PedestalCore;
 
 #nullable enable
 namespace TWitchery.Tiles;
+using Recipes;
 class TEAltar : TEAbstractStation, IBlockingRightClickable {
 	public const int inventorySize = 5;
 	public const int radiusMin = 5, radiusMax = 6, pedestalDistance = radiusMax / 2 + 1;

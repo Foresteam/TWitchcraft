@@ -5,7 +5,8 @@ using System.Text;
 using Terraria;
 using Terraria.ID;
 
-namespace TWitchery;
+namespace TWitchery.Recipes;
+using RecipeItems;
 using Liquids;
 ///<summary>Inherit this and redefine GetResult to customize results based on input ingredients</summary>
 partial class WitcheryRecipe {
@@ -114,7 +115,7 @@ partial class WitcheryRecipe {
 			throw new ArgumentException("The recipe list is empty!");
 		return recipes.Last();
 	}
-	public static void GetDefaultResult(RecipeItem[] ritems, int? xAmount, Item[] items, Item catalyst, List<Liquid> liquids, ref Result result) {
+	public virtual void GetResult(RecipeItem[] ritems, int? xAmount, Item[] items, Item catalyst, List<Liquid> liquids, ref Result result) {
 		if (xAmount == null)
 			return;
 		foreach (var item in result.items)
@@ -123,7 +124,6 @@ partial class WitcheryRecipe {
 			liquid.Volume *= (int)xAmount;
 		result.energyCost *= (int)xAmount;
 	}
-	public virtual void GetResult(RecipeItem[] ritems, int? xAmount, Item[] items, Item catalyst, List<Liquid> liquids, ref Result result) => GetDefaultResult(ritems, xAmount, items, catalyst, liquids, ref result);
 	/// Attempt to combine ingredients into the recipe
 #nullable enable
 	public Result? Craft(Item[] items, Item catalyst, List<Liquid>? liquids = null) {
@@ -136,7 +136,7 @@ partial class WitcheryRecipe {
 			return null;
 		
 		Result result = _result.Clone();
-		GetDefaultResult(_itemIngredients.ToArray(), xAmount, items, catalyst, liquids, ref result);
+		GetResult(_itemIngredients.ToArray(), xAmount, items, catalyst, liquids, ref result);
 		// the same for liquids
 		if (match < 1)
 			result.energyCost /= _failedWorkedChance / match;

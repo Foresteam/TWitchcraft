@@ -6,6 +6,7 @@ using Terraria.ID;
 
 namespace TWitchery;
 using Liquids;
+using ExtVesselItem;
 class LiquidInventory : IEnumerable<Liquid> {
 	private List<Liquid> _contained;
 	public readonly float volume;
@@ -90,14 +91,14 @@ class LiquidInventory : IEnumerable<Liquid> {
 	public void Flush() => _contained.Clear();
 
 	public void Apply(ref Item item, Player ply) {
-		if (!Tables.Vessels.IsVessel(item))
+		if (!item.IsVessel())
 			return;
 		// draw
-		if (Tables.Vessels.IsEmpty(item)) {
+		if (item.IsEmpty()) {
 			Liquid? liquidToTake = Get();
 			if (liquidToTake == null)
 				return;
-			int itemID = Tables.Vessels.GetFilledWith(item, liquidToTake);
+			int itemID = item.GetFilledWith(liquidToTake);
 			if (itemID == 0)
 				return;
 			Liquid? taken = Take(Tables.Vessels.GetVolume(item));

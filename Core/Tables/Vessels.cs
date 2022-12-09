@@ -5,6 +5,7 @@ using Terraria.ID;
 
 namespace TWitchery.Tables;
 using Liquids;
+#nullable enable
 class Vessels {
 	/// <summary>FilledVessel to Liquid pairs (volume included). A factory?</summary>
 	public static readonly Dictionary<int, Func<float, Liquid>> vesselsLiquids = new() {
@@ -141,26 +142,7 @@ class Vessels {
 	};
 
 	public static bool IsVessel(int itemID) => vessels.ContainsKey(itemID);
-	public static bool IsVessel(Terraria.Item item) => IsVessel(item.type);
-	public static bool IsEmpty(int itemID) => IsVessel(itemID) && vessels[itemID] == itemID;
-	public static bool IsEmpty(Terraria.Item item) => IsEmpty(item.type);
 
-	public static bool IsFilled(int itemID) => IsVessel(itemID) && !IsEmpty(itemID);
-	public static bool IsFilled(Terraria.Item item) => IsFilled(item.type);
-
-
-	/// <summary>Get "filled" vessel for the liquid</summary>
-	/// <returns>ItemID if a suitable one was found, 0 otherwise</returns>
-#nullable enable
-	public static int GetFilledWith(int itemID, Liquid? liquid) {
-		if (!IsEmpty(itemID) || liquid == null)
-			return 0;
-		return vesselsLiquids.FirstOrDefault(
-			pair => pair.Key != 0 && pair.Value(VolumeOf(itemID)).GetType() == liquid.GetType() && vessels[pair.Key] == itemID,
-			vesselsLiquids.First()
-		).Key;
-	}
-	public static int GetFilledWith(Terraria.Item item, Liquid liquid) => GetFilledWith(item.type, liquid);
 	public static float VolumeOf(int itemID) {
 		if (!IsVessel(itemID))
 			throw new ArgumentException("The item is not a vessel");

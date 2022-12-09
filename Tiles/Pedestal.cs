@@ -11,7 +11,7 @@ public class Pedestal : ModTile {
 	public static readonly Vector2 particleOrigin = new Vector2(8, magicDrawOffsetY - 8);
 	public override void PlaceInWorld(int i, int j, Item tileItem) {}
 	public override void SetStaticDefaults() {
-		Main.tileSolidTop[Type] = true;
+		Main.tileSolidTop[Type] = false;
 		Main.tileFrameImportant[Type] = true;
 		Main.tileNoAttach[Type] = true;
 		Main.tileTable[Type] = false;

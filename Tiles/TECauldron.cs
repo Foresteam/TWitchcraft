@@ -11,6 +11,7 @@ using TWitchery.CauldronCore;
 namespace TWitchery.Tiles;
 using Liquids;
 using Tables;
+using Recipes;
 class TECauldron : TEAbstractStation, IRightClickable {
 	private static List<WitcheryRecipe> _recipes = new List<WitcheryRecipe>(new WitcheryRecipe[] {
 		new WitcheryRecipe(energyCost: 0)

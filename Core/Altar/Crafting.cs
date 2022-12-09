@@ -6,6 +6,7 @@ using System.Linq;
 
 namespace TWitchery.AltarCore;
 using PedestalCore;
+using Recipes;
 partial class Crafting : ICrafting<Crafting.Action, Inventory> {
 	private List<WitcheryRecipe> _recipes;
 	private Inventory _inventory;

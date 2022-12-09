@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.DataStructures;
 
 namespace TWitchery;
+using Recipes;
 #nullable enable
 interface ICrafting<TAction, TInventory>
 	where TAction : System.Enum

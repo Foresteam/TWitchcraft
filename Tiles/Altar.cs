@@ -8,7 +8,7 @@ using Terraria.DataStructures;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Linq;
-using TWitchery.Ext;
+using TWitchery.ExtItem;
 
 namespace TWitchery.Tiles;
 #nullable enable

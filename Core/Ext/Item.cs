@@ -4,7 +4,9 @@ using Terraria;
 using Terraria.GameContent;
 using Microsoft.Xna.Framework;
 
-namespace TWitchery.Ext;
+namespace TWitchery.ExtItem;
+using ExtTexture2D;
+#nullable enable
 static class ItemExt {
 	public static Color GetMainColor(this Item item, int nth = 0) {
 		if (item.type >= TextureAssets.Item.Length)

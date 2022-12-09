@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace TWitchery.Ext;
+namespace TWitchery.ExtTexture2D;
 static class Texture2DExt {
 	public static Color[] GetPixels(this Texture2D texture) {
 		Color[] colors1d = new Color[texture.Width * texture.Height];

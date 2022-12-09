@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 using TWitchery.PedestalCore;
 
 namespace TWitchery.Tiles;
-using Tables;
+using Recipes;
 #nullable enable
 class TEPedestal : TEAbstractStation, IRightClickable {
 	private static List<WitcheryRecipe> _recipes = new();

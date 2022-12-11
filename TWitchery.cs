@@ -5,10 +5,74 @@ using Microsoft.Xna.Framework;
 using System.IO;
 
 using System.Linq;
+using static Terraria.ID.ItemID;
 
 namespace TWitchery {
-	public class TWitchery : Mod {
-		
+	public class TWitchery : Mod {}
+	public class TWitcheryModSystem : ModSystem {
+		private static readonly int[] _deletedPotions = new int[] {
+			AmmoReservationPotion,
+			ArcheryPotion,
+			BattlePotion,
+			BuilderPotion,
+			CalmingPotion,
+			CratePotion,
+			TrapsightPotion,
+			EndurancePotion,
+			FeatherfallPotion,
+			FishingPotion,
+			GenderChangePotion,
+			GillsPotion,
+			GravitationPotion,
+			GreaterHealingPotion,
+			LuckPotionLesser,
+			LuckPotion,
+			LuckPotionGreater,
+			LesserHealingPotion,
+			HealingPotion,
+			GreaterHealingPotion,
+			HeartreachPotion,
+			HunterPotion,
+			InfernoPotion,
+			InvisibilityPotion,
+			IronskinPotion,
+			LesserManaPotion,
+			ManaPotion,
+			GreaterManaPotion,
+			SuperManaPotion,
+			LifeforcePotion,
+			LovePotion,
+			MagicPowerPotion,
+			ManaRegenerationPotion,
+			MiningPotion,
+			NightOwlPotion,
+			ObsidianSkinPotion,
+			RagePotion,
+			RecallPotion,
+			RegenerationPotion,
+			RestorationPotion,
+			PotionOfReturn,
+			ShinePotion,
+			SonarPotion,
+			SpelunkerPotion,
+			StinkPotion,
+			SummoningPotion,
+			SwiftnessPotion,
+			TeleportationPotion,
+			ThornsPotion,
+			TitanPotion,
+			WarmthPotion,
+			WaterWalkingPotion,
+			WormholePotion,
+			WrathPotion
+		};
+		public override void PostAddRecipes() {
+			base.PostAddRecipes();
+			foreach (var result in _deletedPotions)
+				foreach (var recipe in Main.recipe)
+					if (recipe.HasResult(result))
+						recipe.DisableRecipe();
+		}
 	}
 	public class TWitcheryPlayer : ModPlayer {
 		public int CalcDepletionLimits() {

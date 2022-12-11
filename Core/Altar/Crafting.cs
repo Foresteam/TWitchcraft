@@ -17,11 +17,15 @@ partial class Crafting : ICrafting<Crafting.Action, Inventory> {
 	}
 
 	public Action Interract(int i, int j, Player ply, Item[] inv, int slot) {
-		if (inv[slot].type == ModContent.ItemType<Items.EbonWand>())
+		if (
+			inv[slot].type == ModContent.ItemType<Items.EbonWand>()
+			&& Inventory.Slot.type != 0
+			&& Tiles.TEAltar.GetSatelliteInventories(i, j)?.Sum(i => i.Slot.type == 0 ? 0 : 1) > 0
+		)
 			return Action.Craft;
 		return (Action)_inventory.BasicInterract(i, j, ply, inv, slot);
 	}
-	#nullable enable
+#nullable enable
 	public WitcheryRecipe.Result? Craft(int i, int j) {
 		var pedestalInventories = Tiles.TEAltar.GetSatelliteInventories(i, j);
 		if (pedestalInventories == null)

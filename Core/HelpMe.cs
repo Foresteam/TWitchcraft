@@ -1,10 +1,13 @@
 using Terraria.DataStructures;
 using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
+using static Terraria.ModLoader.ModContent;
 
 #nullable enable
 namespace TWitchery;

@@ -213,7 +213,7 @@ class TECauldron : TEAbstractStation, IRightClickable {
 			.AddIngredient(new EssenseOfForce(.1f))
 			.AddIngredient(new LifeEssense(.1f))
 			.SetCatalyst(new Item(ItemID.Moonglow))
-			.AddResult(new MagicRestorationPotion(Vessels.VolumeOf(ItemID.Bottle))),
+			.AddResult(new ManaRegenerationPotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle)))
 			.AddIngredient(new EssenseOfDarkness(.1f))

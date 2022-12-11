@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using Terraria.ID;
 
@@ -8,7 +7,7 @@ using Liquids;
 #nullable enable
 class Vessels {
 	/// <summary>FilledVessel to Liquid pairs (volume included). A factory?</summary>
-	public static readonly Dictionary<int, Func<float, Liquid>> vesselsLiquids = new() {
+	public static readonly Dictionary<int, Func<float, Liquid?>> vesselsLiquids = new() {
 		{ 0, volume => null },
 		{ ItemID.WaterBucket, volume => new Water(volume) },
 		{ ItemID.BottledWater, volume => new Water(volume) },
@@ -49,7 +48,7 @@ class Vessels {
 		{ ItemID.LovePotion, volume => new LovePotion(volume) },
 		{ ItemID.LuckPotion, volume => new LuckPotion(volume) },
 		{ ItemID.MagicPowerPotion, volume => new MagicPowerPotion(volume) },
-		{ ItemID.ManaRegenerationPotion, volume => new MagicRestorationPotion(volume) },
+		{ ItemID.ManaRegenerationPotion, volume => new ManaRegenerationPotion(volume) },
 		{ ItemID.MiningPotion, volume => new MiningPotion(volume) },
 		{ ItemID.NightOwlPotion, volume => new NightOwlPotion(volume) },
 		{ ItemID.ObsidianSkinPotion, volume => new ObsidianSkinPotion(volume) },

@@ -16,7 +16,7 @@ static class VesselItemExt {
 		if (!item.IsEmpty() || liquid == null)
 			return 0;
 		return Vessels.vesselsLiquids.FirstOrDefault(
-			pair => pair.Key != 0 && pair.Value(item.GetVolume()).GetType() == liquid.GetType() && Vessels.vessels[pair.Key] == item.type,
+			pair => pair.Key != 0 && pair.Value(item.GetVolume())?.GetType() == liquid.GetType() && Vessels.vessels[pair.Key] == item.type,
 			Vessels.vesselsLiquids.First()
 		).Key;
 	}

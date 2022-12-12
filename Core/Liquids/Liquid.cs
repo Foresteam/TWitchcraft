@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using System.Text.Json;
 
 namespace TWitchery.Liquids;
 abstract class Liquid {
@@ -54,17 +55,33 @@ abstract class Liquid {
 	public static Liquid operator +(Liquid a, Liquid b) {
 		if (a.GetType() != b.GetType())
 			throw new ArgumentException("Types don't strictly match");
-		Liquid rs = (Liquid)a.MemberwiseClone();
+		Liquid rs = (Liquid)a.Clone();
 		rs.Volume += b.Volume;
 		return rs;
 	}
 	public static Liquid operator *(Liquid a, float b) {
-		Liquid result = (Liquid)a.MemberwiseClone();
+		Liquid result = (Liquid)a.Clone();
 		result.Volume *= b;
 		return result;
 	}
 	public Liquid Clone() => (Liquid)MemberwiseClone();
-	public string Dump(bool dev = false) => !dev
-		? $"{Name} x{Volume}"
-		: '{' + $"\"id\": {HelpMe.GetLiquidsTable().First(p => p.Value == GetType()).Key}, \"volume\": {Volume}" + '}';
+	public string JDump() => '{' + $"\"id\": {HelpMe.GetLiquidsTable().First(p => p.Value == GetType()).Key}, \"volume\": {Volume}" + '}';
+	public string Dump(bool json = false) => !json ? ($"{Name} x{Volume}") : JDump();
+	public string? FullType => GetType().FullName;
+	public string Serialize() => JsonSerializer.Serialize(this);
+	public static Liquid? Deserialize(string data) {
+		try {
+			var json = JsonDocument.Parse(data);
+			var stype = json.RootElement.GetProperty("FullType").GetString();
+			if (stype == null)
+				throw new Exception();
+			var type = Type.GetType(stype);
+			if (type == null)
+				throw new Exception();
+			return (Liquid?)Activator.CreateInstance(type, 0);
+		}
+		catch {
+			return null;
+		}
+	}
 }

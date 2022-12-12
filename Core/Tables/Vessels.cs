@@ -1,14 +1,18 @@
 using System;
 using System.Collections.Generic;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace TWitchery.Tables;
 using Liquids;
+using Items;
 #nullable enable
 class Vessels {
 	/// <summary>FilledVessel to Liquid pairs (volume included). A factory?</summary>
 	public static readonly Dictionary<int, Func<float, Liquid?>> vesselsLiquids = new() {
 		{ 0, volume => null },
+		{ ModContent.ItemType<UniversalBottle>(), volume => null },
+
 		{ ItemID.WaterBucket, volume => new Water(volume) },
 		{ ItemID.BottledWater, volume => new Water(volume) },
 		{ ItemID.LavaBucket, volume => new Lava(volume) },
@@ -73,9 +77,12 @@ class Vessels {
 	public static readonly Dictionary<int, float> vesselsVolumes = new() {
 		{ ItemID.EmptyBucket, 1f },
 		{ ItemID.Bottle, .25f },
+		{ ModContent.ItemType<UniversalBottle>(), .25f }
 	};
 	/// <summary>FilledVessel => EmptyVessel pairs</summary>
 	public static readonly Dictionary<int, int> vessels = new() {
+		{ ModContent.ItemType<UniversalBottle>(), ModContent.ItemType<UniversalBottle>() },
+
 		{ ItemID.EmptyBucket, ItemID.EmptyBucket },
 		{ ItemID.WaterBucket, ItemID.EmptyBucket },
 		{ ItemID.LavaBucket, ItemID.EmptyBucket },

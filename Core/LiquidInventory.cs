@@ -28,7 +28,7 @@ class LiquidInventory : IEnumerable<Liquid> {
 				break;
 			}
 		if (lq == null) {
-			lq = nLiquid;
+			lq = nLiquid.Clone();
 			_contained.Add(lq);
 			return true;
 		}
@@ -99,11 +99,17 @@ class LiquidInventory : IEnumerable<Liquid> {
 			if (liquidToTake == null)
 				return;
 			int itemID = item.GetFilledWith(liquidToTake);
-			if (itemID == 0)
+			if (itemID != 0) {
+				Take(Tables.Vessels.GetVolume(item));
+				// the order should be preserved!
+				HelpMe.GiveItem(new Item(itemID), ply);
+				HelpMe.Consume(ref item);
 				return;
-			Liquid? taken = Take(Tables.Vessels.GetVolume(item));
-			// the order should be preserved!
-			HelpMe.GiveItem(new Item(itemID), ply);
+			}
+			if (item.type != ItemID.Bottle)
+				return;
+			Take(Tables.Vessels.GetVolume(item));
+			HelpMe.GiveItem(Items.UniversalBottle.CreateFilled(liquidToTake), ply);
 			HelpMe.Consume(ref item);
 			return;
 		}
@@ -111,9 +117,18 @@ class LiquidInventory : IEnumerable<Liquid> {
 		if (!Tables.Vessels.vesselsLiquids.ContainsKey(item.type))
 			return;
 		var vol = Tables.Vessels.GetVolume(item);
-		if (!Add(Tables.Vessels.vesselsLiquids[item.type](Tables.Vessels.GetVolume(item))))
+		Liquid? toAdd;
+		var universalBottle = item.ModItem as Items.UniversalBottle;
+		if (universalBottle == null)
+			toAdd = Tables.Vessels.vesselsLiquids[item.type](vol);
+		else {
+			toAdd = universalBottle.storedLiquid;
+			if (toAdd != null)
+				toAdd.Volume = vol;
+		}
+		if (!Add(toAdd))
 			return;
-		if (Tables.Vessels.vessels[item.type] == ItemID.EmptyBucket)
+		if (item.GetEmpty() == ItemID.EmptyBucket)
 			HelpMe.GiveItem(new Item(ItemID.EmptyBucket), ply);
 		HelpMe.Consume(ref item);
 	}

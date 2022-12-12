@@ -150,4 +150,13 @@ namespace TWitchery {
 			Main.NewText("Dumped successfully.");
 		}
 	}
+	public class TestCommand : ModCommand {
+		public override string Command => "tg";
+		public override CommandType Type => CommandType.Chat;
+		public override void Action(CommandCaller caller, string input, string[] args) {
+			var ply = caller.Player;
+			var item = Items.UniversalBottle.CreateFilled(new Liquids.Blood());
+			ply.QuickSpawnClonedItem(null, item, 2);
+		}
+	}
 }

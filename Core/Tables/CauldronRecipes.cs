@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
-using TWitchery.Recipes;
-using TWitchery.Recipes.RecipeItems;
 
 namespace TWitchery.Tables;
 using Liquids;
+using Recipes;
+using Recipes.RecipeItems;
 static class CauldrounRecipes {
 	public static readonly List<WitcheryRecipe> self = new List<WitcheryRecipe>(new WitcheryRecipe[] {
 		new WitcheryRecipe(energyCost: 0)
@@ -355,9 +355,9 @@ static class CauldrounRecipes {
 			.SetCatalyst(new Item(ItemID.SoulofFlight))
 			.AddResult(new AerialEssense(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 20)
-			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.EmptyBucket)))
-			.AddIngredient(new AnyEvilBlock(10))
-			.AddResult(new EvilExtract(Vessels.VolumeOf(ItemID.EmptyBucket))),
+			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle)))
+			.AddIngredient(new AnyEvilBlock(5))
+			.AddResult(new EvilExtract(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 80)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.EmptyBucket)))
 			.AddIngredient(new Item(ItemID.GrayBrick, 5))
@@ -373,9 +373,9 @@ static class CauldrounRecipes {
 		new WitcheryRecipe(energyCost: 40)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle) * 3))
 			.AddIngredient(new EssenseOfChaos(Vessels.VolumeOf(ItemID.Bottle)))
-			.AddIngredient(new Item(ItemID.Star))
-			.SetCatalyst(new AnyIronOre(2))
-			.AddResult(new EssenseOfForce(Vessels.VolumeOf(ItemID.Bottle) * 3)),
+			.AddIngredient(new Item(ItemID.FallenStar))
+			.SetCatalyst(new AnyIronOre(3))
+			.AddResult(new EssenseOfForce(Vessels.VolumeOf(ItemID.Bottle) * 1)),
 		new WitcheryRecipe(energyCost: 60)
 			.AddIngredient(new Blood(Vessels.VolumeOf(ItemID.Bottle) * 2))
 			.AddIngredient(new EssenseOfOrder(Vessels.VolumeOf(ItemID.Bottle)))

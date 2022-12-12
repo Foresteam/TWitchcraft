@@ -1,12 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.ObjectData;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System;
 using TWitchery.PedestalCore;
 
 namespace TWitchery;
@@ -48,9 +43,11 @@ abstract class EnergyDrainer {
 		}
 	}
 
-	protected void DrainPlayer(Player ply) =>
-			ply.GetModPlayer<TWitcheryPlayer>()
-					.TakeMana((int)_yetToDrain, out _yetToDrain, useDeplition: false);
+	protected void DrainPlayer(Player ply) {
+		float took;
+		ply.GetModPlayer<TWitcheryPlayer>().TakeMana((int)_yetToDrain, out took, useDeplition: false);
+		_yetToDrain -= took;
+	}
 
 	protected void DrainLiquid(LiquidInventory liquids) {
 		if (_yetToDrain == 0)
@@ -65,6 +62,7 @@ abstract class EnergyDrainer {
 					continue;
 				}
 				liquid.Volume -= _yetToDrain / mpu;
+				_yetToDrain = 0;
 				return;
 			}
 		foreach (var toRemove in remove)

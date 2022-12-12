@@ -46,18 +46,5 @@ public class EbonWand : ModItem {
 		recipe.AddTile(TileID.WorkBenches);
 		recipe.AddTile(TileID.Sawmill);
 		recipe.Register();
-
-		recipe = CreateRecipe();
-		recipe.AddIngredient(ItemID.Ebonwood, 60);
-		recipe.AddIngredient(ItemID.SilverCoin, 200);
-		recipe.AddTile(TileID.WorkBenches);
-		recipe.AddTile(TileID.Sawmill);
-		recipe.Register();
-		recipe = CreateRecipe();
-		recipe.AddIngredient(ItemID.Shadewood, 60);
-		recipe.AddIngredient(ItemID.SilverCoin, 200);
-		recipe.AddTile(TileID.WorkBenches);
-		recipe.AddTile(TileID.Sawmill);
-		recipe.Register();
 	}
 }

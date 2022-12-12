@@ -3,7 +3,6 @@ using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using System.IO;
-
 using System.Linq;
 using static Terraria.ID.ItemID;
 
@@ -66,8 +65,14 @@ namespace TWitchery {
 			WormholePotion,
 			WrathPotion
 		};
+		public override void AddRecipes() {
+			// smelting the unspawned ores
+			Recipe.Create(SilverBar)
+				.AddIngredient(SilverCoin, 15)
+				.AddTile(Terraria.ID.TileID.Furnaces)
+				.Register();
+		}
 		public override void PostAddRecipes() {
-			base.PostAddRecipes();
 			foreach (var result in _deletedPotions)
 				foreach (var recipe in Main.recipe)
 					if (recipe.HasResult(result))

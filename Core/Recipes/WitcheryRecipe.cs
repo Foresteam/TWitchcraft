@@ -9,17 +9,18 @@ namespace TWitchery.Recipes;
 using RecipeItems;
 using Liquids;
 ///<summary>Inherit this and redefine GetResult to customize results based on input ingredients</summary>
+#nullable enable
 partial class WitcheryRecipe {
 	protected float _failedWorkedChance, _matchThreshold;
 	protected List<RecipeItem> _itemIngredients;
 	protected List<Liquid> _liquidIngredients;
-	protected Item _catalyst;
+	protected RecipeItem? _catalyst;
 	protected Result _result;
 	/// <param name="resultGetter">An alternative (and advanced) way to define recipe results.</param>
 	public WitcheryRecipe(float energyCost, float failedWorkedChance = 0, float matchThreshold = .75f) {
 		_failedWorkedChance = failedWorkedChance;
 		_matchThreshold = matchThreshold;
-		_catalyst = new Item();
+		_catalyst = null;
 
 		_itemIngredients = new List<RecipeItem>();
 		_liquidIngredients = new List<Liquid>();
@@ -38,8 +39,12 @@ partial class WitcheryRecipe {
 		_liquidIngredients.Add(ingredient);
 		return this;
 	}
-	public WitcheryRecipe SetCatalyst(Item catalyst) {
+	public WitcheryRecipe SetCatalyst(RecipeItem catalyst) {
 		_catalyst = catalyst;
+		return this;
+	}
+	public WitcheryRecipe SetCatalyst(Item catalyst) {
+		_catalyst = new RecipeItem(catalyst);
 		return this;
 	}
 	public WitcheryRecipe AddResult(Item result) {
@@ -51,18 +56,18 @@ partial class WitcheryRecipe {
 		return this;
 	}
 
-	private List<Liquid> FilterEnergyOut(List<Liquid> input) {
-		return input.Select(liquid => !Tables.Common.energyLiquids.ContainsKey(liquid.GetType()) ? liquid : null).ToList();
+	private List<Liquid?> FilterEnergyOut(List<Liquid?> input) {
+		return input.Select(liquid => !Tables.Common.energyLiquids.ContainsKey(liquid?.GetType()) ? liquid : null).ToList();
 	}
 	private float Match(Item[] _items, Item catalyst, List<Liquid> inputLiquids, out int? xAmount) {
 		var items = new List<Item>(_items).FindAll(i => !i.IsAir);
-		var liquids = inputLiquids;
+		List<Liquid?> liquids = new(inputLiquids);
 		if (_result.energyCost > 0)
 			liquids = FilterEnergyOut(liquids);
 		int 
 			totalLiquids = Math.Max(liquids.Select(l => l == null ? 0 : 1).Sum(), _liquidIngredients.Count),
 			totalItems = Math.Max(_itemIngredients.Count, _items.Select(i => i.type == 0 ? 0 : 1).Sum()),
-			totalCatalyst = Math.Max(catalyst.type != 0 ? 1 : 0, _catalyst.type != 0 ? 1 : 0);
+			totalCatalyst = Math.Max(catalyst.type != 0 ? 1 : 0, (_catalyst?.Type ?? 0) != 0 ? 1 : 0);
 		int total = totalLiquids + totalItems + totalCatalyst;
 		int match = 0;
 		// "multiply" the result
@@ -74,11 +79,11 @@ partial class WitcheryRecipe {
 						xAmount = item.stack / ing.Stack;
 					match++;
 				}
-		foreach (Liquid liquid in liquids) {
+		foreach (Liquid? liquid in liquids) {
 			if (liquid == null)
 				continue;
 			var _xAmount = xAmount;
-			Liquid rliquid = null;
+			Liquid? rliquid = null;
 			foreach (var tliquid in _liquidIngredients)
 				if (tliquid.GetType() == liquid.GetType() && (_xAmount == null || liquid.Volume / _xAmount == tliquid.Volume)) {
 					rliquid = tliquid;
@@ -90,8 +95,8 @@ partial class WitcheryRecipe {
 				xAmount = (int)(liquid.Volume / rliquid.Volume);
 			match += 1;
 		}
-		if (totalCatalyst > 0)
-			match += (_catalyst.type == catalyst.type && catalyst.stack % xAmount == 0) ? 1 : 0;
+		if (totalCatalyst > 0 && _catalyst != null)
+			match += _catalyst.Match(catalyst, ref xAmount) ? 1 : 0;
 		// Main.NewText($"totalItems: {totalItems}, totalLiquids: {totalLiquids}, totalCatalyst: {totalCatalyst}, total: {total}, match: {match}, items: {items.Count}, ctype: {catalyst.type} == {_catalyst.type}, {catalyst.stack}, {xAmount}");
 		return (float)match / total;
 	}
@@ -155,7 +160,7 @@ partial class WitcheryRecipe {
 			singredients = $"[{singredients}]";
 		rs.Add(singredients);
 		rs.Add('[' + String.Join(", ", _liquidIngredients.Select(lq => lq.Dump(dev))) + ']');
-		rs.Add(_catalyst.type != 0 ? HelpMe.DumpItem(_catalyst, dev) : "");
+		rs.Add((_catalyst?.Type ?? 0) != 0 ? HelpMe.DumpItem(_catalyst?.Item ?? new Item(), dev) : "");
 		rs.Add(_result.energyCost.ToString());
 		rs.Add('[' + String.Join(", ", _result.liquids.Select(lq => lq.Dump(dev))) + ']');
 		rs.Add('[' + String.Join(", ", _result.items.Select(item => HelpMe.DumpItem(item, dev))) + ']');

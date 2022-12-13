@@ -7,6 +7,7 @@ using Liquids;
 using Recipes;
 using Recipes.RecipeItems;
 static class CauldrounRecipes {
+	private const float _essenseDefaultRequirement = .1f;
 	public static readonly List<WitcheryRecipe> self = new List<WitcheryRecipe>(new WitcheryRecipe[] {
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Water(1f))
@@ -57,6 +58,7 @@ static class CauldrounRecipes {
 			.AddIngredient(new HealingPotion(Vessels.VolumeOf(ItemID.EmptyBucket)))
 			.AddIngredient(new LesserHealingPotion(Vessels.VolumeOf(ItemID.Bottle)))
 			.AddIngredient(new ManaPotion(Vessels.VolumeOf(ItemID.EmptyBucket)))
+			.AddIngredient(new LifeEssense(_essenseDefaultRequirement))
 			.AddResult(new LifeforcePotion(Vessels.VolumeOf(ItemID.Bottle))),
 
 		new WitcheryRecipe(energyCost: 1.5f)
@@ -87,7 +89,7 @@ static class CauldrounRecipes {
 			.AddResult(new ArcheryPotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle)))
-			.AddIngredient(new EvilExtract(.1f))
+			.AddIngredient(new EvilExtract(_essenseDefaultRequirement))
 			.SetCatalyst(new Item(ItemID.Deathweed))
 			.AddResult(new BattlePotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
@@ -110,7 +112,7 @@ static class CauldrounRecipes {
 			.AddResult(new CratePotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle)))
-			.AddIngredient(new EssenseOfAwareness(.1f))
+			.AddIngredient(new EssenseOfAwareness(_essenseDefaultRequirement))
 			.SetCatalyst(new Item(ItemID.Shiverthorn))
 			.AddResult(new DangersensePotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
@@ -120,7 +122,7 @@ static class CauldrounRecipes {
 			.AddResult(new EndurancePotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle)))
-			.AddIngredient(new AerialEssense(.1f))
+			.AddIngredient(new AerialEssense(_essenseDefaultRequirement))
 			.AddIngredient(new Item(ItemID.Blinkroot))
 			.SetCatalyst(new Item(ItemID.Daybloom))
 			.AddResult(new FeatherfallPotion(Vessels.VolumeOf(ItemID.Bottle))),
@@ -131,7 +133,7 @@ static class CauldrounRecipes {
 			.AddResult(new FishingPotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle)))
-			.AddIngredient(new AquaticEssense(.1f))
+			.AddIngredient(new AquaticEssense(_essenseDefaultRequirement))
 			.AddIngredient(new Item(ItemID.Shiverthorn))
 			.SetCatalyst(new Item(ItemID.Waterleaf))
 			.AddResult(new FlipperPotion(Vessels.VolumeOf(ItemID.Bottle))),
@@ -147,24 +149,24 @@ static class CauldrounRecipes {
 		// 	.AddResult(new GenderChangePotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle)))
-			.AddIngredient(new AquaticEssense(.1f))
+			.AddIngredient(new AquaticEssense(_essenseDefaultRequirement))
 			.AddIngredient(new Item(ItemID.Waterleaf))
 			.SetCatalyst(new Item(ItemID.Coral))
 			.AddResult(new GillsPotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle)))
-			.AddIngredient(new AlienEssense(.1f))
+			.AddIngredient(new AlienEssense(_essenseDefaultRequirement))
 			.AddIngredient(new Item(ItemID.Blinkroot))
 			.SetCatalyst(new Item(ItemID.Fireblossom))
 			.AddResult(new GravitationPotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle)))
-			.AddIngredient(new LifeEssense(.1f))
+			.AddIngredient(new LifeEssense(_essenseDefaultRequirement))
 			.SetCatalyst(new Item(ItemID.Daybloom))
 			.AddResult(new HeartreachPotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle)))
-			.AddIngredient(new EssenseOfAwareness(.1f))
+			.AddIngredient(new EssenseOfAwareness(_essenseDefaultRequirement))
 			.AddIngredient(new Item(ItemID.Daybloom))
 			.SetCatalyst(new Item(ItemID.Blinkroot))
 			.AddResult(new HunterPotion(Vessels.VolumeOf(ItemID.Bottle))),
@@ -182,13 +184,13 @@ static class CauldrounRecipes {
 			.AddResult(new InfernoPotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle)))
-			.AddIngredient(new EssenseOfAwareness(.1f))
-			.AddIngredient(new AlienEssense(.1f))
+			.AddIngredient(new EssenseOfAwareness(_essenseDefaultRequirement))
+			.AddIngredient(new AlienEssense(_essenseDefaultRequirement))
 			.SetCatalyst(new Item(ItemID.Blinkroot))
 			.AddResult(new InvisibilityPotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle)))
-			.AddIngredient(new EssenseOfForce(.1f))
+			.AddIngredient(new EssenseOfForce(_essenseDefaultRequirement))
 			.SetCatalyst(new Item(ItemID.Daybloom))
 			.AddResult(new IronskinPotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
@@ -198,38 +200,38 @@ static class CauldrounRecipes {
 			.AddResult(new LovePotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle)))
-			.AddIngredient(new EssenseOfForce(.1f))
-			.AddIngredient(new AlienEssense(.1f))
+			.AddIngredient(new EssenseOfForce(_essenseDefaultRequirement))
+			.AddIngredient(new AlienEssense(_essenseDefaultRequirement))
 			.SetCatalyst(new Item(ItemID.Moonglow))
 			.AddResult(new MagicPowerPotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle)))
-			.AddIngredient(new EssenseOfForce(.1f))
-			.AddIngredient(new LifeEssense(.1f))
+			.AddIngredient(new EssenseOfForce(_essenseDefaultRequirement))
+			.AddIngredient(new LifeEssense(_essenseDefaultRequirement))
 			.SetCatalyst(new Item(ItemID.Moonglow))
 			.AddResult(new ManaRegenerationPotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle) * 2))
-			.AddIngredient(new EssenseOfDarkness(.1f))
-			.AddIngredient(new EssenseOfForce(.1f))
+			.AddIngredient(new EssenseOfDarkness(_essenseDefaultRequirement))
+			.AddIngredient(new EssenseOfForce(_essenseDefaultRequirement))
 			.SetCatalyst(new Item(ItemID.AntlionMandible))
 			.AddResult(new MiningPotion(Vessels.VolumeOf(ItemID.Bottle) * 2)),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle)))
-			.AddIngredient(new EssenseOfDarkness(.1f))
-			.AddIngredient(new EssenseOfAwareness(.1f))
+			.AddIngredient(new EssenseOfDarkness(_essenseDefaultRequirement))
+			.AddIngredient(new EssenseOfAwareness(_essenseDefaultRequirement))
 			.SetCatalyst(new Item(ItemID.Blinkroot))
 			.AddResult(new NightOwlPotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle)))
 			.AddIngredient(new Lava(Vessels.VolumeOf(ItemID.Bottle)))
-			.AddIngredient(new AlienEssense(.1f))
-			.AddIngredient(new AquaticEssense(.1f))
+			.AddIngredient(new AlienEssense(_essenseDefaultRequirement))
+			.AddIngredient(new AquaticEssense(_essenseDefaultRequirement))
 			.SetCatalyst(new Item(ItemID.Fireblossom))
 			.AddResult(new ObsidianSkinPotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle)))
-			.AddIngredient(new EssenseOfForce(.1f))
+			.AddIngredient(new EssenseOfForce(_essenseDefaultRequirement))
 			.SetCatalyst(new Item(ItemID.Hemopiranha))
 			.AddResult(new RagePotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
@@ -239,17 +241,17 @@ static class CauldrounRecipes {
 			.AddResult(new RecallPotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle)))
-			.AddIngredient(new EssenseOfForce(.1f))
-			.AddIngredient(new LifeEssense(.1f))
+			.AddIngredient(new EssenseOfForce(_essenseDefaultRequirement))
+			.AddIngredient(new LifeEssense(_essenseDefaultRequirement))
 			.SetCatalyst(new Item(ItemID.Daybloom))
 			.AddResult(new RegenerationPotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new RecallPotion(Vessels.VolumeOf(ItemID.Bottle)))
-			.AddIngredient(new AlienEssense(.1f))
+			.AddIngredient(new AlienEssense(_essenseDefaultRequirement))
 			.AddResult(new ReturnPotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle)))
-			.AddIngredient(new EssenseOfDarkness(.1f))
+			.AddIngredient(new EssenseOfDarkness(_essenseDefaultRequirement))
 			.AddIngredient(new Item(ItemID.Daybloom))
 			.SetCatalyst(new Item(ItemID.Blinkroot))
 			.AddResult(new ShinePotion(Vessels.VolumeOf(ItemID.Bottle))),
@@ -260,8 +262,8 @@ static class CauldrounRecipes {
 			.AddResult(new SonarPotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle)))
-			.AddIngredient(new EssenseOfAwareness(.1f))
-			.AddIngredient(new EssenseOfAvarice(.1f))
+			.AddIngredient(new EssenseOfAwareness(_essenseDefaultRequirement))
+			.AddIngredient(new EssenseOfAvarice(_essenseDefaultRequirement))
 			.AddIngredient(new Item(ItemID.Moonglow))
 			.SetCatalyst(new Item(ItemID.Blinkroot))
 			.AddResult(new SpelunkerPotion(Vessels.VolumeOf(ItemID.Bottle))),
@@ -272,8 +274,8 @@ static class CauldrounRecipes {
 			.AddResult(new StinkPotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle)))
-			.AddIngredient(new AlienEssense(.1f))
-			.AddIngredient(new EssenseOfForce(.1f))
+			.AddIngredient(new AlienEssense(_essenseDefaultRequirement))
+			.AddIngredient(new EssenseOfForce(_essenseDefaultRequirement))
 			.SetCatalyst(new Item(ItemID.VariegatedLardfish))
 			.AddResult(new SummoningPotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
@@ -283,13 +285,13 @@ static class CauldrounRecipes {
 			.AddResult(new SwiftnessPotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle)))
-			.AddIngredient(new AlienEssense(.1f))
-			.AddIngredient(new EssenseOfChaos(.1f))
+			.AddIngredient(new AlienEssense(_essenseDefaultRequirement))
+			.AddIngredient(new EssenseOfChaos(_essenseDefaultRequirement))
 			.SetCatalyst(new Item(ItemID.Blinkroot))
 			.AddResult(new TeleportationPotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle)))
-			.AddIngredient(new EssenseOfForce(.1f))
+			.AddIngredient(new EssenseOfForce(_essenseDefaultRequirement))
 			.AddIngredient(new Item(ItemID.AntlionMandible))
 			.AddIngredient(new Item(ItemID.Stinger))
 			.AddIngredient(new Item(ItemID.Deathweed))
@@ -297,8 +299,8 @@ static class CauldrounRecipes {
 			.AddResult(new ThornsPotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle)))
-			.AddIngredient(new EssenseOfForce(.1f))
-			.AddIngredient(new LifeEssense(.1f))
+			.AddIngredient(new EssenseOfForce(_essenseDefaultRequirement))
+			.AddIngredient(new LifeEssense(_essenseDefaultRequirement))
 			.SetCatalyst(new Item(ItemID.Bone))
 			.AddResult(new TitanPotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
@@ -308,19 +310,19 @@ static class CauldrounRecipes {
 			.AddResult(new WarmthPotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle)))
-			.AddIngredient(new AquaticEssense(.1f))
-			.AddIngredient(new AerialEssense(.1f))
+			.AddIngredient(new AquaticEssense(_essenseDefaultRequirement))
+			.AddIngredient(new AerialEssense(_essenseDefaultRequirement))
 			.SetCatalyst(new Item(ItemID.Waterleaf))
 			.AddResult(new WaterWalkingPotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle)))
-			.AddIngredient(new EssenseOfChaos(.1f))
-			.AddIngredient(new EssenseOfOrder(.1f))
+			.AddIngredient(new EssenseOfChaos(_essenseDefaultRequirement))
+			.AddIngredient(new EssenseOfOrder(_essenseDefaultRequirement))
 			.SetCatalyst(new Item(ItemID.Blinkroot))
 			.AddResult(new WormholePotion(Vessels.VolumeOf(ItemID.Bottle))),
 		new WitcheryRecipe(energyCost: 0)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.Bottle)))
-			.AddIngredient(new EssenseOfForce(.1f))
+			.AddIngredient(new EssenseOfForce(_essenseDefaultRequirement))
 			.SetCatalyst(new Item(ItemID.Ebonkoi))
 			.AddResult(new WrathPotion(Vessels.VolumeOf(ItemID.Bottle))),
 
@@ -363,6 +365,13 @@ static class CauldrounRecipes {
 			.AddIngredient(new Item(ItemID.GrayBrick, 5))
 			.AddIngredient(new Item(ItemID.MarbleBlock, 2))
 			.AddResult(new EssenseOfOrder(Vessels.VolumeOf(ItemID.Bottle) * 1)),
+		new WitcheryRecipe(energyCost: 160)
+			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.EmptyBucket) * 4))
+			.AddIngredient(new Item(ItemID.Glowstick, 4))
+			.AddIngredient(new Item(ItemID.SharkFin, 1))
+			.AddIngredient(new Item(ItemID.Coral, 5))
+			.SetCatalyst(new Item(ItemID.Waterleaf, 1))
+			.AddResult(new AquaticEssense(Vessels.VolumeOf(ItemID.Bottle) * 2)),
 
 		new WitcheryRecipe(energyCost: 40)
 			.AddIngredient(new Water(Vessels.VolumeOf(ItemID.EmptyBucket)))

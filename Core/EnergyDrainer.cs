@@ -11,15 +11,13 @@ abstract class EnergyDrainer {
 	// private Tile _tile;
 	protected float _yetToDrain;
 	protected int _x, _y;
-	private float _amountDrainFlora, _amountDrainBlocks, _amountDrainBiome;
-	private float[] _amountDrainLivingForms = new float[2];
-
+	private float _amountDrainFlora, _amountDrainBlocks, _amountDrainBiome, _amountDrainMonster, _amountDrainAnimal;
 	public EnergyDrainer(float amountDrainFlora = 15,float amountDrainBlocks=5,float amountDrainBiome=25, float amountDrainMonster = 20, float amountDrainAnimal = 40) {
 		_amountDrainFlora = amountDrainFlora;
 		_amountDrainBlocks = amountDrainBlocks;
 		_amountDrainBiome = amountDrainBiome;
-		_amountDrainLivingForms[0] = amountDrainMonster;
-		_amountDrainLivingForms[1] = amountDrainAnimal;
+		_amountDrainMonster = amountDrainMonster;
+		_amountDrainAnimal = amountDrainAnimal;
 	}
 
 	protected void DrainManaPotions(List<Inventory> entrySlots)
@@ -154,12 +152,12 @@ abstract class EnergyDrainer {
 				//target.life = 0;				
 				if (target.CountsAsACritter) {
 					//Monster in radius
-					_yetToDrain -= _amountDrainLivingForms[0];
+					_yetToDrain -= _amountDrainMonster;
 					//debuff?
 				}
 				else {
 					//Animal in radius
-					_yetToDrain -= _amountDrainLivingForms[1];
+					_yetToDrain -= _amountDrainAnimal;
 				}
 				target.StrikeNPC(999, 0, 0);
 			}

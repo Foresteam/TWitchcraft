@@ -8,6 +8,8 @@ using Terraria.ID;
 namespace TWitchery.Recipes;
 using RecipeItems;
 using Liquids;
+using Terraria.ModLoader;
+
 ///<summary>Inherit this and redefine GetResult to customize results based on input ingredients</summary>
 #nullable enable
 partial class WitcheryRecipe {
@@ -15,6 +17,7 @@ partial class WitcheryRecipe {
 	protected List<RecipeItem> _itemIngredients;
 	protected List<Liquid> _liquidIngredients;
 	protected RecipeItem? _catalyst;
+	//protected RecipeItem? _catalyst;
 	protected Result _result;
 	/// <param name="resultGetter">An alternative (and advanced) way to define recipe results.</param>
 	public WitcheryRecipe(float energyCost, float failedWorkedChance = 0, float matchThreshold = .75f) {
@@ -53,6 +56,14 @@ partial class WitcheryRecipe {
 	}
 	public WitcheryRecipe AddResult(Liquid result) {
 		_result.liquids.Add(result);
+		return this;
+	}
+
+	public WitcheryRecipe AddBuffs(float damage, float knockback, float useTime, float scale, float shootSpeed, float mana, int critBonus) {
+		Item it = new Item(_catalyst.Type);
+		Result.setBuffs(damage, knockback, useTime, scale, shootSpeed, mana, critBonus);
+		it.Prefix(3);
+		_result.items.Add(it);
 		return this;
 	}
 

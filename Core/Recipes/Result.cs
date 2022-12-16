@@ -18,8 +18,10 @@ partial class WitcheryRecipe {
 
 		public Result Clone() {
 			var copy = new Result(energyCost);
-			foreach (var ir in items)
-				copy.items.Add(ir);
+			foreach (var ir in items) {
+				var it = new Item(ir.type, ir.stack);
+				copy.items.Add(it);
+			}
 			foreach (var lr in liquids)
 				copy.liquids.Add(lr.Clone());
 			return copy;

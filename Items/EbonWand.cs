@@ -3,11 +3,9 @@ using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace TWitchery.Items;
-public class EbonWand : ModItem {
-	public override void UpdateInventory(Player player) {
-		var hairColor = player.GetHairColor(false);
-		base.UpdateInventory(player);
-	}
+public class EbonWand : ModItem, IMagicWand {
+	public float ReduceEnergyCost => 1.3f; // +30%
+	
 	public override void SetStaticDefaults() {
 		DisplayName.SetDefault("Ebonwood Wand"); // By default, capitalization in classnames will add spaces to the display name. You can customize the display name here by uncommenting this line.
 		Tooltip.SetDefault(

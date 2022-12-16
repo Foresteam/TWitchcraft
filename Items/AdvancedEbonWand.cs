@@ -3,7 +3,9 @@ using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace TWitchery.Items;
-public class AdvancedEbonWand : ModItem {
+public class AdvancedEbonWand : ModItem, IMagicWand {
+	public float ReduceEnergyCost => 1f; // +0%
+
 	public override void UpdateInventory(Player player) {
 		var hairColor = player.GetHairColor(false);
 		base.UpdateInventory(player);

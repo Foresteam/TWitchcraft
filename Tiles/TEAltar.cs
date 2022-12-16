@@ -13,13 +13,11 @@ using TWitchery.PedestalCore;
 
 #nullable enable
 namespace TWitchery.Tiles;
-using Recipes;
-using Recipes.RecipeItems;
-using static Tables.Vessels;
 class TEAltar : TEAbstractStation, IBlockingRightClickable {
 	public const int inventorySize = 5;
 	public const int radiusMin = 5, radiusMax = 6, pedestalDistance = radiusMax / 2 + 1;
 	private Crafting _crafting;
+	private AltarEnergyDrainer _energyDrainer;
 	private Task? _craftingDelayTimer;
 	public bool HighlightCrafted { get; private set; }
 	public bool Combining => !_craftingDelayTimer?.IsCompleted ?? false;
@@ -28,6 +26,7 @@ class TEAltar : TEAbstractStation, IBlockingRightClickable {
 	public TEAltar() {
 		_crafting = new Crafting(TWitcheryModSystem.altarRecipes);
 		_crafting.Inventory.ItemTaken += (item, slot) => HighlightCrafted = false;
+		_energyDrainer = new();
 		HighlightCrafted = false;
 
 		ItemDrawer = new WorldItemDrawer(() => Inventory.Slot);
@@ -55,9 +54,11 @@ class TEAltar : TEAbstractStation, IBlockingRightClickable {
 				await _craftingDelayTimer;
 				
 				var rs = _crafting.Craft(i, j);
+				HelpMe.ReduceEnergyCost(ref rs, ply, inv, slot);
+				_energyDrainer.Drain(rs?.energyCost ?? 0, ply, i, j, GetSatelliteInventories(i, j));
 				if (rs != null)
 					HighlightCrafted = true;
-				_crafting.Flush(i, j);
+				_crafting.Flush(rs, i, j);
 				_crafting.GiveResult(rs, new Point16(i, j), ply, this);
 				break;
 			default:

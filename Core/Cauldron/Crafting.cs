@@ -24,7 +24,7 @@ partial class Crafting : ICrafting<Crafting.Action, Inventory> {
 		// take item
 		if (_inventory.SlotsUsed > 0 && inv[slot].type == 0)
 			return Action.Take;
-		if (inv[slot].type == ModContent.ItemType<Items.EbonWand>())
+		if (inv[slot].ModItem is Items.IMagicWand)
 			return Action.Craft;
 		if (Tables.Vessels.vesselsLiquids.Keys.Contains(inv[slot].type))
 			return Action.Pour;
@@ -42,7 +42,7 @@ partial class Crafting : ICrafting<Crafting.Action, Inventory> {
 
 		return result;
 	}
-	public void Flush(int i, int j) {
+	public void Flush(WitcheryRecipe.Result? result, int i, int j) {
 		_inventory.slots = Enumerable.Repeat(new Item(), _inventory.slots.Length).ToArray();
 		_inventory.catalyst = new Item();
 		liquidInventory.Flush();

@@ -85,6 +85,7 @@ class TECauldron : TEAbstractStation, IRightClickable {
 				break;
 			case Crafting.Action.Craft:
 				var rs = _crafting.Craft(i, j);
+				HelpMe.ReduceEnergyCost(ref rs, ply, inv, slot);
 				var ytd = _energyDrainer.Drain(rs?.energyCost ?? 0, ply, _crafting.liquidInventory);
 				if (rs != null && ytd > 0) {
 					Main.NewText($"Not enough energy! {ytd}", Color.Red);
@@ -95,7 +96,7 @@ class TECauldron : TEAbstractStation, IRightClickable {
 					Main.NewText("Not enough space!", Color.Red);
 					break;
 				}
-				_crafting.Flush(i, j);
+				_crafting.Flush(rs, i, j);
 				CraftEffects(i, j, rs != null);
 				_crafting.GiveResult(rs, new Terraria.DataStructures.Point16(i, j), ply, this);
 				break;

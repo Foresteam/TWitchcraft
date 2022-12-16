@@ -6,39 +6,61 @@ using Terraria.ModLoader.IO;
 using System.IO;
 using System;
 using Microsoft.Xna.Framework;
+using System.Text.Json;
 
-namespace TWitchery;    
+namespace TWitchery;
+#nullable enable
+class EnchantmentData {
+	public float Damage { get; set; }
+	public float Knockback { get; set; }
+	public float Crit { get; set; }
+	public EnchantmentData(float damage = -1f, float knockback = -1f, float crit = -1f) {
+		this.Damage = damage;
+		this.Knockback = knockback;
+		this.Crit = crit;
+	}
+	public static EnchantmentData operator *(EnchantmentData a, EnchantmentData b) {
+		EnchantmentData t = (EnchantmentData)a.MemberwiseClone();
+		if (b.Damage != -1f) t.Damage = b.Damage;
+		if (b.Knockback != -1f) t.Knockback = b.Knockback;
+		if (b.Crit != -1f) t.Crit = b.Crit;
+		return t;
+	}
+}
 class Enchantment : GlobalItem {
-	private float _power = 1f, _knockback = 1f, _crit = 1f; 
-	
-	public void Apply(float power= -1f, float knockback = -1f, float crit = -1f) {
-		if (power != -1f)	_power = power;				
-		if (knockback != -1f)  _knockback = knockback; 
-		if (crit != -1f) _crit = crit;
+	private EnchantmentData _data = new(1, 1, 1);
+	public void Apply(EnchantmentData data) {
+		_data *= data;
+		Main.NewText($"Apply {_data.Damage} {_data.Knockback} {_data.Crit}");
+	}
+	public void Apply(Item other) {
+		var ench = other.GetGlobalItem<Enchantment>();
+		Main.NewText($"ApplyI {ench._data.Damage} {ench._data.Knockback} {ench._data.Crit}");
+		Apply(ench._data);
 	}
 	public override void ModifyWeaponDamage(Item item, Player player, ref StatModifier damage) {
-		damage *= _power;
+		damage *= _data.Damage;
 	}
 
 	public override void ModifyWeaponKnockback(Item item, Player player, ref StatModifier knockback) {
-		knockback *= _knockback;
+		knockback *= _data.Knockback;
 	}
 
 	public override void ModifyWeaponCrit(Item item, Player player, ref float crit) {
-		crit *= _crit;
+		crit *= _data.Crit;
 	}
 
 	public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) {
-		if (_power == 1f && _knockback == 1f && _crit == 1f)
+		if (_data.Damage == 1f && _data.Knockback == 1f && _data.Crit == 1f)
 			return;
 
-		tooltips.Add(new TooltipLine(Mod, $"TitleEnchantment{_power}", "Applied enchantments: ") { OverrideColor = Color.PowderBlue });
-		if (_power != 1f) 
-			tooltips.Add(new TooltipLine(Mod, $"DamageEnchantment{_power}", $"{StatString(_power)} Damage") { OverrideColor = ColorStat(_power) });
-		if (_knockback != 1f)
-			tooltips.Add(new TooltipLine(Mod, $"KnockbackEnchantment{_knockback}", $"{StatString(_knockback)} Knockback") { OverrideColor = ColorStat(_knockback) });
-		if (_crit != 1f)
-			tooltips.Add(new TooltipLine(Mod, $"CritEnchantment{_crit}", $"{StatString(_crit)} Crit Chance") { OverrideColor = ColorStat(_crit) });
+		tooltips.Add(new TooltipLine(Mod, $"TitleEnchantment{_data.Damage}", "Applied enchantments: ") { OverrideColor = Color.PowderBlue });
+		if (_data.Damage != 1f) 
+			tooltips.Add(new TooltipLine(Mod, $"DamageEnchantment{_data.Damage}", $"{StatString(_data.Damage)} Damage") { OverrideColor = ColorStat(_data.Damage) });
+		if (_data.Knockback != 1f)
+			tooltips.Add(new TooltipLine(Mod, $"KnockbackEnchantment{_data.Knockback}", $"{StatString(_data.Knockback)} Knockback") { OverrideColor = ColorStat(_data.Knockback) });
+		if (_data.Crit != 1f)
+			tooltips.Add(new TooltipLine(Mod, $"CritEnchantment{_data.Crit}", $"{StatString(_data.Crit)} Crit Chance") { OverrideColor = ColorStat(_data.Crit) });
 	}
 
 	private string StatString(float stat) {
@@ -50,27 +72,26 @@ class Enchantment : GlobalItem {
 	}
 
 	public override void SaveData(Item item, TagCompound tag) {
-		tag.Add("_power", _power.ToString());
-		tag.Add("_knockback", _knockback.ToString());
-		tag.Add("_crit", _crit.ToString());
+		tag.Add("TWenchantmentData", JsonSerializer.Serialize(_data));
 	}
 
 	public override void LoadData(Item item, TagCompound tag) {
-		Single.TryParse(tag.GetString("_power")?? _power.ToString(),out _power);
-		Single.TryParse(tag.GetString("_knockback") ?? _knockback.ToString(), out _knockback);
-		Single.TryParse(tag.GetString("_crit") ?? _crit.ToString(), out _crit);		
+		var s = tag.GetString("TWenchantmentData");
+		if (s.Length < 2)
+			return;
+		var data = JsonSerializer.Deserialize<EnchantmentData?>(s);
+		if (data != null)
+			_data = (EnchantmentData)data;
 	}
 
 	public override void NetSend(Item item, BinaryWriter writer) {
-		writer.Write(_power);
-		writer.Write(_knockback);
-		writer.Write(_crit);
+		writer.Write(JsonSerializer.Serialize(_data));
 	}
 
 	public override void NetReceive(Item item, BinaryReader reader) {
-		_power = reader.ReadSingle();
-		_knockback = reader.ReadSingle();
-		_crit = reader.ReadSingle();
+		var data = JsonSerializer.Deserialize<EnchantmentData?>(reader.ReadString());
+		if (data != null)
+			_data = (EnchantmentData)data;
 	}
 
 	public override bool InstancePerEntity => true;

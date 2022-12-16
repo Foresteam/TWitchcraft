@@ -99,4 +99,17 @@ static partial class HelpMe {
 		}
 		return result;
 	}
+
+	public const float reduceHair = .85f; // -15%
+	// Approximately :)
+	public static bool IsOrange(Color color) => color.R > 150 && color.R - color.G > 100 && color.R - color.B > 150;
+	public static void ReduceEnergyCost(ref Recipes.WitcheryRecipe.Result? result, Player ply, Item[]? inv, int wandSlot) {
+		if (result == null)
+			return;
+		if (IsOrange(ply.GetHairColor(false)))
+			result.energyCost *= reduceHair;
+		var wand = inv?[wandSlot]?.ModItem;
+		if (wand is Items.IMagicWand)
+			result.energyCost *= ((Items.IMagicWand)wand).ReduceEnergyCost;
+	} 
 }

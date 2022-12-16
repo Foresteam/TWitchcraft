@@ -62,14 +62,19 @@ partial class WitcheryRecipe {
 	private List<Liquid?> FilterEnergyOut(List<Liquid?> input) {
 		return input.Select(liquid => !Tables.Common.energyLiquids.ContainsKey(liquid?.GetType()) ? liquid : null).ToList();
 	}
-	private float Match(Item[] _items, Item catalyst, List<Liquid> inputLiquids, out int? xAmount, bool fuck) {
+	private List<Item> FilterEnergyOut(List<Item> input) {
+		return input.FindAll(item => !Tables.Common.manaPotions.Contains(item.type));
+	}
+	private float Match(Item[] _items, Item catalyst, List<Liquid> inputLiquids, out int? xAmount) {
 		var items = new List<Item>(_items).FindAll(i => !i.IsAir);
 		List<Liquid?> liquids = new(inputLiquids);
-		if (_result.energyCost > 0)
+		if (_result.energyCost > 0) {
 			liquids = FilterEnergyOut(liquids);
+			items = FilterEnergyOut(items);
+		}
 		int 
 			totalLiquids = Math.Max(liquids.Select(l => l == null ? 0 : 1).Sum(), _liquidIngredients.Count),
-			totalItems = Math.Max(_itemIngredients.Count, _items.Select(i => i.type == 0 ? 0 : 1).Sum()),
+			totalItems = Math.Max(_itemIngredients.Count, items.Select(i => i.type == 0 ? 0 : 1).Sum()),
 			totalCatalyst = Math.Max(catalyst.type != 0 ? 1 : 0, (_catalyst?.Type ?? 0) != 0 ? 1 : 0);
 		int total = totalLiquids + totalItems + totalCatalyst;
 		int match = 0;
@@ -98,18 +103,14 @@ partial class WitcheryRecipe {
 				xAmount = (int)(liquid.Volume / rliquid.Volume);
 			match += 1;
 		}
-		if (fuck)
-			Main.NewText($"{total} {totalItems} {totalCatalyst} {totalLiquids} {match}");
 		if (totalCatalyst > 0 && _catalyst != null)
 			match += _catalyst.Match(catalyst, ref xAmount) ? 1 : 0;
-		if (fuck)
-			Main.NewText($"{total} {totalItems} {totalCatalyst} {totalLiquids} {match}");
 		// Main.NewText($"totalItems: {totalItems}, totalLiquids: {totalLiquids}, totalCatalyst: {totalCatalyst}, total: {total}, match: {match}, items: {items.Count}, ctype: {catalyst.type} == {_catalyst.type}, {catalyst.stack}, {xAmount}");
 		return (float)match / total;
 	}
 	private float Match(Item[] _items, Item catalyst, List<Liquid> liquids) {
 		int? xAmount;
-		return Match(_items, catalyst, liquids, out xAmount, false);
+		return Match(_items, catalyst, liquids, out xAmount);
 	}
 #nullable enable
 	public static WitcheryRecipe BestMatch(List<WitcheryRecipe> recipes, Item[] items, Item catalyst, List<Liquid>? liquids = null) {
@@ -143,7 +144,7 @@ partial class WitcheryRecipe {
 		if (liquids == null)
 			liquids = new List<Liquid>();
 		int? xAmount;
-		float match = Match(items, catalyst, liquids, out xAmount, true);
+		float match = Match(items, catalyst, liquids, out xAmount);
 		// Main.NewText(match, Color.Cyan);
 		if (match < _matchThreshold || match < 1 && Main.rand.NextFloat() > match * _failedWorkedChance)
 			return null;

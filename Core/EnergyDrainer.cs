@@ -12,7 +12,7 @@ abstract class EnergyDrainer {
 	protected float _yetToDrain;
 	protected int _x, _y;
 	private float _amountDrainFlora, _amountDrainBlocks, _amountDrainBiome, _amountDrainMonster, _amountDrainAnimal;
-	public EnergyDrainer(float amountDrainFlora = 15,float amountDrainBlocks=5,float amountDrainBiome=25, float amountDrainMonster = 20, float amountDrainAnimal = 40) {
+	public EnergyDrainer(float amountDrainFlora = 15, float amountDrainBlocks = 5, float amountDrainBiome = 25, float amountDrainMonster = 20, float amountDrainAnimal = 40) {
 		_amountDrainFlora = amountDrainFlora;
 		_amountDrainBlocks = amountDrainBlocks;
 		_amountDrainBiome = amountDrainBiome;
@@ -20,19 +20,14 @@ abstract class EnergyDrainer {
 		_amountDrainAnimal = amountDrainAnimal;
 	}
 
-	protected void DrainManaPotions(List<Inventory> entrySlots)
-    {
-		for (int k = 0; k < entrySlots.Count; k++)
-		{
-			if (entrySlots[k].slots[0].healMana > 0 && entrySlots[k].slots[0].potion && entrySlots[k].slots[0].healLife == 0)
-			{
-				if ((_yetToDrain / entrySlots[k].slots[0].healMana) > entrySlots[k].slots[0].stack)
-				{
+	protected void DrainManaPotions(List<Inventory> entrySlots) {
+		for (int k = 0; k < entrySlots.Count; k++) {
+			if (entrySlots[k].slots[0].healMana > 0 && entrySlots[k].slots[0].potion && entrySlots[k].slots[0].healLife == 0) {
+				if ((_yetToDrain / entrySlots[k].slots[0].healMana) > entrySlots[k].slots[0].stack) {
 					_yetToDrain -= entrySlots[k].slots[0].healMana * entrySlots[k].slots[0].stack;
 					entrySlots[k].slots[0] = new Item();
 				}
-				else
-				{
+				else {
 					entrySlots[k].slots[0].stack -= (int)(_yetToDrain / entrySlots[k].slots[0].healMana);
 					_yetToDrain -= entrySlots[k].slots[0].healMana * (int)(_yetToDrain / entrySlots[k].slots[0].healMana);
 					break;
@@ -124,7 +119,7 @@ abstract class EnergyDrainer {
 		float sqrMaxDetectDistance = maxDetectDistance * maxDetectDistance;
 
 		// Loop through all NPCs(max always 200)
-		for (int k = 0; k < Main.maxNPCs; k++) {	
+		for (int k = 0; k < Main.maxNPCs; k++) {
 			NPC target = Main.npc[k];
 			// Check if NPC able to be targeted. It means that NPC is
 			// 1. active (alive)

@@ -18,7 +18,7 @@ partial class Crafting : ICrafting<Crafting.Action, Inventory> {
 
 	public Action Interract(int i, int j, Player ply, Item[] inv, int slot) {
 		if (
-			inv[slot].type == ModContent.ItemType<Items.EbonWand>()
+			inv[slot].ModItem is Items.IMagicWand
 			&& Inventory.Slot.type != 0
 			&& Tiles.TEAltar.GetSatelliteInventories(i, j)?.Sum(i => i.Slot.type == 0 ? 0 : 1) > 0
 		)
@@ -36,12 +36,15 @@ partial class Crafting : ICrafting<Crafting.Action, Inventory> {
 
 		return result;
 	}
-	public void Flush(int i, int j) {
+	public void Flush(WitcheryRecipe.Result? result, int i, int j) {
 		var overallInventory = Tiles.TEAltar.GetOverallInventory(i, j);
 		if (overallInventory == null)
 			return;
 		foreach (var inventory in overallInventory)
-			inventory.Slot = new Item();
+			if (result != null && result.energyCost > 0 && Tables.Common.manaPotions.Contains(inventory.Slot.type))
+				continue;
+			else
+				inventory.Slot = new Item();
 	}
 	public void GiveResult(WitcheryRecipe.Result? result, Point16 tile, Player ply, TileEntity source) {
 		if (result == null)

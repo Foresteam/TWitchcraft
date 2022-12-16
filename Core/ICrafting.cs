@@ -11,6 +11,6 @@ interface ICrafting<TAction, TInventory>
 	public TInventory Inventory { get; }
 	public abstract TAction Interract(int i, int j, Player ply, Item[] inv, int slot);
 	public abstract WitcheryRecipe.Result? Craft(int i, int j);
-	public abstract void Flush(int i, int j);
+	public abstract void Flush(WitcheryRecipe.Result? result, int i, int j);
 	public abstract void GiveResult(WitcheryRecipe.Result? result, Point16 tile, Player ply, TileEntity source);
 }

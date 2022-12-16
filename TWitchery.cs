@@ -73,7 +73,7 @@ namespace TWitchery {
 		};
 		public override void AddRecipes() {
 			altarRecipes.Clear();
-			altarRecipes.Add(new AltarRecipe(0)
+			altarRecipes.Add(new AltarRecipe(energyCost: 100)
 				.AddIngredient(new Item(ItemID.DirtBlock, 5))
 				.SetCatalyst(new Item(ItemID.Wood))
 				.AddResult(new Item(ItemID.WoodenSword)));
@@ -86,17 +86,17 @@ namespace TWitchery {
 				.AddIngredient(new Item(ItemID.DirtBlock, 5))
 				.SetTarget(new Item(ItemID.WoodenSword))
 				.AddResult()
-				.Enchant(power: 5f));
-			altarRecipes.Add(new AltarEnchantment(0)
+				.Enchant(new EnchantmentData(damage: 5f)));
+			altarRecipes.Add(new AltarEnchantment(energyCost: 50)
 				.AddIngredient(new Item(ItemID.StoneBlock))
 				.SetTarget(new Item(ItemID.WoodenSword))
 				.AddResult()
-				.Enchant(crit: 1f));
+				.Enchant(new EnchantmentData(crit: 1.2f)));
 			altarRecipes.Add(new AltarEnchantment(0)
 				.AddIngredient(new Item(ItemID.DirtBlock))
 				.SetTarget(new Item(ItemID.WoodenSword))
 				.AddResult()
-				.Enchant(knockback: -3f));
+				.Enchant(new EnchantmentData(knockback: -3f)));
 
 			// smelting the unspawned ores
 			Recipe.Create(SilverBar)

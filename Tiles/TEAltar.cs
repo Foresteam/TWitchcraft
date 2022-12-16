@@ -28,12 +28,17 @@ class TEAltar : TEAbstractStation, IBlockingRightClickable {
 			.AddIngredient(new Item(ItemID.DirtBlock))
 			.SetTarget(new Item(ItemID.WoodenSword))
 			.AddResult()
-			.Enchant(5f),
-		new AltarRecipe(800)
-			.AddIngredient(new AnyGoldBar(10))
-			.AddIngredient(Items.UniversalBottle.CreateFilled(new Liquids.Blood(), (int)(VolumeOf(ItemID.EmptyBucket) * 3 * (VolumeOf(ItemID.EmptyBucket) / VolumeOf(ItemID.Bottle)))))
-			.SetTarget(new AnyEvilWood(60))
-			.AddResult(new Item(ModContent.ItemType<Items.AdvancedEbonWand>()))
+			.Enchant(power: 5f),
+		//new AltarRecipe(800)
+		//	.AddIngredient(new AnyGoldBar(10))
+		//	.AddIngredient(Items.UniversalBottle.CreateFilled(new Liquids.Blood(), (int)(VolumeOf(ItemID.EmptyBucket) * 3 * (VolumeOf(ItemID.EmptyBucket) / VolumeOf(ItemID.Bottle)))))
+		//	.SetTarget(new AnyEvilWood(60))
+		//	.AddResult(new Item(ModContent.ItemType<Items.AdvancedEbonWand>())),
+		new AltarEnchantment(0)
+			.AddIngredient(new Item(ItemID.StoneBlock))
+			.SetTarget(new Item(ItemID.WoodenSword))
+			.AddResult()
+			.Enchant(knockback: -3f, crit:2f)
 	};
 	private Crafting _crafting;
 	private Task? _craftingDelayTimer;

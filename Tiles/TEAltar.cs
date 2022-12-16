@@ -18,14 +18,15 @@ class TEAltar : TEAbstractStation, IBlockingRightClickable {
 	public const int inventorySize = 5;
 	public const int radiusMin = 5, radiusMax = 6, pedestalDistance = radiusMax / 2 + 1;
 	private static List<WitcheryRecipe> _recipes = new() {
-    new WitcheryRecipe(0)
-      .AddIngredient(new Item(ItemID.DirtBlock, 5))
-      .SetCatalyst(new Item(ItemID.Wood))
-      .AddResult(new Item(ItemID.WoodenSword)),
-    new AltarEnchantment(0)
+		new WitcheryRecipe(0)
+			.AddIngredient(new Item(ItemID.DirtBlock, 5))
+			.SetCatalyst(new Item(ItemID.Wood))
+			.AddResult(new Item(ItemID.WoodenSword)),
+		new AltarEnchantment(0)
 			.AddIngredient(new Item(ItemID.DirtBlock))
 			.SetTarget(new Item(ItemID.WoodenSword))
-			.BuffedResult(0.3f, 0.1f, 0.1f, 0.1f, 0.1f, 0f, 10)
+			.AddResult()
+			.Enchant(5f)
 	};
 	private Crafting _crafting;
 	private Task? _craftingDelayTimer;

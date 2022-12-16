@@ -83,8 +83,8 @@ class UniversalBottle : ModItem {
 		spriteBatch.Draw(_liquidTexture.Value, position, frame, storedLiquid.Color, 0, origin, scale, SpriteEffects.None, 0);
 	}
 
-	public static Item CreateFilled(Liquid with) {
-		Item self = new Item(ModContent.ItemType<UniversalBottle>());
+	public static Item CreateFilled(Liquid with, int stack = 1) {
+		Item self = new Item(ModContent.ItemType<UniversalBottle>(), stack);
 		var bottle = self.ModItem as UniversalBottle;
 		if (bottle == null)
 			throw new System.Exception("The bottle is no bottle");

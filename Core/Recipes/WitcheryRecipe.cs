@@ -135,7 +135,6 @@ partial class WitcheryRecipe {
 			item.stack *= (int)xAmount;
 		foreach (var liquid in result.liquids)
 			liquid.Volume *= (int)xAmount;
-		Main.NewText($"GetResult: {xAmount}");
 		result.energyCost *= (int)xAmount;
 	}
 	/// Attempt to combine ingredients into the recipe

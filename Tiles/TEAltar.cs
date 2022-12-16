@@ -14,11 +14,13 @@ using TWitchery.PedestalCore;
 #nullable enable
 namespace TWitchery.Tiles;
 using Recipes;
+using Recipes.RecipeItems;
+using static Tables.Vessels;
 class TEAltar : TEAbstractStation, IBlockingRightClickable {
 	public const int inventorySize = 5;
 	public const int radiusMin = 5, radiusMax = 6, pedestalDistance = radiusMax / 2 + 1;
 	private static List<WitcheryRecipe> _recipes = new() {
-		new WitcheryRecipe(0)
+		new AltarRecipe(0)
 			.AddIngredient(new Item(ItemID.DirtBlock, 5))
 			.SetCatalyst(new Item(ItemID.Wood))
 			.AddResult(new Item(ItemID.WoodenSword)),
@@ -26,7 +28,12 @@ class TEAltar : TEAbstractStation, IBlockingRightClickable {
 			.AddIngredient(new Item(ItemID.DirtBlock))
 			.SetTarget(new Item(ItemID.WoodenSword))
 			.AddResult()
-			.Enchant(5f)
+			.Enchant(5f),
+		new AltarRecipe(800)
+			.AddIngredient(new AnyGoldBar(10))
+			.AddIngredient(Items.UniversalBottle.CreateFilled(new Liquids.Blood(), (int)(VolumeOf(ItemID.EmptyBucket) * 3 * (VolumeOf(ItemID.EmptyBucket) / VolumeOf(ItemID.Bottle)))))
+			.SetTarget(new AnyEvilWood(60))
+			.AddResult(new Item(ModContent.ItemType<Items.AdvancedEbonWand>()))
 	};
 	private Crafting _crafting;
 	private Task? _craftingDelayTimer;

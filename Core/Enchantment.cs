@@ -34,15 +34,15 @@ class Enchantment : GlobalItem {
 
 		tooltips.Add(new TooltipLine(Mod, $"TitleEnchantment{_power}", "Applied enchantments: ") { OverrideColor = Color.PowderBlue });
 		if (_power != 1f) 
-			tooltips.Add(new TooltipLine(Mod, $"DamageEnchantment{_power}", StatString(_power) + " Damage") { OverrideColor = ColorStat(_power) });
+			tooltips.Add(new TooltipLine(Mod, $"DamageEnchantment{_power}", $"{StatString(_power)} Damage") { OverrideColor = ColorStat(_power) });
 		if (_knockback != 1f)
-			tooltips.Add(new TooltipLine(Mod, $"KnockbackEnchantment{_knockback}", StatString(_knockback) + " Knockback") { OverrideColor = ColorStat(_knockback) });
+			tooltips.Add(new TooltipLine(Mod, $"KnockbackEnchantment{_knockback}", $"{StatString(_knockback)} Knockback") { OverrideColor = ColorStat(_knockback) });
 		if (_crit != 1f)
-			tooltips.Add(new TooltipLine(Mod, $"CritEnchantment{_crit}", StatString(_crit) + " Crit Chance") { OverrideColor = ColorStat(_crit) });
+			tooltips.Add(new TooltipLine(Mod, $"CritEnchantment{_crit}", $"{StatString(_crit)} Crit Chance") { OverrideColor = ColorStat(_crit) });
 	}
 
 	private string StatString(float stat) {
-		return (stat >= 0 ? "+" : "") + (int)(stat) * 100 + "% ";
+		return (int)(stat * 100) + "%";
 	}
 
 	private Color ColorStat(float stat) {

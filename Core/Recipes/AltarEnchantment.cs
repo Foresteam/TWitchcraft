@@ -12,5 +12,5 @@ class AltarEnchantment : WitcheryRecipe {
 		_result.items.Last().GetGlobalItem<Enchantment>().Apply(power);
 		return this;
 	}
-	public AltarEnchantment AddResult() => (AltarEnchantment)AddResult(new Item(_catalyst.Type, _catalyst.Stack));
+	public AltarEnchantment AddResult() => (AltarEnchantment)AddResult(_catalyst.Item);
 }

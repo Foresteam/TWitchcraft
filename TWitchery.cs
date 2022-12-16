@@ -77,21 +77,26 @@ namespace TWitchery {
 				.AddIngredient(new Item(ItemID.DirtBlock, 5))
 				.SetCatalyst(new Item(ItemID.Wood))
 				.AddResult(new Item(ItemID.WoodenSword)));
-			altarRecipes.Add(new AltarEnchantment(0)
-				.AddIngredient(new Item(ItemID.DirtBlock))
-				.SetTarget(new Item(ItemID.WoodenSword))
-				.AddResult()
-				.Enchant(power: 5f));
 			altarRecipes.Add(new AltarRecipe(800)
 				.AddIngredient(new AnyGoldBar(10))
 				.AddIngredient(Items.UniversalBottle.CreateFilled(new Liquids.Blood(), 12))
 				.SetTarget(new AnyEvilWood(60))
 				.AddResult(new Item(ModContent.ItemType<Items.AdvancedEbonWand>())));
 			altarRecipes.Add(new AltarEnchantment(0)
+				.AddIngredient(new Item(ItemID.DirtBlock, 5))
+				.SetTarget(new Item(ItemID.WoodenSword))
+				.AddResult()
+				.Enchant(power: 5f));
+			altarRecipes.Add(new AltarEnchantment(0)
 				.AddIngredient(new Item(ItemID.StoneBlock))
 				.SetTarget(new Item(ItemID.WoodenSword))
 				.AddResult()
-				.Enchant(knockback: -3f, crit:2f));
+				.Enchant(crit: 1f));
+			altarRecipes.Add(new AltarEnchantment(0)
+				.AddIngredient(new Item(ItemID.DirtBlock))
+				.SetTarget(new Item(ItemID.WoodenSword))
+				.AddResult()
+				.Enchant(knockback: -3f));
 
 			// smelting the unspawned ores
 			Recipe.Create(SilverBar)

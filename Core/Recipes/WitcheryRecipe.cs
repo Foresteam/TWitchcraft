@@ -30,43 +30,35 @@ partial class WitcheryRecipe {
 		_result = new Result(energyCost);
 	}
 
-	public WitcheryRecipe AddIngredient(Item ingredient) {
+	public virtual WitcheryRecipe AddIngredient(Item ingredient) {
 		_itemIngredients.Add(new RecipeItem(ingredient));
 		return this;
 	}
-	public WitcheryRecipe AddIngredient(RecipeItem ingredient) {
+	public virtual WitcheryRecipe AddIngredient(RecipeItem ingredient) {
 		_itemIngredients.Add(ingredient);
 		return this;
 	}
-	public WitcheryRecipe AddIngredient(Liquid ingredient) {
+	public virtual WitcheryRecipe AddIngredient(Liquid ingredient) {
 		_liquidIngredients.Add(ingredient);
 		return this;
 	}
-	public WitcheryRecipe SetCatalyst(RecipeItem catalyst) {
+	public virtual WitcheryRecipe SetCatalyst(RecipeItem catalyst) {
 		_catalyst = catalyst;
 		return this;
 	}
-	public WitcheryRecipe SetCatalyst(Item catalyst) {
+	public virtual WitcheryRecipe SetCatalyst(Item catalyst) {
 		_catalyst = new RecipeItem(catalyst);
 		return this;
 	}
-	public WitcheryRecipe AddResult(Item result) {
+	public virtual WitcheryRecipe AddResult(Item result) {
 		_result.items.Add(result);
 		return this;
 	}
-	public WitcheryRecipe AddResult(Liquid result) {
+	public virtual WitcheryRecipe AddResult(Liquid result) {
 		_result.liquids.Add(result);
 		return this;
 	}
-
-	public WitcheryRecipe AddBuffs(float damage, float knockback, float useTime, float scale, float shootSpeed, float mana, int critBonus) {
-		Item it = new Item(_catalyst.Type);
-		Result.setBuffs(damage, knockback, useTime, scale, shootSpeed, mana, critBonus);
-		it.Prefix(3);
-		_result.items.Add(it);
-		return this;
-	}
-
+	
 	private List<Liquid?> FilterEnergyOut(List<Liquid?> input) {
 		return input.Select(liquid => !Tables.Common.energyLiquids.ContainsKey(liquid?.GetType()) ? liquid : null).ToList();
 	}

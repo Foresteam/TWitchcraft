@@ -1,19 +1,12 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.ID;
+﻿using Terraria;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System;
-using TWitchery.PedestalCore;
 
 namespace TWitchery;
-internal class Enchant : ModPrefix {
-	public static float Power = 0.1f, KnockBack = 0.1f, Scale = 0.1f,UseTime = 0.1f,ShootSpeed = 0.1f,Mana = 0.1f;
+internal class Enchantment : ModPrefix {
+	public static float power = 0.1f, knockback = 0.1f, scale = 0.1f, useTime = 0.1f, shootSpeed = 0.1f, mana = 0.1f;
 	//public static float Power = 0f, KnockBack = 0f, Scale = 0f, UseTime = 0f, ShootSpeed = 0f, Mana = 0f;
-	public static int CritBonus = 10;
+	public static int critBonus = 10;
 
 	// Change your category this way, defaults to PrefixCategory.Custom. Affects which items can get this prefix.
 	public override PrefixCategory Category => PrefixCategory.AnyWeapon;
@@ -29,18 +22,18 @@ internal class Enchant : ModPrefix {
 	//	SetStats(ref Power, ref KnockBack, ref UseTime, ref Scale, ref ShootSpeed, ref Mana, ref CritBonus);
 	//}
 
-	public static void setBuffs(float damage, float knockback, float useTime, float scale, float shootSpeed, float mana, int critBonus) {
-		Power = damage;
-		KnockBack = knockback;
-		UseTime = useTime;
-		Scale = scale;
-		ShootSpeed = shootSpeed;
-		Mana = mana;
-		CritBonus = critBonus;		
+	public static void SetBuffs(float damage = 0, float knockback = 0, float useTime = 0, float scale = 0, float shootSpeed = 0, float mana = 0, int critBonus = 0) {
+		power = damage;
+		Enchantment.knockback = knockback;
+		Enchantment.useTime = useTime;
+		Enchantment.scale = scale;
+		Enchantment.shootSpeed = shootSpeed;
+		Enchantment.mana = mana;
+		Enchantment.critBonus = critBonus;
 	}
 
-	public static List<double> getBuffs() {
-		return new List<double>() { Power, KnockBack, UseTime, Scale, ShootSpeed, Mana, CritBonus};
+	public static List<double> GetBuffs() {
+		return new List<double>() { power, knockback, useTime, scale, shootSpeed, mana, critBonus };
 	}
 
 	// Determines if it can roll at all.
@@ -55,19 +48,19 @@ internal class Enchant : ModPrefix {
 	// Use this function to modify these stats for items which have this prefix:
 	// Damage Multiplier, Knockback Multiplier, Use Time Multiplier, Scale Multiplier (Size), Shoot Speed Multiplier, Mana Multiplier (Mana cost), Crit Bonus.
 	public override void SetStats(ref float damageMult, ref float knockbackMult, ref float useTimeMult, ref float scaleMult, ref float shootSpeedMult, ref float manaMult, ref int critBonus) {
-		damageMult *= 1f + Power;
-		knockbackMult *= 1f + KnockBack;
-		useTimeMult *= 1f + UseTime;
-		scaleMult *= 1f + Scale;
-		shootSpeedMult *= 1f + ShootSpeed;
-		critBonus += CritBonus;
-		Power = 0f; KnockBack = 0f; Scale = 0f; UseTime = 0f; ShootSpeed = 0f; Mana = 0f;
-		CritBonus = 0;
+		damageMult *= 1f + power;
+		knockbackMult *= 1f + knockback;
+		useTimeMult *= 1f + useTime;
+		scaleMult *= 1f + scale;
+		shootSpeedMult *= 1f + shootSpeed;
+		critBonus += Enchantment.critBonus;
+		power = 0f; knockback = 0f; scale = 0f; useTime = 0f; shootSpeed = 0f; mana = 0f;
+		Enchantment.critBonus = 0;
 	}
-	public static void ApplyPrefix(ref Item item, int prefix) {
+	public static void ApplyEnchantment<Prefix>(ref Item item) where Prefix : ModPrefix {
 		bool favorited = item.favorited;
 		item.netDefaults(item.netID);
-		item.Prefix(prefix);
+		item.Prefix(ModContent.PrefixType<Prefix>());
 		item.position = Main.LocalPlayer.Center;
 		item.favorited = favorited;
 		PopupText.NewText(PopupTextContext.ItemReforge, item, item.stack, true);

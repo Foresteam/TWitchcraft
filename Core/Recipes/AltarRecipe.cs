@@ -8,4 +8,5 @@ class AltarRecipe : WitcheryRecipe {
 	public AltarRecipe SetTarget(Recipes.RecipeItems.RecipeItem target) => (AltarRecipe)SetCatalyst(target);
 	public override AltarRecipe AddIngredient(Item ingredient) => (AltarRecipe)base.AddIngredient(ingredient);
 	public override AltarRecipe AddIngredient(Recipes.RecipeItems.RecipeItem ingredient) => (AltarRecipe)base.AddIngredient(ingredient);
+	public override AltarRecipe AddResult(Item result) => (AltarRecipe)base.AddResult(result);
 }

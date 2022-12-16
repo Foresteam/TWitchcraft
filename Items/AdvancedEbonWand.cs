@@ -18,7 +18,7 @@ public class AdvancedEbonWand : ModItem {
 	}
 
 	public override void SetDefaults() {
-		Item.damage = 50;
+		Item.damage = 1;
 		Item.DamageType = DamageClass.Magic;
 		Item.width = 64;
 		Item.height = 64;

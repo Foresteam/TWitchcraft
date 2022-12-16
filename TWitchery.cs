@@ -1,14 +1,20 @@
 using System;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 using static Terraria.ID.ItemID;
+using TWitchery.Recipes;
+using TWitchery.Recipes.RecipeItems;
+using static TWitchery.Tables.Vessels;
 
 namespace TWitchery {
-	public class TWitchery : Mod {}
-	public class TWitcheryModSystem : ModSystem {
+	class TWitchery : Mod {}
+	class TWitcheryModSystem : ModSystem {
+		public static List<WitcheryRecipe> altarRecipes = new();
 		private static readonly int[] _deletedPotions = new int[] {
 			AmmoReservationPotion,
 			ArcheryPotion,
@@ -66,6 +72,27 @@ namespace TWitchery {
 			WrathPotion
 		};
 		public override void AddRecipes() {
+			altarRecipes.Clear();
+			altarRecipes.Add(new AltarRecipe(0)
+				.AddIngredient(new Item(ItemID.DirtBlock, 5))
+				.SetCatalyst(new Item(ItemID.Wood))
+				.AddResult(new Item(ItemID.WoodenSword)));
+			altarRecipes.Add(new AltarEnchantment(0)
+				.AddIngredient(new Item(ItemID.DirtBlock))
+				.SetTarget(new Item(ItemID.WoodenSword))
+				.AddResult()
+				.Enchant(power: 5f));
+			altarRecipes.Add(new AltarRecipe(800)
+				.AddIngredient(new AnyGoldBar(10))
+				.AddIngredient(Items.UniversalBottle.CreateFilled(new Liquids.Blood(), 12))
+				.SetTarget(new AnyEvilWood(60))
+				.AddResult(new Item(ModContent.ItemType<Items.AdvancedEbonWand>())));
+			altarRecipes.Add(new AltarEnchantment(0)
+				.AddIngredient(new Item(ItemID.StoneBlock))
+				.SetTarget(new Item(ItemID.WoodenSword))
+				.AddResult()
+				.Enchant(knockback: -3f, crit:2f));
+
 			// smelting the unspawned ores
 			Recipe.Create(SilverBar)
 				.AddIngredient(SilverCoin, 15)

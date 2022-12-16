@@ -19,27 +19,6 @@ using static Tables.Vessels;
 class TEAltar : TEAbstractStation, IBlockingRightClickable {
 	public const int inventorySize = 5;
 	public const int radiusMin = 5, radiusMax = 6, pedestalDistance = radiusMax / 2 + 1;
-	private static List<WitcheryRecipe> _recipes = new() {
-		new AltarRecipe(0)
-			.AddIngredient(new Item(ItemID.DirtBlock, 5))
-			.SetCatalyst(new Item(ItemID.Wood))
-			.AddResult(new Item(ItemID.WoodenSword)),
-		new AltarEnchantment(0)
-			.AddIngredient(new Item(ItemID.DirtBlock))
-			.SetTarget(new Item(ItemID.WoodenSword))
-			.AddResult()
-			.Enchant(power: 5f),
-		//new AltarRecipe(800)
-		//	.AddIngredient(new AnyGoldBar(10))
-		//	.AddIngredient(Items.UniversalBottle.CreateFilled(new Liquids.Blood(), (int)(VolumeOf(ItemID.EmptyBucket) * 3 * (VolumeOf(ItemID.EmptyBucket) / VolumeOf(ItemID.Bottle)))))
-		//	.SetTarget(new AnyEvilWood(60))
-		//	.AddResult(new Item(ModContent.ItemType<Items.AdvancedEbonWand>())),
-		new AltarEnchantment(0)
-			.AddIngredient(new Item(ItemID.StoneBlock))
-			.SetTarget(new Item(ItemID.WoodenSword))
-			.AddResult()
-			.Enchant(knockback: -3f, crit:2f)
-	};
 	private Crafting _crafting;
 	private Task? _craftingDelayTimer;
 	public bool HighlightCrafted { get; private set; }
@@ -47,7 +26,7 @@ class TEAltar : TEAbstractStation, IBlockingRightClickable {
 	public override Inventory Inventory => _crafting.Inventory;
 	public WorldItemDrawer ItemDrawer { get; private set; }
 	public TEAltar() {
-		_crafting = new Crafting(_recipes);
+		_crafting = new Crafting(TWitcheryModSystem.altarRecipes);
 		_crafting.Inventory.ItemTaken += (item, slot) => HighlightCrafted = false;
 		HighlightCrafted = false;
 

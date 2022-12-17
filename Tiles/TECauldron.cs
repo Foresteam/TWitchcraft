@@ -18,7 +18,7 @@ class TECauldron : TEAbstractStation, IRightClickable {
 	public override Inventory Inventory => _crafting.Inventory;
 	public override LiquidInventory LiquidInventory => _crafting.liquidInventory;
 	public TECauldron() {
-		_crafting = new Crafting(inventorySize, 25f, Tables.CauldrounRecipes.self);
+		_crafting = new Crafting(inventorySize, 25f, CauldronRecipes.self);
 		_energyDrainer = new CauldronEnegyDrainer();
 	}
 
@@ -110,7 +110,7 @@ class TECauldron : TEAbstractStation, IRightClickable {
 	}
 
 	public static string DumpRecipes(bool dev) {
-		var dump = Tables.CauldrounRecipes.self.Select(recipe => recipe.Dump(dev)).ToList();
+		var dump = CauldronRecipes.self.Select(recipe => recipe.Dump(dev)).ToList();
 		dump.Insert(0, WitcheryRecipe.DumpHeader);
 		return String.Join("\n", dump);
 	}

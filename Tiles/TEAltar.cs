@@ -24,7 +24,7 @@ class TEAltar : TEAbstractStation, IBlockingRightClickable {
 	public override Inventory Inventory => _crafting.Inventory;
 	public WorldItemDrawer ItemDrawer { get; private set; }
 	public TEAltar() {
-		_crafting = new Crafting(TWitcheryModSystem.altarRecipes);
+		_crafting = new Crafting(AltarRecipes.self);
 		_crafting.Inventory.ItemTaken += (item, slot) => HighlightCrafted = false;
 		_energyDrainer = new();
 		HighlightCrafted = false;
